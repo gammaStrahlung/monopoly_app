@@ -5,10 +5,22 @@ plugins {
     id "org.sonarqube" version "4.4.1.3373"
 }
 
-jacocoTestReport {
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn "testDebugUnitTest"
+    description = "Generate Jacoco coverage reports"
+
     reports {
         xml.required = true
+        html.required = true
     }
+
+    def fileFilter = ['**/AndroidManifest.xml', '**/strings.xml', '**/*.xml', '**/*.json']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
 }
 
 sonar {
@@ -16,5 +28,7 @@ sonar {
         property "sonar.projectKey", "gammaStrahlung_monopoly_app"
         property "sonar.organization", "gammastrahlung"
         property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.projectDir}/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
     }
 }
