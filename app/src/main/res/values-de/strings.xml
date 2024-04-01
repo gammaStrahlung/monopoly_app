@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Monopoly</string>
+    <string name="main_startGame">Spiel Starten</string>
+    <string name="main_joinGame">Spiel Beitreten</string>
+</resources>

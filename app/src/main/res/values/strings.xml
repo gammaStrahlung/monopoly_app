@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">monopoly_app</string>
+    <string name="app_name">Monopoly</string>
+    <string name="main_startGame">Start Game</string>
+    <string name="main_joinGame">Join Game</string>
 </resources>
