@@ -3,4 +3,7 @@
     <string name="app_name">Monopoly</string>
     <string name="main_startGame">Spiel Starten</string>
     <string name="main_joinGame">Spiel Beitreten</string>
+    <string name="dialog_join_gameID">Spiel ID</string>
+    <string name="dialog_join_cancel">Abbrechen</string>
+    <string name="dialog_join_title">Bitte Spiel ID eingeben:</string>
 </resources>
