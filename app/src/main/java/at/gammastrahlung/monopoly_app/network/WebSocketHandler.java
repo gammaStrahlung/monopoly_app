@@ -22,6 +22,7 @@ public class WebSocketHandler {
 
     /**
      * Handles "create" ServerMessages
+     *
      * @param message Message from the Server
      */
     private void create(ServerMessage message) {
@@ -37,21 +38,24 @@ public class WebSocketHandler {
 
     /**
      * Handles "join" ServerMessages
+     *
      * @param message Message from the Server
      */
     private void join(ServerMessage message) {
         GameData gameData = GameData.getGameData();
 
         if (message.getType() == ServerMessage.MessageType.SUCCESS) {
-            // This player has joined a game
-            gameData.setGameId(Integer.parseInt(message.getMessage()));
-            gameData.getPlayers().put(gameData.getPlayer().getID(), gameData.getPlayer());
-            Log.d("WSHandler", "Joined Game: " + message.getMessage());
 
-        } else if (message.getType() == ServerMessage.MessageType.INFO) {
-            // Other player has joined the game
-            gameData.getPlayers().put(message.getPlayer().getID(), message.getPlayer());
-            Log.d("WSHandler", "Other player joined game: " + message.getMessage());
+            if (gameData.getPlayer().getID().equals(message.getPlayer().getID())) {
+                // This player has joined a game
+                gameData.setGameId(Integer.parseInt(message.getMessage()));
+                gameData.getPlayers().put(gameData.getPlayer().getID(), gameData.getPlayer());
+                Log.d("WSHandler", "Player joined Game: " + message.getMessage());
+            } else {
+                // Other player has joined the game
+                gameData.getPlayers().put(message.getPlayer().getID(), message.getPlayer());
+                Log.d("WSHandler", "Other player joined game: " + message.getPlayer().getName());
+            }
 
         } else if (message.getType() == ServerMessage.MessageType.ERROR) {
             if (gameData.getPlayer().getID() == message.getPlayer().getID()) {
