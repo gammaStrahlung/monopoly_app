@@ -6,5 +6,6 @@
     <string name="gameID">Spiel ID</string>
     <string name="playerName">Spielername</string>
     <string name="dialog_join_cancel">Abbrechen</string>
-    <string name="dialog_join_title">Bitte Spiel ID eingeben:</string>
+    <string name="dialog_join_title">Bitte Namen und Spiel ID eingeben:</string>
+    <string name="dialog_new_title">Bitte Namen eingeben:</string>
 </resources>

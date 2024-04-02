@@ -22,14 +22,15 @@ public class NewGameFragment extends DialogFragment {
         View inflated = inflater.inflate(R.layout.dialog_newgame, null);
 
         builder.setView(inflated)
-
                 // Add action buttons
-                .setPositiveButton(R.string.main_joinGame, (dialog, id) -> {
+                .setPositiveButton(R.string.main_startGame, (dialog, id) -> {
                     EditText text = inflated.findViewById(R.id.playerName);
-                    if (text.getText().toString().isEmpty())
+                    String playerName = text.getText().toString();
+
+                    if (playerName.isEmpty())
                         return; // Handle empty input here
 
-                    MonopolyClient.getMonopolyClient().newGame(text.getText().toString());
+                    MonopolyClient.getMonopolyClient().newGame(playerName);
                 })
                 .setNegativeButton(R.string.dialog_join_cancel, (dialog, id) -> {
                     dialog.cancel(); // Cancel the dialog

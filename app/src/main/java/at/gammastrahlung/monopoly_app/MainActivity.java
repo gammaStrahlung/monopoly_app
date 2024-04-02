@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.UUID;
 
 import at.gammastrahlung.monopoly_app.fragments.JoinGameFragment;
+import at.gammastrahlung.monopoly_app.fragments.NewGameFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.network.WebSocketClient;
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startButtonClick(View view) {
-        // TODO create new game
+        new NewGameFragment().show(getSupportFragmentManager(), "NEW_DIALOG");
     }
 
     public void joinButtonClick(View view) {

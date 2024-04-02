@@ -16,6 +16,7 @@ public class MonopolyClient {
 
     private MonopolyClient() {
         webSocketClient = WebSocketClient.getWebSocketClient();
+        webSocketClient.connect(new WebSocketHandler());
     }
 
     public void newGame(String playerName) {
@@ -33,7 +34,7 @@ public class MonopolyClient {
         gameData.getPlayer().setName(playerName);
 
         webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("create")
+                .messagePath("join")
                 .player(gameData.getPlayer())
                 .message(String.valueOf(gameId))
                 .build());

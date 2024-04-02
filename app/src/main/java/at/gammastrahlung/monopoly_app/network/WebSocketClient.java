@@ -46,6 +46,7 @@ public class WebSocketClient {
             @Override
             public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t,
                                   @Nullable Response response) {
+                Log.w("WebSocket", t.getMessage());
                 super.onFailure(webSocket, t, response);
             }
 
@@ -64,9 +65,13 @@ public class WebSocketClient {
     }
 
     public void sendMessage(ClientMessage message) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
 
-        webSocket.send(gson.toJson(message));
+            webSocket.send(gson.toJson(message));
+        } catch (Exception e) {
+            Log.e("WebSocket", e.getMessage());
+        }
     }
 
     public void close() {
