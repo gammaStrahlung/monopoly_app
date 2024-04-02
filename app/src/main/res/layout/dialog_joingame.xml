@@ -18,7 +18,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/gameId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -26,7 +26,19 @@
         android:layout_marginRight="4dp"
         android:layout_marginBottom="4dp"
         android:autofillHints=""
-        android:hint="@string/dialog_join_gameID"
+        android:hint="@string/gameID"
         android:inputType="number" />
+
+    <EditText
+        android:id="@+id/playerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:autofillHints=""
+        android:hint="@string/playerName"
+        android:inputType="text" />
 
 </LinearLayout>

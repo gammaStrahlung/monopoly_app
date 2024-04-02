@@ -1,6 +1,9 @@
 package at.gammastrahlung.monopoly_app;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -9,7 +12,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.UUID;
+
 import at.gammastrahlung.monopoly_app.fragments.JoinGameFragment;
+import at.gammastrahlung.monopoly_app.game.GameData;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        updatePlayerUUID();
     }
 
     public void startButtonClick(View view) {
@@ -31,5 +39,34 @@ public class MainActivity extends AppCompatActivity {
 
     public void joinButtonClick(View view) {
         new JoinGameFragment().show(getSupportFragmentManager(), "JOIN_DIALOG");
+    }
+
+    /**
+     * Sets the player UUID for the Player in GameData.
+     * The UUID is only generated once and then saved, this allows re-joining of
+     */
+    private void updatePlayerUUID() {
+        UUID playerUUID;
+
+        // Get UUID from SharedPreferences
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        String uuid = sharedPreferences.getString("playerUUID", null);
+
+        if (uuid == null) {
+            // UUID has not yet been set (First app start)
+            SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+
+            playerUUID = UUID.randomUUID();
+
+            Log.i("PlayerUUID", "Set player UUID to: " + playerUUID);
+
+            preferenceEditor.putString("playerUUID", playerUUID.toString());
+            preferenceEditor.apply();
+        } else {
+            playerUUID = UUID.fromString(uuid);
+        }
+
+        GameData.getGameData().getPlayer().setID(playerUUID);
     }
 }
