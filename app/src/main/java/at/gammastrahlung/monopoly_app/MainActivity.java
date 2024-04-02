@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import at.gammastrahlung.monopoly_app.fragments.JoinGameFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.network.WebSocketClient;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Initialize Player UUID and WebSocket URI
         updatePlayerUUID();
+        WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
     }
 
     public void startButtonClick(View view) {
