@@ -40,4 +40,17 @@ public class MonopolyClient {
                 .build());
 
     }
+
+    /**
+     * Gets all players of the same game as the player from the server
+     */
+    public void getPlayers() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("players")
+                .player(gameData.getPlayer())
+                .message(null)
+                .build());
+    }
 }
