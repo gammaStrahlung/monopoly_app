@@ -21,7 +21,7 @@ public class MonopolyClient {
 
     /**
      * Sends a new game message to the server.
-     * @param playerName
+     * @param playerName Name of the player that will be shown to other players.
      */
     public void newGame(String playerName) {
         GameData gameData = GameData.getGameData();
@@ -33,6 +33,11 @@ public class MonopolyClient {
                 .build());
     }
 
+    /**
+     * Sends a join game message to the server.
+     * @param gameId The ID of the game you want to join.
+     * @param playerName Name of the player that will be shown to other players.
+     */
     public void joinGame(int gameId, String playerName) {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);

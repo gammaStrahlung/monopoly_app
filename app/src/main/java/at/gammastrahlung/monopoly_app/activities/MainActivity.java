@@ -1,4 +1,4 @@
-package at.gammastrahlung.monopoly_app;
+package at.gammastrahlung.monopoly_app.activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.UUID;
 
+import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.JoinGameFragment;
 import at.gammastrahlung.monopoly_app.fragments.NewGameFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
