@@ -11,8 +11,16 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
+/**
+ * Handles messages coming from the server
+ */
 public class WebSocketHandler {
 
+    /**
+     * Main message handler that depending on message.messagePath calls the correct handler.
+     *
+     * @param message Message from the server
+     */
     public void messageReceived(ServerMessage message) {
         switch (message.getMessagePath()) {
             case "create":
@@ -61,7 +69,7 @@ public class WebSocketHandler {
                 gameData.getPlayers().put(gameData.getPlayer().getID(), gameData.getPlayer());
                 Log.d("WSHandler", "Player joined Game: " + message.getMessage());
 
-                // Update player list
+                // Sync the player list with the server
                 MonopolyClient.getMonopolyClient().getPlayers();
             } else {
                 // Other player has joined the game

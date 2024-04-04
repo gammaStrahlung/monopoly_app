@@ -5,7 +5,7 @@ import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
 
 /**
- * Singleton used for Messages to server
+ * Singleton used to send messages to server
  */
 public class MonopolyClient {
 
@@ -19,6 +19,10 @@ public class MonopolyClient {
         webSocketClient.connect(new WebSocketHandler());
     }
 
+    /**
+     * Sends a new game message to the server.
+     * @param playerName
+     */
     public void newGame(String playerName) {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);
@@ -42,7 +46,8 @@ public class MonopolyClient {
     }
 
     /**
-     * Gets all players of the same game as the player from the server
+     * Gets all players of the same game as the player from the server.
+     * This is used when joining to sync the players of the game with the server.
      */
     public void getPlayers() {
         GameData gameData = GameData.getGameData();

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Setter
 public class Player {
     /**
-     * The unique ID of the player, this can be used by the player to allow for re-joining the ga
+     * The unique ID of the player, this can be used by the player to allow for re-joining the game
      */
     @Expose
     protected UUID ID;
