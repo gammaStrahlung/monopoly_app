@@ -18,7 +18,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // WebSocket connection URI
-        resValue "string", "websocket_uri", "ws://10.0.2.2:8080/monopoly"
+        resValue "string", "websocket_uri", "ws://10.0.2.2:53211/monopoly"
     }
 
     buildTypes {
