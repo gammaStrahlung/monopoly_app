@@ -11,7 +11,6 @@ import lombok.Setter;
  * Singleton that contains all game data
  */
 @Getter
-@Setter
 public class GameData {
     @Getter
     private static final GameData gameData = new GameData();
@@ -27,7 +26,7 @@ public class GameData {
     /**
      * Our player
      */
-    private Player player = new Player();
+    private final Player player = new Player();
 
     /**
      * List of players of the game
