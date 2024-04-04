@@ -4,8 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
@@ -47,8 +46,8 @@ public class WebSocketHandler {
 
         if (message.getType() == ServerMessage.MessageType.SUCCESS) {
             // Creating game was successful
-            gameData.setGameId(Integer.parseInt(message.getMessage()));
-            gameData.getPlayers().put(gameData.getPlayer().getID(), gameData.getPlayer());
+            gameData.getGameId().set(Integer.parseInt(message.getMessage()));
+            gameData.getPlayers().add(gameData.getPlayer());
             Log.d("WSHandler", "Create game: " + message.getMessage());
         }
     }
@@ -65,21 +64,21 @@ public class WebSocketHandler {
 
             if (gameData.getPlayer().getID().equals(message.getPlayer().getID())) {
                 // This player has joined a game
-                gameData.setGameId(Integer.parseInt(message.getMessage()));
-                gameData.getPlayers().put(gameData.getPlayer().getID(), gameData.getPlayer());
+                gameData.getGameId().set(Integer.parseInt(message.getMessage()));
+                gameData.getPlayers().add(gameData.getPlayer());
                 Log.d("WSHandler", "Player joined Game: " + message.getMessage());
 
                 // Sync the player list with the server
                 MonopolyClient.getMonopolyClient().getPlayers();
             } else {
                 // Other player has joined the game
-                gameData.getPlayers().put(message.getPlayer().getID(), message.getPlayer());
+                gameData.getPlayers().add(message.getPlayer());
                 Log.d("WSHandler", "Other player joined game: " + message.getPlayer().getName());
             }
 
         } else if (message.getType() == ServerMessage.MessageType.ERROR) {
             if (gameData.getPlayer().getID() == message.getPlayer().getID()) {
-                gameData.setGameId(-1); // Could not join game
+                gameData.getGameId().set(-1); // Could not join game
                 Log.d("WSHandler", "Other player joined game: " + message.getMessage());
             }
         }
@@ -96,13 +95,17 @@ public class WebSocketHandler {
 
         Player[] players = gson.fromJson(message.getMessage(), Player[].class);
 
-        HashMap<UUID, Player> gamePlayers = gameData.getPlayers();
+        ArrayList<Player> gamePlayers = gameData.getPlayers();
 
         StringBuilder log = new StringBuilder("All other players:\n");
 
+        // Clear and add this player
+        gamePlayers.clear();
+        gamePlayers.add(gameData.getPlayer());
+
         for (Player p : players) {
             if (!p.getID().equals(gameData.getPlayer().getID())) { // Don't add this player
-                gamePlayers.put(p.getID(), p);
+                gamePlayers.add(p);
                 log.append(p.getName()).append("\n");
             }
         }

@@ -1,8 +1,9 @@
 package at.gammastrahlung.monopoly_app.game;
 
-import java.util.HashMap;
-import java.util.UUID;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableInt;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,8 @@ public class GameData {
     /**
      * The gameId of the current game
      */
-    private int gameId;
+    @Setter(AccessLevel.NONE)
+    private ObservableInt gameId = new ObservableInt();
 
     /**
      * Our player
@@ -30,5 +32,5 @@ public class GameData {
     /**
      * List of players of the game
      */
-    private final HashMap<UUID, Player> players = new HashMap<>();
+    private final ObservableArrayList<Player> players = new ObservableArrayList<>();
 }

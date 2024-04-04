@@ -8,4 +8,7 @@
     <string name="dialog_join_cancel">Abbrechen</string>
     <string name="dialog_join_title">Bitte Namen und Spiel ID eingeben:</string>
     <string name="dialog_new_title">Bitte Namen eingeben:</string>
+    <string name="playersHeader">Spieler:</string>
+    <string name="newGame_fail">Neues Spiel konnte nicht gestartet werden!</string>
+    <string name="joinGame_fail">Dem Spiel konnte nicht beigetreten werden</string>
 </resources>

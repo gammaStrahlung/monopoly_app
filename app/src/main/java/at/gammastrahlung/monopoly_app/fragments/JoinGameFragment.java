@@ -1,6 +1,8 @@
 package at.gammastrahlung.monopoly_app.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,11 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.Observable;
+import androidx.databinding.ObservableInt;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.activities.LobbyActivity;
+import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.helpers.DialogDataValidation;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
@@ -40,6 +47,25 @@ public class JoinGameFragment extends DialogFragment {
                     int gameId = Integer.parseInt(gameIdEditText.getText().toString());
 
                     MonopolyClient.getMonopolyClient().joinGame(gameId, playerName);
+
+                    Activity activity = getActivity();
+
+                    GameData.getGameData().getGameId().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                        @Override
+                        public void onPropertyChanged(Observable sender, int propertyId) {
+                            // Received data from the server
+                            ObservableInt gameId = (ObservableInt) sender;
+                            if (gameId.get() == -1) {
+                                // Error popup
+                                Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show();
+                                gameId.set(0);
+                            } else {
+                                // Created game -> Start lobby activity
+                                Intent intent = new Intent(activity, LobbyActivity.class);
+                                getActivity().startActivity(intent);
+                            }
+                        }
+                    });
                 })
                 .setNegativeButton(R.string.dialog_join_cancel, (dialog, id) -> {
                     dialog.cancel(); // Cancel the dialog
