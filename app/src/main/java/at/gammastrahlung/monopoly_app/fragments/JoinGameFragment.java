@@ -62,7 +62,7 @@ public class JoinGameFragment extends DialogFragment {
                             } else {
                                 // Created game -> Start lobby activity
                                 Intent intent = new Intent(activity, LobbyActivity.class);
-                                getActivity().startActivity(intent);
+                                activity.startActivity(intent);
                             }
                         }
                     });
