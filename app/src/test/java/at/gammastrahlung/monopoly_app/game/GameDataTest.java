@@ -1,12 +1,12 @@
 package at.gammastrahlung.monopoly_app.game;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class GameDataTest {
+class GameDataTest {
     @Test
-    public void getGameData() {
+    void getGameData() {
         GameData gameData = GameData.getGameData();
 
         assertNotNull(gameData);

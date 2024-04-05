@@ -1,13 +1,13 @@
 package at.gammastrahlung.monopoly_app.helpers;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DialogDataValidationTests {
+class DialogDataValidationTests {
 
     @Test
-    public void validateGameId() {
+    void validateGameId() {
         // Game ID has to be in range 100000 - 999999
 
         // Test empty
@@ -40,7 +40,7 @@ public class DialogDataValidationTests {
     }
 
     @Test
-    public void validatePlayerName() {
+    void validatePlayerName() {
         // Player name can be anything but empty
 
         assertFalse(DialogDataValidation.validatePlayerName(""));

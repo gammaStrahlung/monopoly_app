@@ -38,11 +38,6 @@ android {
             finalizedBy jacocoTestReport
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
@@ -83,6 +78,8 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.jupiter.engine
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok

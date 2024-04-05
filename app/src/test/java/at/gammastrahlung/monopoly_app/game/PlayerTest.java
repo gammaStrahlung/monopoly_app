@@ -1,12 +1,12 @@
 package at.gammastrahlung.monopoly_app.game;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-public class PlayerTest {
+class PlayerTest {
 
     @Test
     public void newPlayer() {
@@ -23,7 +23,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void id() {
+    void id() {
         Player p1 = new Player();
 
         UUID uuid = UUID.randomUUID();
@@ -32,7 +32,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void name() {
+    void name() {
         Player p1 = new Player();
 
         p1.setName("Some Name");
