@@ -3,40 +3,24 @@ package at.gammastrahlung.monopoly_app.helpers;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class DialogDataValidationTests {
 
-    @Test
-    void validateGameId() {
-        // Game ID has to be in range 100000 - 999999
+    @ParameterizedTest
+    @ValueSource(strings = {"", "abc", "/*-+", "!@#$", "ABCDEF", "-100000", "-1", "0", "100",
+            "99999", "100.0", "100000.0"})
+    void validateGameIdInvalid(String input) {
 
-        // Test empty
-        assertFalse(DialogDataValidation.validateGameId(""));
+        assertFalse(DialogDataValidation.validateGameId(input));
+    }
 
-        // Test non number input
-        assertFalse(DialogDataValidation.validateGameId("abc"));
-        assertFalse(DialogDataValidation.validateGameId("/*-+"));
-        assertFalse(DialogDataValidation.validateGameId("!@#$"));
-        assertFalse(DialogDataValidation.validateGameId("ABCDEF")); // Six digits like gameId
+    @ParameterizedTest
+    @ValueSource(strings = {"123456", "100000", "999999"})
+    void validateGameIdValid(String input) {
 
-        // Test negative
-        assertFalse(DialogDataValidation.validateGameId(String.valueOf(Integer.MIN_VALUE)));
-        assertFalse(DialogDataValidation.validateGameId("-100000"));
-        assertFalse(DialogDataValidation.validateGameId("-1"));
-
-        // Test to small
-        assertFalse(DialogDataValidation.validateGameId("0"));
-        assertFalse(DialogDataValidation.validateGameId("100"));
-        assertFalse(DialogDataValidation.validateGameId("99999"));
-
-        // Test floating point
-        assertFalse(DialogDataValidation.validateGameId("100.0"));
-        assertFalse(DialogDataValidation.validateGameId("100000.0"));
-
-        // Test valid
-        assertTrue(DialogDataValidation.validateGameId("123456"));
-        assertTrue(DialogDataValidation.validateGameId("100000"));
-        assertTrue(DialogDataValidation.validateGameId("999999"));
+        assertTrue(DialogDataValidation.validateGameId(input));
     }
 
     @Test

@@ -9,7 +9,7 @@ import java.util.UUID;
 class PlayerTest {
 
     @Test
-    public void newPlayer() {
+    void newPlayer() {
         // new player has no values
         Player p1 = new Player();
         assertNull(p1.getId());
