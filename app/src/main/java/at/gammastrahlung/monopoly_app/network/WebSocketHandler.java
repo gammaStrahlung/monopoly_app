@@ -62,7 +62,7 @@ public class WebSocketHandler {
 
         if (message.getType() == ServerMessage.MessageType.SUCCESS) {
 
-            if (gameData.getPlayer().getID().equals(message.getPlayer().getID())) {
+            if (gameData.getPlayer().getId().equals(message.getPlayer().getId())) {
                 // This player has joined a game
                 gameData.getGameId().set(Integer.parseInt(message.getMessage()));
                 gameData.getPlayers().add(gameData.getPlayer());
@@ -77,7 +77,7 @@ public class WebSocketHandler {
             }
 
         } else if (message.getType() == ServerMessage.MessageType.ERROR) {
-            if (gameData.getPlayer().getID() == message.getPlayer().getID()) {
+            if (gameData.getPlayer().getId() == message.getPlayer().getId()) {
                 gameData.getGameId().set(-1); // Could not join game
                 Log.d("WSHandler", "Other player joined game: " + message.getMessage());
             }
@@ -104,7 +104,7 @@ public class WebSocketHandler {
         gamePlayers.add(gameData.getPlayer());
 
         for (Player p : players) {
-            if (!p.getID().equals(gameData.getPlayer().getID())) { // Don't add this player
+            if (!p.getId().equals(gameData.getPlayer().getId())) { // Don't add this player
                 gamePlayers.add(p);
                 log.append(p.getName()).append("\n");
             }

@@ -72,6 +72,6 @@ public class MainActivity extends AppCompatActivity {
             playerUUID = UUID.fromString(uuid);
         }
 
-        GameData.getGameData().getPlayer().setID(playerUUID);
+        GameData.getGameData().getPlayer().setId(playerUUID);
     }
 }
