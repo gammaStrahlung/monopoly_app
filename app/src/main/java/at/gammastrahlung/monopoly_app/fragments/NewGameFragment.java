@@ -51,8 +51,12 @@ public class NewGameFragment extends DialogFragment {
                             ObservableInt gameId = (ObservableInt) sender;
                             if (gameId.get() == -1) {
                                 // Error popup
-                                Toast.makeText(activity, R.string.newGame_fail, Toast.LENGTH_LONG).show();
-                                gameId.set(0);
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(activity, R.string.newGame_fail, Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             } else {
                                 // Created game -> Start lobby activity
                                 Intent intent = new Intent(activity, LobbyActivity.class);

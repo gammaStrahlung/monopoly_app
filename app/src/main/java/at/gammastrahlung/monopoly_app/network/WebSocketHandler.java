@@ -49,6 +49,9 @@ public class WebSocketHandler {
             gameData.getGameId().set(Integer.parseInt(message.getMessage()));
             gameData.getPlayers().add(gameData.getPlayer());
             Log.d("WSHandler", "Create game: " + message.getMessage());
+        } else {
+            gameData.getGameId().set(-1);
+            Log.d("WSHandler", "Could not join game");
         }
     }
 
@@ -77,9 +80,9 @@ public class WebSocketHandler {
             }
 
         } else if (message.getType() == ServerMessage.MessageType.ERROR) {
-            if (gameData.getPlayer().getId() == message.getPlayer().getId()) {
+            if (gameData.getPlayer().getId().equals(message.getPlayer().getId())) {
                 gameData.getGameId().set(-1); // Could not join game
-                Log.d("WSHandler", "Other player joined game: " + message.getMessage());
+                Log.d("WSHandler", "Could not join game");
             }
         }
     }
