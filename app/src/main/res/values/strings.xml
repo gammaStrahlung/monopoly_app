@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">monopoly_app</string>
+    <string name="app_name">Monopoly</string>
+    <string name="main_startGame">Start Game</string>
+    <string name="main_joinGame">Join Game</string>
+    <string name="gameID">Game ID</string>
+    <string name="playerName">Player name</string>
+    <string name="dialog_join_cancel">Cancel</string>
+    <string name="dialog_join_title">Please enter Name and Game ID:</string>
+    <string name="dialog_new_title">Please enter your name:</string>
+    <string name="playersHeader">Players:</string>
+    <string name="newGame_fail">Failed to create new game!</string>
+    <string name="joinGame_fail">Failed to join the game</string>
 </resources>

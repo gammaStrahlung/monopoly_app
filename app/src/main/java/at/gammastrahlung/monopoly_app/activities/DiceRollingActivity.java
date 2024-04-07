@@ -1,4 +1,4 @@
-package at.gammastrahlung.monopoly_app;
+package at.gammastrahlung.monopoly_app.activities;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
+
+import at.gammastrahlung.monopoly_app.R;
 
 public class DiceRollingActivity extends AppCompatActivity implements SensorEventListener {
 
