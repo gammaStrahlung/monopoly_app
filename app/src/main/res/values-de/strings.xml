@@ -11,4 +11,5 @@
     <string name="playersHeader">Spieler:</string>
     <string name="newGame_fail">Neues Spiel konnte nicht gestartet werden!</string>
     <string name="joinGame_fail">Dem Spiel konnte nicht beigetreten werden</string>
+    <string name="roll_dice">Würfeln</string>
 </resources>

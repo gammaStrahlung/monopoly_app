@@ -10,4 +10,5 @@
     <string name="playersHeader">Players:</string>
     <string name="newGame_fail">Failed to create new game!</string>
     <string name="joinGame_fail">Failed to join the game</string>
+    <string name="roll_dice">Roll Dice</string>
 </resources>
