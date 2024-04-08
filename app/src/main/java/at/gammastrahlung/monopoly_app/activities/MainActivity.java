@@ -41,17 +41,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Set OnClickListener for Roll Dice button
         Button rollDiceButton = findViewById(R.id.rollDiceButton);
-        rollDiceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create an intent to start the DiceRollingActivity
-                Intent intent = new Intent(MainActivity.this, DiceRollingActivity.class);
-                // Start the DiceRollingActivity
-                startActivity(intent);
-            }
+        rollDiceButton.setOnClickListener(v -> {
+            // Create an intent to start the DiceRollingActivity
+            Intent intent = new Intent(MainActivity.this, DiceRollingActivity.class);
+            // Start the DiceRollingActivity
+            startActivity(intent);
+        });
+        // Display board button
+        Button boardButton = findViewById(R.id.displayBoardButton); // Finds the button in the layout by its ID
+        boardButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, BoardGameActivity.class);
+            startActivity(intent);
         });
     }
-
     public void startButtonClick(View view) {
         new NewGameFragment().show(getSupportFragmentManager(), "NEW_DIALOG");
     }

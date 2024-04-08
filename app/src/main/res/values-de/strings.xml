@@ -12,4 +12,6 @@
     <string name="newGame_fail">Neues Spiel konnte nicht gestartet werden!</string>
     <string name="joinGame_fail">Dem Spiel konnte nicht beigetreten werden</string>
     <string name="roll_dice">Würfeln</string>
+    <string name="display_board">Spielfeld angezeigen</string>
+    <string name="board">Spielfeld</string>
 </resources>
