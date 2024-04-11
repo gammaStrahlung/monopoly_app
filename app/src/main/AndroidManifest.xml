@@ -31,7 +31,14 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DiceRollingActivity"></activity>
+        <activity
+            android:name=".activities.DiceRollingActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".activities.BoardGameActivity"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>
