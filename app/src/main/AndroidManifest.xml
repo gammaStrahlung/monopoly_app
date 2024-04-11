@@ -32,12 +32,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.DiceRollingActivity"
-            android:exported="true">
+            android:name=".activities.DiceRollingActivity">
         </activity>
         <activity
-            android:name=".activities.BoardGameActivity"
-            android:exported="true">
+            android:name=".activities.BoardGameActivity">
         </activity>
     </application>
 
