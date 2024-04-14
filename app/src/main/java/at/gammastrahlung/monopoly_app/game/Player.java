@@ -24,4 +24,9 @@ public class Player {
      */
     @Expose
     protected String name;
+
+    /**
+     * The game the player is currently playing
+     */
+    protected Game currentGame;
 }
