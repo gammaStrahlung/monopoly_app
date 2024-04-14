@@ -63,4 +63,30 @@ public class MonopolyClient {
                 .message(null)
                 .build());
     }
+
+    /**
+     * Sends a start game message to the server.
+     * Only the player that has created the game can use this.
+     */
+    public void startGame() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("start")
+                .player(gameData.getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a end game message to the server.
+     * Only the player that has created the game can use this.
+     */
+    public void endGame() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("end")
+                .player(gameData.getPlayer())
+                .build());
+    }
 }
