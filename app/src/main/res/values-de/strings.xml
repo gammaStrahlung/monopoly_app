@@ -14,4 +14,6 @@
     <string name="roll_dice">Würfeln</string>
     <string name="display_board">Spielfeld angezeigen</string>
     <string name="board">Spielfeld</string>
+    <string name="lobby_start">Starten</string>
+    <string name="lobby_cancel">Abbrechen</string>
 </resources>

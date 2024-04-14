@@ -2,6 +2,7 @@ package at.gammastrahlung.monopoly_app.activities;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -78,5 +79,15 @@ public class LobbyActivity extends AppCompatActivity {
                 adapter.notifyItemRangeRemoved(positionStart, itemCount);
             }
         });
+    }
+
+    // Cancel button ends the game and returns to main menu
+    public void cancelButtonClick(View view) {
+
+    }
+
+    // Start button starts the game and opens BoardGameActivity
+    public void startButtonClick(View view) {
+
     }
 }
