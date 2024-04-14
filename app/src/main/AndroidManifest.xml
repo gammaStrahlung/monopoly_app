@@ -25,11 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LobbyActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+            android:name=".activities.LobbyActivity">
         </activity>
         <activity
             android:name=".activities.DiceRollingActivity">
