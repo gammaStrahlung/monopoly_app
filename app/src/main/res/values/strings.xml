@@ -13,4 +13,84 @@
     <string name="roll_dice">Roll Dice</string>
     <string name="display_board">Display Board</string>
     <string name="board">Board</string>
+
+    <!-- Event Cards: -->
+    <!-- 0. Jail Time -->
+
+    <string name="jail_description">
+Go to jail.\n\nAn unexpected\n visit to jail can disrupt\n your plans and affect your\n strategy. You might be on\n your way to a lucrative\n property or in the midst\n of a clever trade, only\n to suddenly become incarcerated. This\n card is a constant reminder\n of how quickly fortune can\n turn in Monopoly and the\n importance of caution, even in\n the seemingly calmest moments of\n the game.</string>
+
+    <!-- 1. Advance to Go -->
+
+    <string name="advance_to_go_description">
+Advance to Go.\n\nMoving directly\n to the Go space not\n only rewards you with €200\n but also offers a chance\n to restart your journey on\n the game board. It\'s like\n a fresh start, an opportunity\n to rectify past mistakes or\n develop a new strategy. This\n unexpected windfall of money and\n the possibility to change the\n direction of your journey make\n this card one of the\n most coveted in the Monopoly\n game.</string>
+
+    <!-- 2. Advance to Boardwalk -->
+
+    <string name="boardwalk_description">
+Advance to Boardwalk.\n\nA swift\n move to the most prestigious\n street in the game can\n significantly increase your wealth. Boardwalk\n is the crown jewel of\n the Monopoly board, and advancing\n directly to it can dramatically\n improve your position in the\n game. However, caution is advised,\n as with great wealth comes\n great responsibility and the danger\n of rivalries with other players\n also aiming for the coveted\n blue streets.</string>
+
+    <!-- 3. Advance to St. Charles Place -->
+
+    <string name="st_charles_place_description">
+Advance to St. Charles Place.\n\nAn\n unexpected journey to the most\n expensive orange street could dramatically\n alter your financial situation. St.\n Charles Place is known for\n its high rents and strategic\n value in the game. A\n sudden leap to this location\n can surprise your competitors and\n put you in a strong\n position to collect high rents\n and solidify your dominance on\n the game board. However, be\n prepared for your opponents to\n try to drive you away\n from this valuable property.</string>
+
+    <!-- 4. Railroads -->
+
+    <string name="railroads_description">
+Railroads.\n\nThe decision to reach\n the next railroad could influence\n both your journey and your\n wallet, depending on whether you\'re\n an owner or a visitor.\n Railroads are strategically important locations\n in Monopoly, as they provide\n regular income and the opportunity\n to corner your opponents. Whether\n you choose to buy a\n railroad or just visit it\n depends on your current game\n strategy and financial capabilities.</string>
+
+    <!-- 5. Electric Company and Water Works -->
+
+    <string name="utilities_description">
+Electric Company and Water Works.\n\nA\n visit to the next utility\n company could change your dice\n strategy and open up new\n opportunities. Electric Company and Water\n Works are unique properties in\n Monopoly, as their rents depend\n on the roll of the\n dice. An unexpected visit to\n one of these utilities can\n increase your income or raise\n your expenses, depending on the\n current game conditions and your\n position on the board. Be\n ready to seize the opportunities\n that arise and, above all,\n be prepared for unexpected twists.</string>
+
+    <!-- 6. Street Repairs -->
+
+    <string name="street_repairs_description">
+Street Repairs.\n\nThe unexpected costs\n of repairs could strain your\n financial situation and thwart your\n plans. In Monopoly, owning houses\n and hotels is crucial for\n long-term success but also comes\n with costs. If you land\n on this event card, be\n prepared to spend some of\n your earnings on repairs, which\n could affect your financial flexibility\n and limit your strategic options.</string>
+
+    <!-- Community Chest Cards: -->
+
+
+
+    <string name="community_jail_description">
+Go to Jail.\n\n\nA reminder of\n the possibility of suddenly ending\n up behind bars can influence\n game strategy and increase tension.\n Jail is a constant threat\n in Monopoly, and this card\n reminds players that no one\n is safe from the law\n of the game. It forces\n players to adapt their plans\n and find alternative paths to\n success while enhancing the uncertainty\n and thrill of the game.</string>
+
+    <!-- 8. Birthday -->
+
+    <string name="birthday_description">
+Birthday.\n\nReceiving €10 from each\n player can bring unexpected wealth\n and strengthen your position in\n the game. Birthdays are a\n time of celebration and joy,\n and this card reflects that\n atmosphere by offering players an\n unexpected reward. But don\'t get\n too cocky, as your opponents\n could also benefit from this\n generous gesture and advance their\n own plans.</string>
+
+    <!-- 9. Beauty Contest -->
+
+    <string name="beauty_contest_description">
+Beauty Contest.\n\nWinning a beauty\n contest can not only boost\n your self-esteem but also improve\n your finances. This card rewards\n players for their elegance and\n style, reminding them that beauty\n often comes with rewards. Seize\n this moment to strengthen your\n financial situation and surprise your\n opponents by wisely investing your\n winnings and solidifying your position\n on the game board.</string>
+
+    <!-- 10. Inheritance -->
+
+    <string name="inheritance_description">
+Inheritance.\n\nAn unexpected inheritance can\n improve your financial situation and\n open up new opportunities on\n the game board. Inheritances are\n a source of unexpected wealth,\n giving players the chance to\n solidify their position in the\n game and surprise their competitors.\n Use this opportunity to strengthen\n your financial situation and expand\n your strategic options while mastering\n the challenges and opportunities of\n the Monopoly game.</string>
+
+    <!-- 11. Hospital Fees -->
+
+    <string name="hospital_fees_description">
+Hospital Fees.\n\nThe unexpected costs\n of hospital fees could strain\n your financial resources and influence\n your strategy. In Monopoly, health\n is as important as wealth,\n and this card reminds players\n that unforeseen expenses can thwart\n their plans. Be prepared to\n adapt and find alternative paths\n to success while mastering the\n challenges of the game.</string>
+
+    <!-- 12. Doctor's Fees -->
+
+    <string name="doctors_fees_description">
+Doctors Fees.\n\nThe unexpected costs\n of doctors fees could affect\n your financial situation and thwart\n your plans. Health is a\n precious asset, even in Monopoly,\n and this card serves as\n a reminder that unforeseen expenses\n can arise at any time.\n Be prepared to adjust your\n strategy and find alternative paths\n to success while mastering the\n challenges of the game.</string>
+
+    <!-- 13. Income Tax Refund -->
+
+    <string name="income_tax_refund_description">
+Income Tax Refund.\n\nAn unexpected\n tax refund can strengthen your\n finances and open up new\n opportunities. Taxes are a fact\n of life, even in Monopoly,\n and this card rewards players\n for their financial discipline and\n hard work. Use this unexpected\n windfall to strengthen your position\n in the game and expand\n your strategic options while mastering\n the challenges of the Monopoly\n game.</string>
+
+    <!-- 14. School Fees -->
+
+    <string name="school_fees_description">
+School Fees.\n\nThe unexpected costs\n of school fees could strain\n your financial situation and influence\n your strategy. Education is important,\n even in Monopoly, but this\n card serves as a reminder\n that education can also come\n with costs. Be prepared to\n adapt your plans and find\n alternative paths to success while\n mastering the challenges and opportunities\n of the Monopoly game.</string>
+
+
 </resources>

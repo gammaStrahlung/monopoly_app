@@ -14,4 +14,70 @@
     <string name="roll_dice">Würfeln</string>
     <string name="display_board">Spielfeld angezeigen</string>
     <string name="board">Spielfeld</string>
+
+
+    <!-- Event Cards (Ereigniskarten): -->
+
+    <!-- 0. Jail Time -->
+    <string name="jail_description">
+Gehe in das Gefängnis.\n\nEin unerwarteter\n Besuch im Gefängnis kann deine\n Pläne durcheinander bringen und deine\n Strategie beeinflussen. Du könntest dich\n gerade auf dem Weg zu\n einer lukrativen Immobilie befinden oder\n inmitten eines ausgeklügelten Handels sein,\n nur um plötzlich zum Inhaftierten\n zu werden. Diese Karte ist\n ein ständiger Reminder dafür, wie\n schnell sich das Glück im\n Monopoly drehen kann und wie\n wichtig es ist, Vorsicht walten\n zu lassen, selbst in den\n vermeintlich ruhigsten Momenten des Spiels.</string>
+
+    <!-- 1. Advance to Go (Gehe direkt los) -->
+    <string name="advance_to_go_description">
+Gehe direkt los.\n\nDas direkte\n Bewegen zur Los-Feld belohnt dich\n nicht nur mit €200, sondern\n bietet auch die Chance, deine\n Reise auf dem Spielbrett neu\n zu starten. Es ist wie\n ein Neuanfang, eine Gelegenheit, vergangene\n Fehler zu korrigieren oder eine\n neue Strategie zu entwickeln. Dieser\n unerwartete Geldsegen und die Möglichkeit,\n die Richtung deiner Reise zu\n ändern, machen diese Karte zu\n einer der begehrtesten im Monopoly-Spiel.</string>
+
+    <!-- 2. Advance to Boardwalk (Gehe zur Schlossallee) -->
+    <string name="boardwalk_description">
+Gehe zur Schlossallee.\n\nEin schneller\n Zug zur prestigeträchtigsten Straße im\n Spiel kann deinen Reichtum erheblich\n steigern. Die Schlossallee ist das\n Kronjuwel des Monopoly-Bretts, und ein\n direkter Zug dorthin kann deine\n Position im Spiel dramatisch verbessern.\n Doch Vorsicht ist geboten, denn\n mit großem Reichtum kommt große\n Verantwortung und die Gefahr von\n Rivalitäten mit anderen Spielern, die\n auch die begehrten blauen Straßen\n anstreben.</string>
+
+    <!-- 3. Advance to St. Charles Place (Gehe zum St. Charles Platz) -->
+    <string name="st_charles_place_description">
+Gehe zum St. Charles Platz.\n\nEine\n unerwartete Reise zur teuersten orangen\n Straße könnte deine finanzielle Situation\n dramatisch verändern. Der St. Charles\n Platz ist bekannt für seine\n hohen Mieten und strategischen Wert\n im Spiel. Ein plötzlicher Sprung\n an diesen Ort kann deine\n Gegner überraschen und dich in\n eine starke Position bringen, hohe\n Mieten zu kassieren und deine\n Dominanz auf dem Spielbrett zu\n festigen. Sei jedoch darauf vorbereitet,\n dass deine Gegner versuchen werden,\n dich von diesem wertvollen Eigentum\n zu vertreiben.</string>
+
+    <!-- 4. Railroads (Eisenbahnen) -->
+    <string name="railroads_description">
+Eisenbahnen.\n\nDie Entscheidung, die nächste\n Eisenbahn zu erreichen, könnte sowohl\n deine Reise als auch deine\n Brieftasche beeinflussen, je nachdem, ob\n du Eigentümer oder Besucher bist.\n Eisenbahnen sind strategisch wichtige Orte\n in Monopoly, da sie regelmäßige\n Einkommen bieten und die Möglichkeit\n geben, deine Gegner in die\n Enge zu treiben. Ob du\n eine Eisenbahn kaufst oder nur\n besuchst, hängt von deiner aktuellen\n Spielstrategie und deinen finanziellen Möglichkeiten\n ab.</string>
+
+    <!-- 5. Electric Company and Water Works (Elektrizitätswerk und Wasserwerk) -->
+    <string name="utilities_description">
+Elektrizitätswerk und Wasserwerk.\n\nEin Besuch\n beim nächsten Versorgungsunternehmen könnte deine\n Würfelstrategie ändern und neue Möglichkeiten\n eröffnen. Elektrizitätswerk und Wasserwerk sind\n einzigartige Eigenschaften in Monopoly, da\n ihre Mieten vom Würfelwurf abhängen.\n Ein unerwarteter Besuch bei einem\n dieser Versorgungsunternehmen kann dein Einkommen\n erhöhen oder deine Ausgaben steigern,\n je nach den aktuellen Spielbedingungen\n und deiner Position auf dem\n Brett. Sei bereit, die sich\n ergebenden Möglichkeiten zu ergreifen und\n vor allem auf unerwartete Wendungen\n vorbereitet zu sein.</string>
+
+    <!-- 6. Street Repairs (Straßenreparaturen) -->
+    <string name="street_repairs_description">
+Straßenreparaturen.\n\nDie unerwarteten Kosten für\n Reparaturen könnten deine finanzielle Situation\n belasten und deine Pläne durchkreuzen.\n In Monopoly ist der Besitz\n von Häusern und Hotels entscheidend\n für den langfristigen Erfolg, aber\n auch mit Kosten verbunden. Wenn\n du auf diese Ereigniskarte triffst,\n sei darauf vorbereitet, einen Teil\n deiner Einnahmen für Reparaturen auszugeben,\n was deine finanzielle Flexibilität beeinträchtigen\n und deine strategischen Optionen einschränken\n könnte.</string>
+
+    <!-- Community Chest Cards (Gemeinschaftsfeld-Karten): -->
+
+    <!-- 7. Go to Jail (Gehe ins Gefängnis) -->
+    <string name="community_jail_description">
+Gehe ins Gefängnis.\n\nEine Erinnerung\n an die Möglichkeit, plötzlich hinter\n Gittern zu landen, kann die\n Spielstrategie beeinflussen und die Spannung\n erhöhen. Das Gefängnis ist eine\n ständige Bedrohung in Monopoly, und\n diese Karte erinnert die Spieler\n daran, dass niemand vor dem\n Gesetz des Spiels sicher ist.\n Sie zwingt die Spieler, ihre\n Pläne anzupassen und alternative Wege\n zum Erfolg zu finden, während\n sie die Unsicherheit und den\n Nervenkitzel des Spiels steigert.</string>
+
+    <!-- 8. Birthday (Geburtstag) -->
+    <string name="birthday_description">
+Geburtstag.\n\nDer Erhalt von €10\n von jedem Spieler kann unerwarteten\n Reichtum bringen und deine Position\n im Spiel stärken. Geburtstage sind\n eine Zeit der Feier und\n Freude, und diese Karte spiegelt\n diese Atmosphäre wider, indem sie\n den Spielern einen unerwarteten Gewinn\n bietet. Aber werde nicht zu\n selbstsicher, da auch deine Gegner\n von dieser großzügigen Geste profitieren\n und ihre eigenen Pläne vorantreiben\n könnten.</string>
+
+    <!-- 9. Beauty Contest (Schönheitswettbewerb) -->
+    <string name="beauty_contest_description">
+Schönheitswettbewerb.\n\nDer Gewinn eines Schönheitswettbewerbs\n kann nicht nur dein Selbstwertgefühl\n steigern, sondern auch deine Finanzen\n verbessern. Diese Karte belohnt die\n Spieler für ihre Eleganz und\n Stil, und erinnert sie daran,\n dass Schönheit oft mit Belohnungen\n einhergeht. Nutze diesen Moment, um\n deine finanzielle Situation zu stärken\n und deine Gegner zu überraschen,\n indem du deine Gewinne klug\n investierst und deine Position auf\n dem Spielbrett festigst.</string>
+
+    <!-- 10. Inheritance (Erbschaft) -->
+    <string name="inheritance_description">
+Erbschaft.\n\nEine unerwartete Erbschaft kann\n deine finanzielle Situation verbessern und\n neue Möglichkeiten auf dem Spielbrett\n eröffnen. Erbschaften sind eine Quelle\n unerwarteten Reichtums, die den Spielern\n die Chance gibt, ihre Position\n im Spiel zu festigen und\n ihre Konkurrenten zu überraschen. Nutze\n diese Gelegenheit, um deine finanzielle\n Situation zu stärken und deine\n strategischen Optionen zu erweitern, während\n du die Herausforderungen und Möglichkeiten\n des Monopoly-Spiels meisterst.</string>
+
+    <!-- 11. Hospital Fees (Krankenhausgebühren) -->
+    <string name="hospital_fees_description">
+Krankenhausgebühren.\n\nDie unerwarteten Kosten für\n Krankenhausgebühren könnten deine finanziellen Ressourcen\n belasten und deine Strategie beeinflussen.\n In Monopoly sind Gesundheit genauso\n wichtig wie Reichtum, und diese\n Karte erinnert die Spieler daran,\n dass unvorhergesehene Ausgaben ihre Pläne\n durchkreuzen können. Sei darauf vorbereitet,\n deine Strategie anzupassen und alternative\n Wege zum Erfolg zu finden,\n während du die Herausforderungen des\n Spiels meisterst.</string>
+
+    <!-- 12. Doctor's Fees (Arztkosten) -->
+    <string name="doctors_fees_description">
+Arztkosten.\n\nDie unerwarteten Kosten für\n Arztkosten könnten deine finanzielle Situation\n beeinflussen und deine Pläne durchkreuzen.\n Gesundheit ist ein wertvolles Gut,\n auch in Monopoly, und diese\n Karte dient als Erinnerung daran,\n dass unvorhergesehene Ausgaben jederzeit entstehen\n können. Sei darauf vorbereitet, deine\n Strategie anzupassen und alternative Wege\n zum Erfolg zu finden, während\n du die Herausforderungen des Spiels\n meisterst.</string>
+
+    <!-- 13. Income Tax Refund (Einkommensteuerrückerstattung) -->
+    <string name="income_tax_refund_description">
+Einkommensteuerrückerstattung.\n\nEine unerwartete Steuerrückerstattung kann\n deine Finanzen stärken und neue\n Möglichkeiten eröffnen. Steuern sind ein\n Fakt des Lebens, auch in\n Monopoly, und diese Karte belohnt\n die Spieler für ihre finanzielle\n Disziplin und harte Arbeit. Nutze\n diesen unerwarteten Geldsegen, um deine\n Position im Spiel zu stärken\n und deine strategischen Optionen zu\n erweitern, während du die Herausforderungen\n des Monopoly-Spiels meisterst.</string>
+
+    <!-- 14. School Fees (Schulgebühren) -->
+    <string name="school_fees_description">
+Schulgebühren.\n\nDie unerwarteten Kosten für\n Schulgebühren könnten deine finanzielle Situation\n belasten und deine Strategie beeinflussen.\n Bildung ist wichtig, auch in\n Monopoly, aber diese Karte dient\n als Erinnerung daran, dass Bildung\n auch Kosten verursachen kann. Sei\n darauf vorbereitet, deine Pläne anzupassen\n und alternative Wege zum Erfolg\n zu finden, während du die\n Herausforderungen und Möglichkeiten des Monopoly-Spiels\n meisterst.</string>
+
 </resources>
