@@ -13,6 +13,10 @@ import lombok.Setter;
 @Setter
 public class Game {
 
+    // The gameId of the game
+    @Getter
+    private int gameId;
+
     // Current state of the game
     @Expose
     private GameState state;
