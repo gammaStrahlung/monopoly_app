@@ -24,4 +24,12 @@ public class Player {
      */
     @Expose
     protected String name;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (! (obj instanceof Player))
+            return false;
+
+        return id.equals(((Player) obj).id);
+    }
 }
