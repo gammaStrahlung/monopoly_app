@@ -30,6 +30,11 @@ public class GameData {
     private final Player player = new Player();
 
     /**
+     * The game and its data
+     */
+    private Game game;
+
+    /**
      * List of players of the game
      */
     private final ObservableArrayList<Player> players = new ObservableArrayList<>();

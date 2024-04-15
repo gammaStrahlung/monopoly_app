@@ -48,6 +48,7 @@ public class WebSocketHandler {
             // Creating game was successful
             gameData.getGameId().set(Integer.parseInt(message.getMessage()));
             gameData.getPlayers().add(gameData.getPlayer());
+            gameData.setGame(message.getGame());
             Log.d("WSHandler", "Create game: " + message.getMessage());
         } else {
             gameData.getGameId().set(-1);
@@ -69,6 +70,7 @@ public class WebSocketHandler {
                 // This player has joined a game
                 gameData.getGameId().set(Integer.parseInt(message.getMessage()));
                 gameData.getPlayers().add(gameData.getPlayer());
+                gameData.setGame(message.getGame());
                 Log.d("WSHandler", "Player joined Game: " + message.getMessage());
 
                 // Sync the player list with the server
