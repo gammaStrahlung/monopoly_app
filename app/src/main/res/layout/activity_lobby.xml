@@ -41,34 +41,36 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        app:layout_constraintBottom_toTopOf="@id/button_cancel"
+        app:layout_constraintBottom_toTopOf="@id/buttons_bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lobby_players"
         android:layout_marginBottom="10dp" />
 
-    <Button
-        android:id="@+id/button_cancel"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/buttons_bottom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:onClick="cancelButtonClick"
-        android:text="@string/lobby_cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_start"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/playersList" />
-
-    <Button
-        android:id="@+id/button_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:onClick="startButtonClick"
-        android:text="@string/lobby_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button_cancel"
-        app:layout_constraintTop_toBottomOf="@id/playersList" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playersList"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="cancelButtonClick"
+            android:text="@string/lobby_cancel"
+            android:layout_marginEnd="30dp"/>
+
+        <Button
+            android:id="@+id/button_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="startButtonClick"
+            android:text="@string/lobby_start" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
