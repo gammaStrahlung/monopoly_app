@@ -1,6 +1,7 @@
 package at.gammastrahlung.monopoly_app.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
@@ -90,6 +93,30 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
                 adapter.notifyItemRangeRemoved(positionStart, itemCount);
+            }
+        });
+
+        // Add handlers for game end and start
+        LobbyActivity context = this;
+        gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                Game game = GameData.getGameData().getGame();
+
+                if (game.getState() == Game.GameState.PLAYING) { // Game was started
+                    // Remove this callback
+                    GameData.getGameData().removeOnPropertyChangedCallback(this);
+
+                    // Go to Board
+                    Intent intent = new Intent(context, BoardGameActivity.class);
+                    startActivity(intent);
+                } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
+                    // Remove this callback
+                    GameData.getGameData().removeOnPropertyChangedCallback(this);
+
+                    GameData.getGameData().reset();
+                    finish(); // Return to MainActivity
+                }
             }
         });
     }
