@@ -3,6 +3,7 @@ package at.gammastrahlung.monopoly_app.activities;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +20,7 @@ import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -34,10 +36,12 @@ public class LobbyActivity extends AppCompatActivity {
             return insets;
         });
 
+        GameData gameData = GameData.getGameData();
+
         TextView gameIdText = findViewById(R.id.lobby_gameId);
         RecyclerView playerList = findViewById(R.id.playersList);
 
-        String titleText = getString(R.string.gameID) + ": " + GameData.getGameData().getGameId().get();
+        String titleText = getString(R.string.gameID) + ": " + gameData.getGameId().get();
 
         // Set game id text
         gameIdText.setText(titleText);
@@ -48,6 +52,15 @@ public class LobbyActivity extends AppCompatActivity {
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
         RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this);
         playerList.setAdapter(adapter);
+
+        // Disable "Cancel" and "Start" buttons when player is not gameOwner
+        if (gameData.getGame().getGameOwner().equals(gameData.getPlayer())) {
+            Button cancel = findViewById(R.id.button_cancel);
+            Button start = findViewById(R.id.button_start);
+
+            cancel.setEnabled(false);
+            start.setEnabled(false);
+        }
 
         // Add list change callback
         players.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Player>>() {
@@ -83,11 +96,11 @@ public class LobbyActivity extends AppCompatActivity {
 
     // Cancel button ends the game and returns to main menu
     public void cancelButtonClick(View view) {
-
+        MonopolyClient.getMonopolyClient().endGame();
     }
 
     // Start button starts the game and opens BoardGameActivity
     public void startButtonClick(View view) {
-
+        MonopolyClient.getMonopolyClient().startGame();
     }
 }
