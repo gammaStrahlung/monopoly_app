@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 public class GameData extends BaseObservable {
     @Getter
-    private static final GameData gameData = new GameData();
+    private static GameData gameData = new GameData();
 
     private GameData() {}
 
@@ -61,4 +61,12 @@ public class GameData extends BaseObservable {
      */
     @Getter
     private final ObservableArrayList<Player> players = new ObservableArrayList<>();
+
+    /**
+     * Resets the gameData object. This is used when the game ended and the user returns to the
+     * MainActivity
+     */
+    public void reset() {
+        gameData = new GameData();
+    }
 }
