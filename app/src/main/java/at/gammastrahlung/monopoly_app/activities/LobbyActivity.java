@@ -57,7 +57,7 @@ public class LobbyActivity extends AppCompatActivity {
         playerList.setAdapter(adapter);
 
         // Disable "Cancel" and "Start" buttons when player is not gameOwner
-        if (gameData.getGame().getGameOwner().equals(gameData.getPlayer())) {
+        if (!gameData.getGame().getGameOwner().equals(gameData.getPlayer())) {
             Button cancel = findViewById(R.id.button_cancel);
             Button start = findViewById(R.id.button_start);
 
