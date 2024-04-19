@@ -68,6 +68,7 @@ public class JoinGameFragment extends DialogFragment {
                                 Intent intent = new Intent(activity, LobbyActivity.class);
                                 activity.startActivity(intent);
                             }
+                            gameId.removeOnPropertyChangedCallback(this);
                         }
                     });
                 })
