@@ -112,12 +112,15 @@ public class WebSocketHandler {
 
         // Clear and add this player
         gamePlayers.clear();
-        gamePlayers.add(gameData.getPlayer());
 
         for (Player p : players) {
             if (!p.getId().equals(gameData.getPlayer().getId())) { // Don't add this player
                 gamePlayers.add(p);
                 log.append(p.getName()).append("\n");
+            } else {
+                // Update local player with player from Server
+                gameData.setPlayer(p);
+                gamePlayers.add(p);
             }
         }
 
