@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
+import at.gammastrahlung.monopoly_app.adapters.PlayerListChangedCallback;
 import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
@@ -65,39 +66,12 @@ public class LobbyActivity extends AppCompatActivity {
             start.setEnabled(false);
         }
 
+        LobbyActivity activity = this;
+
         // Add list change callback
-        players.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Player>>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(ObservableList sender) {
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
-                adapter.notifyItemRangeChanged(positionStart, positionStart);
-            }
-
-            @Override
-            public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-                adapter.notifyItemRangeInserted(positionStart, itemCount);
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
-                // ItemRangeMoved is not available in RecyclerView.Adapter
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
-                adapter.notifyItemRangeRemoved(positionStart, itemCount);
-            }
-        });
+        players.addOnListChangedCallback(new PlayerListChangedCallback(activity, adapter));
 
         // Add handlers for game end and start
-        LobbyActivity context = this;
         gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -107,15 +81,25 @@ public class LobbyActivity extends AppCompatActivity {
                     // Remove this callback
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
-                    // Go to Board
-                    Intent intent = new Intent(context, BoardGameActivity.class);
-                    startActivity(intent);
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Go to Board
+                            Intent intent = new Intent(activity, BoardGameActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                 } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
                     // Remove this callback
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
                     GameData.getGameData().reset();
-                    finish(); // Return to MainActivity
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish(); // Return to MainActivity
+                        }
+                    });
                 }
             }
         });
