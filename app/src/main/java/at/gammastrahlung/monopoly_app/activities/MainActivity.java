@@ -47,12 +47,6 @@ public class MainActivity extends AppCompatActivity {
             // Start the DiceRollingActivity
             startActivity(intent);
         });
-        // Display board button
-        Button boardButton = findViewById(R.id.displayBoardButton); // Finds the button in the layout by its ID
-        boardButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, BoardGameActivity.class);
-            startActivity(intent);
-        });
     }
     public void startButtonClick(View view) {
         new NewGameFragment().show(getSupportFragmentManager(), "NEW_DIALOG");
