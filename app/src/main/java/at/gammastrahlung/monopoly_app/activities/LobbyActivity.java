@@ -96,7 +96,7 @@ public class LobbyActivity extends AppCompatActivity {
                     // Remove this callback
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
-                    GameData.getGameData().reset();
+                    GameData.reset();
                     activity.runOnUiThread(() -> {
                         finish(); // Return to MainActivity
                     });

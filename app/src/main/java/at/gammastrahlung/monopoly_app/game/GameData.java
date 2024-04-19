@@ -66,7 +66,7 @@ public class GameData extends BaseObservable {
      * Resets the gameData object. This is used when the game ended and the user returns to the
      * MainActivity
      */
-    public void reset() {
+    public static void reset() {
         gameData = new GameData();
     }
 }

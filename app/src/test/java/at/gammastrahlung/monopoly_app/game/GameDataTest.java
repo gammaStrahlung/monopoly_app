@@ -50,7 +50,7 @@ class GameDataTest {
     void reset() {
         GameData gameData1 = GameData.getGameData();
 
-        gameData1.reset();
+        GameData.reset();
 
         GameData gameData2 = GameData.getGameData();
 
@@ -59,6 +59,6 @@ class GameDataTest {
 
     @AfterEach
     void cleanup() {
-        GameData.getGameData().reset();
+        GameData.reset();
     }
 }
