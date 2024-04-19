@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 
 import java.util.UUID;
 
-public class GameTest {
+class GameTest {
     @Test
     void newGame() {
         Player mockPlayer = Mockito.mock(Player.class);
