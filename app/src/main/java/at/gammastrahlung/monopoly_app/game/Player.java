@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -31,5 +32,10 @@ public class Player {
             return false;
 
         return id.equals(((Player) obj).id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 }
