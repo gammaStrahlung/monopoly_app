@@ -80,6 +80,7 @@ dependencies {
     androidTestImplementation libs.espresso.core
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.jupiter.engine
+    testImplementation libs.mockito.core
 
     compileOnly libs.lombok
     annotationProcessor libs.lombok
