@@ -1,6 +1,5 @@
 package at.gammastrahlung.monopoly_app.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +13,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,24 +79,18 @@ public class LobbyActivity extends AppCompatActivity {
                     // Remove this callback
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Go to Board
-                            Intent intent = new Intent(activity, BoardGameActivity.class);
-                            startActivity(intent);
-                        }
+                    activity.runOnUiThread(() -> {
+                        // Go to Board
+                        Intent intent = new Intent(activity, BoardGameActivity.class);
+                        startActivity(intent);
                     });
                 } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
                     // Remove this callback
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
                     GameData.getGameData().reset();
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish(); // Return to MainActivity
-                        }
+                    activity.runOnUiThread(() -> {
+                        finish(); // Return to MainActivity
                     });
                 }
             }
