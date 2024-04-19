@@ -15,4 +15,5 @@
     <string name="board">Spielfeld</string>
     <string name="lobby_start">Starten</string>
     <string name="lobby_cancel">Abbrechen</string>
+    <string name="startGame_fail">Spiel konnte nicht gestartet werden. Stelle sicher, das mindestens zwei Spieler vorhanden sind.</string>
 </resources>

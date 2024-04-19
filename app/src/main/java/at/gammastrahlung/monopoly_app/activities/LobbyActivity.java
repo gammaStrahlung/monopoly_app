@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,9 +75,15 @@ public class LobbyActivity extends AppCompatActivity {
         gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId != BR.game)
+                    return; // Something other then game has changed -> Ignore
+
                 Game game = GameData.getGameData().getGame();
 
-                if (game.getState() == Game.GameState.PLAYING) { // Game was started
+                if (game == null) { // Starting the game was not successful
+                    activity.runOnUiThread(() ->
+                            Toast.makeText(activity, R.string.startGame_fail, Toast.LENGTH_LONG).show());
+                } else if (game.getState() == Game.GameState.PLAYING) { // Game was started
                     // Remove this callback
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
