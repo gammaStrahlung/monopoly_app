@@ -2,7 +2,11 @@ package at.gammastrahlung.monopoly_app.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.UUID;
 
 class GameDataTest {
     @Test
@@ -19,5 +23,42 @@ class GameDataTest {
 
         // Players has been initialized already
         assertNotNull(gameData.getPlayers());
+    }
+
+    @Test
+    void player() {
+        Player mockPlayer = Mockito.mock(Player.class);
+        Mockito.when(mockPlayer.getId()).thenReturn(UUID.randomUUID());
+
+        GameData gd = GameData.getGameData();
+
+        gd.setPlayer(mockPlayer);
+        assertEquals(mockPlayer, gd.getPlayer());
+    }
+
+    @Test
+    void game() {
+        Game mockGame = Mockito.mock(Game.class);
+
+        GameData gd = GameData.getGameData();
+
+        gd.setGame(mockGame);
+        assertEquals(mockGame, gd.getGame());
+    }
+
+    @Test
+    void reset() {
+        GameData gameData1 = GameData.getGameData();
+
+        gameData1.reset();
+
+        GameData gameData2 = GameData.getGameData();
+
+        assertNotEquals(gameData1, gameData2);
+    }
+
+    @AfterEach
+    void cleanup() {
+        GameData.getGameData().reset();
     }
 }
