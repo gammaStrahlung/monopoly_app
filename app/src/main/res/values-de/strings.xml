@@ -12,6 +12,10 @@
     <string name="newGame_fail">Neues Spiel konnte nicht gestartet werden!</string>
     <string name="joinGame_fail">Dem Spiel konnte nicht beigetreten werden</string>
     <string name="roll_dice">Würfeln</string>
-    <string name="display_board">Spielfeld angezeigen</string>
     <string name="board">Spielfeld</string>
+    <string name="lobby_start">Starten</string>
+    <string name="lobby_cancel">Abbrechen</string>
+    <string name="startGame_fail">Spiel konnte nicht gestartet werden. Stelle sicher, das mindestens zwei Spieler vorhanden sind.</string>
+    <string name="playerList_gameOwner">(Spielersteller)</string>
+    <string name="playerList_IsYou">(Du)</string>
 </resources>

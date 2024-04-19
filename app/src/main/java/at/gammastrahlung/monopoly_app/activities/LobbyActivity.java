@@ -1,23 +1,30 @@
 package at.gammastrahlung.monopoly_app.activities;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableList;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
+import at.gammastrahlung.monopoly_app.adapters.PlayerListChangedCallback;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -33,10 +40,12 @@ public class LobbyActivity extends AppCompatActivity {
             return insets;
         });
 
+        GameData gameData = GameData.getGameData();
+
         TextView gameIdText = findViewById(R.id.lobby_gameId);
         RecyclerView playerList = findViewById(R.id.playersList);
 
-        String titleText = getString(R.string.gameID) + ": " + GameData.getGameData().getGameId().get();
+        String titleText = getString(R.string.gameID) + ": " + gameData.getGameId().get();
 
         // Set game id text
         gameIdText.setText(titleText);
@@ -48,35 +57,61 @@ public class LobbyActivity extends AppCompatActivity {
         RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this);
         playerList.setAdapter(adapter);
 
+        // Disable "Cancel" and "Start" buttons when player is not gameOwner
+        if (!gameData.getGame().getGameOwner().equals(gameData.getPlayer())) {
+            Button cancel = findViewById(R.id.button_cancel);
+            Button start = findViewById(R.id.button_start);
+
+            cancel.setEnabled(false);
+            start.setEnabled(false);
+        }
+
+        LobbyActivity activity = this;
+
         // Add list change callback
-        players.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Player>>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onChanged(ObservableList sender) {
-                adapter.notifyDataSetChanged();
-            }
+        players.addOnListChangedCallback(new PlayerListChangedCallback(activity, adapter));
 
+        // Add handlers for game end and start
+        gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
-            public void onItemRangeChanged(ObservableList sender, int positionStart, int itemCount) {
-                adapter.notifyItemRangeChanged(positionStart, positionStart);
-            }
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId != BR.game)
+                    return; // Something other then game has changed -> Ignore
 
-            @Override
-            public void onItemRangeInserted(ObservableList sender, int positionStart, int itemCount) {
-                adapter.notifyItemRangeInserted(positionStart, itemCount);
-            }
+                Game game = GameData.getGameData().getGame();
 
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onItemRangeMoved(ObservableList sender, int fromPosition, int toPosition, int itemCount) {
-                // ItemRangeMoved is not available in RecyclerView.Adapter
-                adapter.notifyDataSetChanged();
-            }
+                if (game == null) { // Starting the game was not successful
+                    activity.runOnUiThread(() ->
+                            Toast.makeText(activity, R.string.startGame_fail, Toast.LENGTH_LONG).show());
+                } else if (game.getState() == Game.GameState.PLAYING) { // Game was started
+                    // Remove this callback
+                    GameData.getGameData().removeOnPropertyChangedCallback(this);
 
-            @Override
-            public void onItemRangeRemoved(ObservableList sender, int positionStart, int itemCount) {
-                adapter.notifyItemRangeRemoved(positionStart, itemCount);
+                    activity.runOnUiThread(() -> {
+                        // Go to Board
+                        Intent intent = new Intent(activity, BoardGameActivity.class);
+                        startActivity(intent);
+                    });
+                } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
+                    // Remove this callback
+                    GameData.getGameData().removeOnPropertyChangedCallback(this);
+
+                    GameData.reset();
+                    activity.runOnUiThread(() -> {
+                        finish(); // Return to MainActivity
+                    });
+                }
             }
         });
+    }
+
+    // Cancel button ends the game and returns to main menu
+    public void cancelButtonClick(View view) {
+        MonopolyClient.getMonopolyClient().endGame();
+    }
+
+    // Start button starts the game and opens BoardGameActivity
+    public void startButtonClick(View view) {
+        MonopolyClient.getMonopolyClient().startGame();
     }
 }

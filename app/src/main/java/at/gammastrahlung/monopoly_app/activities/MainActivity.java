@@ -35,10 +35,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Initialize Player UUID and WebSocket URI
-        updatePlayerUUID();
-        WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
-
         // Set OnClickListener for Roll Dice button
         Button rollDiceButton = findViewById(R.id.rollDiceButton);
         rollDiceButton.setOnClickListener(v -> {
@@ -47,13 +43,17 @@ public class MainActivity extends AppCompatActivity {
             // Start the DiceRollingActivity
             startActivity(intent);
         });
-        // Display board button
-        Button boardButton = findViewById(R.id.displayBoardButton); // Finds the button in the layout by its ID
-        boardButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, BoardGameActivity.class);
-            startActivity(intent);
-        });
     }
+
+    @Override
+    protected void onResume() {
+        // Initialize Player UUID and WebSocket URI
+        updatePlayerUUID();
+        WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
+
+        super.onResume();
+    }
+
     public void startButtonClick(View view) {
         new NewGameFragment().show(getSupportFragmentManager(), "NEW_DIALOG");
     }

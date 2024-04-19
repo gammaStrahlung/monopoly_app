@@ -11,6 +11,7 @@ import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> {
@@ -33,7 +34,18 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     @Override
     public void onBindViewHolder(@NonNull PlayerViewHolder holder, int position) {
 
-        holder.playerNameView.setText(players.get(position).getName());
+        Player thisPlayer = GameData.getGameData().getPlayer();
+        Player gameOwner = GameData.getGameData().getGame().getGameOwner();
+
+        Player player = players.get(position);
+
+        holder.playerNameView.setText(player.getName());
+
+        if (player.equals(thisPlayer))
+            holder.isCurrentPlayer.setText(R.string.playerList_IsYou);
+
+        if (player.equals(gameOwner))
+            holder.isGameOwner.setText(R.string.playerList_gameOwner);
     }
 
     @Override
@@ -44,10 +56,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     public static class PlayerViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView playerNameView;
+        protected TextView isGameOwner;
+        protected TextView isCurrentPlayer;
 
         public PlayerViewHolder(@NonNull View itemView) {
             super(itemView);
             playerNameView = itemView.findViewById(R.id.player_name);
+            isGameOwner = itemView.findViewById(R.id.isGameOwner);
+            isCurrentPlayer = itemView.findViewById(R.id.isCurrentPlayer);
         }
     }
 }

@@ -31,6 +31,12 @@ public class WebSocketHandler {
             case "players":
                 players(message);
                 break;
+            case "start":
+                start(message);
+                break;
+            case "end":
+                end(message);
+                break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -48,6 +54,7 @@ public class WebSocketHandler {
             // Creating game was successful
             gameData.getGameId().set(Integer.parseInt(message.getMessage()));
             gameData.getPlayers().add(gameData.getPlayer());
+            gameData.setGame(message.getGame());
             Log.d("WSHandler", "Create game: " + message.getMessage());
         } else {
             gameData.getGameId().set(-1);
@@ -69,6 +76,7 @@ public class WebSocketHandler {
                 // This player has joined a game
                 gameData.getGameId().set(Integer.parseInt(message.getMessage()));
                 gameData.getPlayers().add(gameData.getPlayer());
+                gameData.setGame(message.getGame());
                 Log.d("WSHandler", "Player joined Game: " + message.getMessage());
 
                 // Sync the player list with the server
@@ -104,15 +112,57 @@ public class WebSocketHandler {
 
         // Clear and add this player
         gamePlayers.clear();
-        gamePlayers.add(gameData.getPlayer());
 
         for (Player p : players) {
             if (!p.getId().equals(gameData.getPlayer().getId())) { // Don't add this player
                 gamePlayers.add(p);
                 log.append(p.getName()).append("\n");
+            } else {
+                // Update local player with player from Server
+                gameData.setPlayer(p);
+                gamePlayers.add(p);
             }
         }
 
         Log.d("WSHandler", log.toString());
+    }
+
+    /**
+     * Handles when the game has been started
+     *
+     * @param message Message from the Server
+     */
+    private void start(ServerMessage message) {
+        GameData gameData = GameData.getGameData();
+
+        if (message.getType() == ServerMessage.MessageType.SUCCESS) {
+            // Starting the game was successful
+            Log.d("WSHandler", "Successfully started game");
+            gameData.setGame(message.getGame());
+        } else if (message.getType() == ServerMessage.MessageType.ERROR) {
+            // Starting the game failed
+            Log.d("WSHandler", "Failed to start the game");
+            gameData.setGame(null);
+        }
+    }
+
+    /**
+     * Handles when the game has been ended
+     *
+     * @param message Message from the Server
+     */
+    private void end(ServerMessage message) {
+        GameData gameData = GameData.getGameData();
+
+        if (message.getType() == ServerMessage.MessageType.SUCCESS) {
+            // Ending the game was successful
+            Log.d("WSHandler", "Successfully ended game");
+        } else if (message.getType() == ServerMessage.MessageType.ERROR) {
+            // Ending the game failed
+            Log.d("WSHandler", "Failed to end the game");
+        }
+
+        // Game should be updated anyway. When game has ended, Game.state is set to GameState.ENDED
+        gameData.setGame(message.getGame());
     }
 }
