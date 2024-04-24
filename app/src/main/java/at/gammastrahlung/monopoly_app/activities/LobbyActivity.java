@@ -89,7 +89,7 @@ public class LobbyActivity extends AppCompatActivity {
 
                     activity.runOnUiThread(() -> {
                         // Go to Board
-                        Intent intent = new Intent(activity, BoardGameActivity.class);
+                        Intent intent = new Intent(activity, BoardActivity.class);
                         startActivity(intent);
                     });
                 } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
