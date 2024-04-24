@@ -13,32 +13,36 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:background="#FF0000"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        tools:layout_editor_absoluteX="1dp" />
 
     <View
         android:id="@+id/colorBar_bottom"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:background="#00FF00"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        tools:layout_editor_absoluteX="1dp" />
 
     <View
         android:id="@+id/colorBar_left"
         android:layout_width="20dp"
         android:layout_height="match_parent"
         android:background="#0000FF"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        tools:layout_editor_absoluteY="1dp" />
 
     <View
         android:id="@+id/colorBar_right"
         android:layout_width="20dp"
         android:layout_height="match_parent"
         android:background="#FF00FF"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        tools:layout_editor_absoluteY="1dp" />
 
     <!-- Field Title -->
     <TextView
