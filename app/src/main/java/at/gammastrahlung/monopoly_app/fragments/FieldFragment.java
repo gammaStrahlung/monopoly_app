@@ -1,8 +1,10 @@
 package at.gammastrahlung.monopoly_app.fragments;
 
-import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,48 +22,52 @@ public class FieldFragment extends Fragment {
     public static final int COLOR_BAR_RIGHT = 3;
     public static final int COLOR_BAR_NONE = 4; // Used to prevent using a number that is in use
 
-    public FieldFragment() {
-        super(R.layout.fragment_field);
+    private View inflatedView;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        inflatedView = inflater.inflate(R.layout.fragment_field, container, false);
+        return inflatedView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setColorBarLocation(requireArguments().getInt("color_bar"));
+        setColorBar(requireArguments().getInt("color_bar_position"), requireArguments().getString("color_bar_color"));
         setFieldTitle(requireArguments().getString("title"));
         setPlayers(requireArguments().getIntArray("players"));
     }
 
-    private void setColorBarLocation(int location) {
-        Activity a = getActivity();
-        if (a == null)
-            return;
+    private void setColorBar(int location, String color) {
+        View v = null;
 
         switch (location) {
             case COLOR_BAR_TOP:
-                a.findViewById(R.id.colorBar_top).setVisibility(View.VISIBLE);
+                v = inflatedView.findViewById(R.id.colorBar_top);
                 break;
             case COLOR_BAR_BOTTOM:
-                a.findViewById(R.id.colorBar_bottom).setVisibility(View.VISIBLE);
+                v = inflatedView.findViewById(R.id.colorBar_bottom);
                 break;
             case COLOR_BAR_LEFT:
-                a.findViewById(R.id.colorBar_left).setVisibility(View.VISIBLE);
+                v = inflatedView.findViewById(R.id.colorBar_left);
                 break;
             case COLOR_BAR_RIGHT:
-                a.findViewById(R.id.colorBar_right).setVisibility(View.VISIBLE);
+                v = inflatedView.findViewById(R.id.colorBar_right);
                 break;
             default:
                 break; // No color bar
         }
+
+        if (v != null) {
+            v.setVisibility(View.VISIBLE);
+            v.setBackgroundColor(Color.parseColor(color));
+        }
     }
 
     private void setFieldTitle(String title) {
-        Activity a = getActivity();
-        if (a == null)
-            return;
-
-        ((TextView) a.findViewById(R.id.field_title)).setText(title);
+        ((TextView) inflatedView.findViewById(R.id.field_title)).setText(title);
     }
 
     private void setPlayers(int[] players) {
