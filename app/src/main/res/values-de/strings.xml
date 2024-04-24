@@ -18,4 +18,5 @@
     <string name="startGame_fail">Spiel konnte nicht gestartet werden. Stelle sicher, das mindestens zwei Spieler vorhanden sind.</string>
     <string name="playerList_gameOwner">(Spielersteller)</string>
     <string name="playerList_IsYou">(Du)</string>
+    <string name="field_title">Feld Titel</string>
 </resources>
