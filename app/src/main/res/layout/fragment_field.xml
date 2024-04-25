@@ -5,43 +5,52 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/field_border"
-    android:padding="1dp" >
+    android:padding="1dp"
+    app:layout_constraintDimensionRatio="1:1" >
 
     <!-- Color bars, only one (or none) gets enabled depending on the position in the board / the field type-->
     <View
         android:id="@+id/colorBar_top"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
         android:background="#FF0000"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteX="1dp" />
 
     <View
         android:id="@+id/colorBar_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
         android:background="#00FF00"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteX="1dp" />
 
     <View
         android:id="@+id/colorBar_left"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
+        android:layout_width="10dp"
+        android:layout_height="0dp"
         android:background="#0000FF"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteY="1dp" />
 
     <View
         android:id="@+id/colorBar_right"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
+        android:layout_width="10dp"
+        android:layout_height="0dp"
         android:background="#FF00FF"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteY="1dp" />
 
     <!-- Field Title -->
@@ -50,11 +59,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/field_title"
-        android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/colorBar_top"
         app:layout_constraintStart_toEndOf="@id/colorBar_left"
         app:layout_constraintEnd_toStartOf="@id/colorBar_right"
-        android:layout_margin="5dp"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="100sp"
+        android:autoSizeStepGranularity=".5sp"
         />
 
     <!-- Player icons get added here when they are on the field -->
