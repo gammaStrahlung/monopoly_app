@@ -9,7 +9,7 @@ import lombok.Setter;
 public class GameBoard {
     private Player bank;
     private Field[] gameBoard;
-    private int gameBoardSize;
+    private int GAME_BOARD_SIZE;
     private String FULL_SET;
     private String HOTEL;
 }

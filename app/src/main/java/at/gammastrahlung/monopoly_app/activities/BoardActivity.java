@@ -11,6 +11,7 @@ import androidx.databinding.library.baseAdapters.BR;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
+import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
@@ -65,10 +66,10 @@ public class BoardActivity extends AppCompatActivity {
         fieldRowLeft.removeAllViews();
         fieldRowRight.removeAllViews();
 
-        int boardSideLenght = board.getGameBoardSize() / 4;
+        int boardSideLength = board.getGAME_BOARD_SIZE() / 4;
 
-        int horizontalFieldCount = boardSideLenght + 2; // Includes edges
-        int verticalFieldCount = boardSideLenght - 2; // Does not include edges
+        int horizontalFieldCount = boardSideLength + 2; // Includes edges
+        int verticalFieldCount = boardSideLength - 2; // Does not include edges
 
         /* Monopoly game starts bottom right and then goes in clockwise direction
         [6] [7] [8] [ 9]
@@ -80,43 +81,43 @@ public class BoardActivity extends AppCompatActivity {
         // Bottom row (right to left)
         for (int i = horizontalFieldCount - 2; i >= 0; i--) {
             boolean isEdge = i == 0 || i == horizontalFieldCount - 2;
-            addFieldToBoard(fieldRowBottom, board.getGameBoard()[i], isEdge);
+            addFieldToBoard(fieldRowBottom, board.getGameBoard()[i], isEdge, i);
         }
         addConstraints(fieldRowBottom);
 
         // Left row (bottom to top)
         for (int i = horizontalFieldCount + verticalFieldCount - 1; i >= horizontalFieldCount - 1; i--)
-            addFieldToBoard(fieldRowLeft, board.getGameBoard()[i], false);
+            addFieldToBoard(fieldRowLeft, board.getGameBoard()[i], false, i);
         addConstraints(fieldRowLeft);
 
         // Top row (left to right)
         for (int i = horizontalFieldCount + verticalFieldCount; i < horizontalFieldCount * 2 + verticalFieldCount - 1; i++) {
             boolean isEdge = i == horizontalFieldCount + verticalFieldCount || i == horizontalFieldCount * 2 + verticalFieldCount - 2;
-            addFieldToBoard(fieldRowTop, board.getGameBoard()[i], isEdge);
+            addFieldToBoard(fieldRowTop, board.getGameBoard()[i], isEdge, i);
         }
         addConstraints(fieldRowTop);
 
         // Right row (top to bottom)
-        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGameBoardSize(); i++)
-            addFieldToBoard(fieldRowRight, board.getGameBoard()[i], false);
+        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGAME_BOARD_SIZE(); i++)
+            addFieldToBoard(fieldRowRight, board.getGameBoard()[i], false, i);
         addConstraints(fieldRowRight);
     }
 
-    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge) {
+    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
 
         // Add players on the field here (Not currently tracked on the server):
         int[] players = null;
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
-            addFieldToBoard(fieldRow, p.getName(), players, true, p.getColor().getColorString(), isEdge);
+            addFieldToBoard(fieldRow, p.getName(), players, true, p.getColor().getColorString(), isEdge, fieldId);
 
         } else {
-            addFieldToBoard(fieldRow, field.getName(), players, false, null, isEdge);
+            addFieldToBoard(fieldRow, field.getName(), players, false, null, isEdge, fieldId);
         }
     }
 
-    private void addFieldToBoard(ConstraintLayout fieldRow, String fieldTitle, int[] playerIds, boolean showColorBar, String colorBarColor, boolean isEdge) {
+    private void addFieldToBoard(ConstraintLayout fieldRow, String fieldTitle, int[] playerIds, boolean showColorBar, String colorBarColor, boolean isEdge, int fieldId) {
         Bundle bundle = new Bundle();
         int colorBarPosition = FieldFragment.COLOR_BAR_NONE;
 
@@ -154,6 +155,8 @@ public class BoardActivity extends AppCompatActivity {
         layout.getLayoutParams().height = height;
         layout.getLayoutParams().width = width;
         layout.setId(View.generateViewId());
+        layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getGameBoard()[fieldId])
+                .show(getSupportFragmentManager(), "FieldInfo"));
 
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
