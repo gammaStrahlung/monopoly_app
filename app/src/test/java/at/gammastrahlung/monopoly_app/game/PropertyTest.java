@@ -24,7 +24,8 @@ class PropertyTest {
 
     @Test
     void price() {
-
+        p.setPrice(12345);
+        assertEquals(12345, p.getPrice());
     }
 
     @Test
