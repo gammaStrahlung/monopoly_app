@@ -40,6 +40,14 @@ class PlayerTest {
     }
 
     @Test
+    void balance() {
+        Player p1 = new Player();
+
+        p1.setBalance(100);
+        assertEquals(100, p1.getBalance());
+    }
+
+    @Test
     void equalsTest() {
         UUID playerid = UUID.randomUUID();
 
