@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import at.gammastrahlung.monopoly_app.game.gameboard.PropertyColor;
 
-class PropertyColorTest {
+public class PropertyColorTest {
     @ParameterizedTest
     @EnumSource(PropertyColor.class)
     void getColorString(PropertyColor color) {
