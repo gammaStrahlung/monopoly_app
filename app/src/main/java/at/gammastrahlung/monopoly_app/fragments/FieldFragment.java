@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
 import at.gammastrahlung.monopoly_app.R;
@@ -71,6 +74,22 @@ public class FieldFragment extends Fragment {
     }
 
     private void setPlayers(int[] players) {
+        if (players == null)
+            return;
 
+        LinearLayout playerIcons = inflatedView.findViewById(R.id.playerIcons);
+
+        for (int playerId : players) {
+            if (playerId < 1 || playerId > 8)
+                return; // Only players 1-8 are valid
+
+            ImageView iv = new ImageView(getActivity());
+            int iconId = getResources().getIdentifier("playericon_" + playerId, "drawable", getActivity().getPackageName());
+
+            iv.setImageDrawable(AppCompatResources.getDrawable(getActivity(), iconId));
+            iv.setLayoutParams(new LinearLayout.LayoutParams(30, 30));
+
+            playerIcons.addView(iv);
+        }
     }
 }
