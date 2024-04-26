@@ -1,5 +1,6 @@
 package at.gammastrahlung.monopoly_app.fragments;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textview.MaterialTextView;
@@ -22,19 +24,21 @@ public class FieldInfoFragment extends DialogFragment {
         this.field = field;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, container, false);
-        return inflatedView;
-    }
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, null);
+
+        // Add close button
+        builder.setView(inflatedView).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
 
         // Add actual field display code here
         MaterialTextView title = inflatedView.findViewById(R.id.fieldName);
         title.setText(field.getName());
+
+        return builder.create();
     }
 }
