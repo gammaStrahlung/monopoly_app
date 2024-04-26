@@ -17,9 +17,13 @@ import at.gammastrahlung.monopoly_app.game.Player;
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> {
 
     ObservableArrayList<Player> players;
+    Context context;
+    private final boolean showMoney;
 
-    public PlayerAdapter(ObservableArrayList<Player> players, Context context) {
+    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney) {
         this.players = players;
+        this.context = context;
+        this.showMoney = showMoney;
     }
 
     @NonNull
@@ -46,6 +50,9 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
 
         if (player.equals(gameOwner))
             holder.isGameOwner.setText(R.string.playerList_gameOwner);
+
+        if (showMoney)
+            holder.playerMoney.setText(context.getString(R.string.currencyDisplay, thisPlayer.getBalance()));
     }
 
     @Override
@@ -58,12 +65,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         protected TextView playerNameView;
         protected TextView isGameOwner;
         protected TextView isCurrentPlayer;
+        protected TextView playerMoney;
 
         public PlayerViewHolder(@NonNull View itemView) {
             super(itemView);
             playerNameView = itemView.findViewById(R.id.player_name);
             isGameOwner = itemView.findViewById(R.id.isGameOwner);
             isCurrentPlayer = itemView.findViewById(R.id.isCurrentPlayer);
+            playerMoney = itemView.findViewById(R.id.playerMoney);
         }
     }
 }

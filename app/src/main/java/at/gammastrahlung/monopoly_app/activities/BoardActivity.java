@@ -2,7 +2,6 @@ package at.gammastrahlung.monopoly_app.activities;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import androidx.databinding.library.baseAdapters.BR;
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
+import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
@@ -65,7 +65,7 @@ public class BoardActivity extends AppCompatActivity {
     }
 
     public void otherPlayersClick(View v) {
-
+        new PlayerListFragment().show(getSupportFragmentManager(), "playerList");
     }
 
     private void updatePlayerInfo() {
