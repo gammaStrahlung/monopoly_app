@@ -35,7 +35,7 @@ public class PlayerListFragment extends DialogFragment {
         RecyclerView playersList = inflatedView.findViewById(R.id.playersList);
         playersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
-        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, getActivity(), true);
+        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, getActivity(), true, true);
         playersList.setAdapter(adapter);
     }
 }

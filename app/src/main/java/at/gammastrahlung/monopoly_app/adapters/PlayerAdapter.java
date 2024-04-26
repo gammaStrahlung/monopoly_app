@@ -7,23 +7,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.PlayerInfoFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> {
 
     ObservableArrayList<Player> players;
-    Context context;
+    AppCompatActivity context;
     private final boolean showMoney;
+    private final boolean enablePlayerInfo;
 
-    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney) {
+    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney, boolean enablePlayerInfo) {
         this.players = players;
-        this.context = context;
+        this.context = (AppCompatActivity) context;
         this.showMoney = showMoney;
+        this.enablePlayerInfo = enablePlayerInfo;
     }
 
     @NonNull
@@ -53,6 +57,9 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
 
         if (showMoney)
             holder.playerMoney.setText(context.getString(R.string.currencyDisplay, thisPlayer.getBalance()));
+
+        if (enablePlayerInfo)
+            holder.itemView.setOnClickListener(v -> new PlayerInfoFragment(player).show(context.getSupportFragmentManager(), "PlayerInfo"));
     }
 
     @Override
