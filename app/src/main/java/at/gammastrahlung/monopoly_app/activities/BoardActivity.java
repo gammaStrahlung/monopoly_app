@@ -6,9 +6,15 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.databinding.Observable;
+import androidx.databinding.library.baseAdapters.BR;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
+import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.gameboard.Field;
+import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
+import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 
 public class BoardActivity extends AppCompatActivity {
 
@@ -34,6 +40,80 @@ public class BoardActivity extends AppCompatActivity {
         fieldRowRight = findViewById(R.id.field_row_right);
         boardLayout = findViewById(R.id.boardLayout);
 
+        buildGameBoard();
+
+        // Update when game data changes
+        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId != BR.game)
+                    return;
+
+                runOnUiThread(() -> buildGameBoard());
+            }
+        });
+    }
+
+    private void buildGameBoard() {
+        GameBoard board = GameData.getGameData().getGame().getGameBoard();
+        if (board == null)
+            return; // Don't build board if it does not exist
+
+        // Clear views
+        fieldRowTop.removeAllViews();
+        fieldRowBottom.removeAllViews();
+        fieldRowLeft.removeAllViews();
+        fieldRowRight.removeAllViews();
+
+        int boardSideLenght = board.getGameBoardSize() / 4;
+
+        int horizontalFieldCount = boardSideLenght + 2; // Includes edges
+        int verticalFieldCount = boardSideLenght - 2; // Does not include edges
+
+        /* Monopoly game starts bottom right and then goes in clockwise direction
+        [6] [7] [8] [ 9]
+        [5] ->      [10]
+        [4]      <- [11]
+        [3] [2] [1] [ 0] (Start)
+         */
+
+        // Bottom row (right to left)
+        for (int i = horizontalFieldCount - 2; i >= 0; i--) {
+            boolean isEdge = i == 0 || i == horizontalFieldCount - 2;
+            addFieldToBoard(fieldRowBottom, board.getGameBoard()[i], isEdge);
+        }
+        addConstraints(fieldRowBottom);
+
+        // Left row (bottom to top)
+        for (int i = horizontalFieldCount + verticalFieldCount - 1; i >= horizontalFieldCount - 1; i--)
+            addFieldToBoard(fieldRowLeft, board.getGameBoard()[i], false);
+        addConstraints(fieldRowLeft);
+
+        // Top row (left to right)
+        for (int i = horizontalFieldCount + verticalFieldCount; i < horizontalFieldCount * 2 + verticalFieldCount - 1; i++) {
+            boolean isEdge = i == horizontalFieldCount + verticalFieldCount || i == horizontalFieldCount * 2 + verticalFieldCount - 2;
+            addFieldToBoard(fieldRowTop, board.getGameBoard()[i], isEdge);
+        }
+        addConstraints(fieldRowTop);
+
+        // Right row (top to bottom)
+        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGameBoardSize(); i++)
+            addFieldToBoard(fieldRowRight, board.getGameBoard()[i], false);
+        addConstraints(fieldRowRight);
+    }
+
+    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge) {
+
+        // Add players on the field here (Not currently tracked on the server):
+        int[] players = null;
+
+        if (field.getClass() == Property.class) {
+            Property p = (Property) field;
+            addFieldToBoard(fieldRow, p.getName(), players, true, p.getColor().getColorString(), isEdge);
+
+        } else {
+            addFieldToBoard(fieldRow, field.getName(), players, false, null, isEdge);
+        }
     }
 
     private void addFieldToBoard(ConstraintLayout fieldRow, String fieldTitle, int[] playerIds, boolean showColorBar, String colorBarColor, boolean isEdge) {
