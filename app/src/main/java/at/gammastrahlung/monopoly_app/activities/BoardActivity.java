@@ -2,6 +2,8 @@ package at.gammastrahlung.monopoly_app.activities;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -24,6 +26,7 @@ public class BoardActivity extends AppCompatActivity {
     private ConstraintLayout fieldRowLeft;
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
+    private TextView moneyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,10 @@ public class BoardActivity extends AppCompatActivity {
         fieldRowRight = findViewById(R.id.field_row_right);
         boardLayout = findViewById(R.id.boardLayout);
 
+        moneyText = findViewById(R.id.moneyText);
+
         buildGameBoard();
+        updatePlayerInfo();
 
         // Update when game data changes
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
@@ -50,9 +56,20 @@ public class BoardActivity extends AppCompatActivity {
                 if (propertyId != BR.game)
                     return;
 
-                runOnUiThread(() -> buildGameBoard());
+                runOnUiThread(() -> {
+                    buildGameBoard();
+                    updatePlayerInfo();
+                });
             }
         });
+    }
+
+    public void otherPlayersClick(View v) {
+
+    }
+
+    private void updatePlayerInfo() {
+        moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
     }
 
     private void buildGameBoard() {

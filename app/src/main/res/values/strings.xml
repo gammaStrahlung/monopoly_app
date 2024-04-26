@@ -18,4 +18,6 @@
     <string name="playerList_gameOwner">(Owner)</string>
     <string name="playerList_IsYou">(You)</string>
     <string name="field_title">Field Title</string>
+    <string name="money">Money: %1$d $</string>
+    <string name="otherPlayers">Other Players</string>
 </resources>

@@ -19,4 +19,6 @@
     <string name="playerList_gameOwner">(Spielersteller)</string>
     <string name="playerList_IsYou">(Du)</string>
     <string name="field_title">Feld Titel</string>
+    <string name="money">Geld: %1$d €</string>
+    <string name="otherPlayers">Mitspieler</string>
 </resources>

@@ -66,6 +66,29 @@
             app:layout_constraintTop_toBottomOf="@id/field_row_top">
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/moneyText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/money"
+        app:layout_constraintTop_toBottomOf="@id/boardLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/otherPlayers" />
+
+    <Button
+        android:id="@+id/otherPlayers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="otherPlayersClick"
+        android:text="@string/otherPlayers"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/moneyText"
+        app:layout_constraintTop_toBottomOf="@id/boardLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
