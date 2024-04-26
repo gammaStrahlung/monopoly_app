@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +16,6 @@ import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 
 public class FieldInfoFragment extends DialogFragment {
-    private View inflatedView;
     private final Field field;
 
     public FieldInfoFragment(Field field) {
