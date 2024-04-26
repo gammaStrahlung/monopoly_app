@@ -22,4 +22,5 @@
     <string name="money">Geld: %1$d €</string>
     <string name="otherPlayers">Mitspieler</string>
     <string name="currencyDisplay">%1$d €</string>
+    <string name="close">Schließen</string>
 </resources>
