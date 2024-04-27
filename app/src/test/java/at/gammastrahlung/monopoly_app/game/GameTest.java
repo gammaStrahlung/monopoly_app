@@ -7,6 +7,8 @@ import org.mockito.Mockito;
 
 import java.util.UUID;
 
+import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
+
 class GameTest {
     @Test
     void newGame() {
@@ -19,7 +21,7 @@ class GameTest {
         assertNull(g1.getState());
         assertNull(g1.getGameOwner());
 
-        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer);
+        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, null);
 
         assertEquals(1, g2.getGameId());
         assertEquals(Game.GameState.STARTED, g2.getState());
@@ -57,5 +59,15 @@ class GameTest {
 
         g.setGameOwner(mockPlayer);
         assertEquals(mockPlayer, g.getGameOwner());
+    }
+
+    @Test
+    void gameBoard() {
+        Game g = new Game();
+
+        GameBoard mockBoard = Mockito.mock(GameBoard.class);
+
+        g.setGameBoard(mockBoard);
+        assertEquals(mockBoard, g.getGameBoard());
     }
 }

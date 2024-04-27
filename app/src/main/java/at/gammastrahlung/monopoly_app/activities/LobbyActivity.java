@@ -54,7 +54,7 @@ public class LobbyActivity extends AppCompatActivity {
         // Initialize "playerList" RecyclerView
         playerList.setLayoutManager(new LinearLayoutManager(this));
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
-        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this);
+        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this, false, false);
         playerList.setAdapter(adapter);
 
         // Disable "Cancel" and "Start" buttons when player is not gameOwner
@@ -89,7 +89,7 @@ public class LobbyActivity extends AppCompatActivity {
 
                     activity.runOnUiThread(() -> {
                         // Go to Board
-                        Intent intent = new Intent(activity, BoardGameActivity.class);
+                        Intent intent = new Intent(activity, BoardActivity.class);
                         startActivity(intent);
                     });
                 } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
