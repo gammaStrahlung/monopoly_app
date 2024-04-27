@@ -7,19 +7,27 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.PlayerInfoFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 
 public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> {
 
     ObservableArrayList<Player> players;
+    AppCompatActivity context;
+    private final boolean showMoney;
+    private final boolean enablePlayerInfo;
 
-    public PlayerAdapter(ObservableArrayList<Player> players, Context context) {
+    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney, boolean enablePlayerInfo) {
         this.players = players;
+        this.context = (AppCompatActivity) context;
+        this.showMoney = showMoney;
+        this.enablePlayerInfo = enablePlayerInfo;
     }
 
     @NonNull
@@ -46,6 +54,12 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
 
         if (player.equals(gameOwner))
             holder.isGameOwner.setText(R.string.playerList_gameOwner);
+
+        if (showMoney)
+            holder.playerMoney.setText(context.getString(R.string.currencyDisplay, thisPlayer.getBalance()));
+
+        if (enablePlayerInfo)
+            holder.itemView.setOnClickListener(v -> new PlayerInfoFragment(player).show(context.getSupportFragmentManager(), "PlayerInfo"));
     }
 
     @Override
@@ -58,12 +72,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         protected TextView playerNameView;
         protected TextView isGameOwner;
         protected TextView isCurrentPlayer;
+        protected TextView playerMoney;
 
         public PlayerViewHolder(@NonNull View itemView) {
             super(itemView);
             playerNameView = itemView.findViewById(R.id.player_name);
             isGameOwner = itemView.findViewById(R.id.isGameOwner);
             isCurrentPlayer = itemView.findViewById(R.id.isCurrentPlayer);
+            playerMoney = itemView.findViewById(R.id.playerMoney);
         }
     }
 }

@@ -17,7 +17,7 @@ class PlayerTest {
 
         UUID uuid = UUID.randomUUID();
 
-        Player p2 = new Player(uuid, "NAME");
+        Player p2 = new Player(uuid, "NAME", 0);
         assertEquals(uuid, p2.getId());
         assertEquals("NAME", p2.getName());
     }
@@ -37,6 +37,14 @@ class PlayerTest {
 
         p1.setName("Some Name");
         assertEquals("Some Name", p1.getName());
+    }
+
+    @Test
+    void balance() {
+        Player p1 = new Player();
+
+        p1.setBalance(100);
+        assertEquals(100, p1.getBalance());
     }
 
     @Test

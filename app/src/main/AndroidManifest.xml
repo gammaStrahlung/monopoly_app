@@ -31,7 +31,7 @@
             android:name=".activities.DiceRollingActivity">
         </activity>
         <activity
-            android:name=".activities.BoardGameActivity">
+            android:name=".activities.BoardActivity">
         </activity>
     </application>
 

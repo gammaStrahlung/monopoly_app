@@ -1,7 +1,6 @@
 package at.gammastrahlung.monopoly_app.game;
 
-import com.google.gson.annotations.Expose;
-
+import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +17,13 @@ public class Game {
     private int gameId;
 
     // Current state of the game
-    @Expose
     private GameState state;
 
     // The owner of the game. This is the only player that can start and end the game
-    @Expose
     private Player gameOwner;
+
+    // The game board
+    GameBoard gameBoard;
 
     public enum GameState {
         /**
