@@ -2,6 +2,7 @@ package at.gammastrahlung.monopoly_app.activities;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
 import androidx.databinding.library.baseAdapters.BR;
+
+import java.util.Random;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -18,6 +21,7 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class BoardActivity extends AppCompatActivity {
 
@@ -27,6 +31,9 @@ public class BoardActivity extends AppCompatActivity {
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
+
+    private ImageView dice1;
+    private ImageView dice2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,9 @@ public class BoardActivity extends AppCompatActivity {
         boardLayout = findViewById(R.id.boardLayout);
 
         moneyText = findViewById(R.id.moneyText);
+
+        dice1 = findViewById(R.id.imageView1);
+        dice2 = findViewById(R.id.imageView5);
 
         buildGameBoard();
         updatePlayerInfo();
@@ -210,5 +220,24 @@ public class BoardActivity extends AppCompatActivity {
         constraints.applyTo(fieldRow);
         fieldRow.invalidate();
         boardLayout.invalidate();
+    }
+
+    public void updateDices(){
+        int tem1 = getResources().getIdentifier("die_" + GameData.getGameData().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
+        int tem2 = getResources().getIdentifier("die_" + GameData.getGameData().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
+
+        dice1.setImageResource(tem1);
+        dice2.setImageResource(tem2);
+
+    }
+
+    public void rollDiceClick() {
+        int value1 = new Random().nextInt(6) + 1;
+        int value2 = new Random().nextInt(6) + 1;
+
+        String message = String.valueOf(value1) +
+                value2;
+
+        MonopolyClient.getMonopolyClient().rollDice(message);
     }
 }
