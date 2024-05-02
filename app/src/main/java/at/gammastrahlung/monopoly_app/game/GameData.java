@@ -57,6 +57,23 @@ public class GameData extends BaseObservable {
     }
 
     /**
+     * The diced values
+     */
+
+    private Dice dice;
+
+    @Bindable
+    public Dice getDice(){
+        return dice;
+    }
+
+    public void setDice(Dice dice) {
+        this.dice = dice;
+        notifyPropertyChanged(BR.dice);
+    }
+
+
+    /**
      * List of players of the game
      */
     @Getter
