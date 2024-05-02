@@ -25,6 +25,9 @@ public class Game {
     // The game board
     GameBoard gameBoard;
 
+    // The dice
+    private Dice dice;
+
     public enum GameState {
         /**
          * Game was started but playing has not yet begun.
