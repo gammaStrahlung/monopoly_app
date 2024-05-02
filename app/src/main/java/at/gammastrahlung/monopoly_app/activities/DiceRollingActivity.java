@@ -30,8 +30,8 @@ public class DiceRollingActivity extends AppCompatActivity implements SensorEven
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Button btnRollDice = findViewById(R.id.rollDices);
-        img1 = findViewById(R.id.imageView1);
-        img2 = findViewById(R.id.imageView5);
+        img1 = findViewById(R.id.imageView4);
+        img2 = findViewById(R.id.imageView6);
 
         rollDice();
         btnRollDice.setOnClickListener(new View.OnClickListener() {
