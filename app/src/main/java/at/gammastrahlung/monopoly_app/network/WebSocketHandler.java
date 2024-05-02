@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
+import at.gammastrahlung.monopoly_app.game.Dice;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
@@ -36,6 +37,9 @@ public class WebSocketHandler {
                 break;
             case "end":
                 end(message);
+                break;
+            case "roll_dice":
+                rollDice(message);
                 break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
@@ -164,5 +168,11 @@ public class WebSocketHandler {
 
         // Game should be updated anyway. When game has ended, Game.state is set to GameState.ENDED
         gameData.setGame(message.getGame());
+    }
+
+    private void rollDice(ServerMessage message) {
+        GameData gameData = GameData.getGameData();
+
+        gameData.setDice(message.getGame().getDice());
     }
 }
