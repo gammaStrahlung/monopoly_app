@@ -59,7 +59,6 @@ public class GameData extends BaseObservable {
     /**
      * The diced values
      */
-
     private Dice dice;
 
     @Bindable

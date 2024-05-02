@@ -91,7 +91,8 @@ public class MonopolyClient {
     }
 
     /**
-     * Sends a message with the diced values to the server.
+     * Sends a message roll_dice message to server.
+     * Transfer player which diced
      */
     public void rollDice() {
         GameData gameData = GameData.getGameData();
