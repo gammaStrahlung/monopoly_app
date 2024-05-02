@@ -93,13 +93,12 @@ public class MonopolyClient {
     /**
      * Sends a message with the diced values to the server.
      */
-    public void rollDice(String sb) {
+    public void rollDice() {
         GameData gameData = GameData.getGameData();
 
         webSocketClient.sendMessage(ClientMessage.builder()
                 .messagePath("roll_dice")
                 .player(gameData.getPlayer())
-                .message(sb) // Send both dice values as a single message
                 .build());
     }
 }
