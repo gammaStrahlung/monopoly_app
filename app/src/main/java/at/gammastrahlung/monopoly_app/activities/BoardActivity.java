@@ -1,7 +1,6 @@
 package at.gammastrahlung.monopoly_app.activities;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,8 +10,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
 import androidx.databinding.library.baseAdapters.BR;
-
-import java.util.Random;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -78,13 +75,11 @@ public class BoardActivity extends AppCompatActivity {
         // Update when dice value is changed
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
-            public void onPropertyChanged(Observable sender, int propertyId){
+            public void onPropertyChanged(Observable sender, int propertyId) {
                 if (propertyId != BR.dice)
                     return;
 
-                runOnUiThread(() -> {
-                    updateDices();
-                });
+                runOnUiThread(() -> updateDices());
             }
         });
     }
@@ -237,15 +232,16 @@ public class BoardActivity extends AppCompatActivity {
         boardLayout.invalidate();
     }
 
-    public void updateDices(){
-        int tem1 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
-        int tem2 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
+    // Updates ImageView of each die
+    public void updateDices() {
+        int value1 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
+        int value2 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
 
-        dice1.setImageResource(tem1);
-        dice2.setImageResource(tem2);
+        dice1.setImageResource(value1);
+        dice2.setImageResource(value2);
     }
 
-    public void rollDiceClick() {
+    public void rollDiceClick(View v) {
         MonopolyClient.getMonopolyClient().rollDice();
     }
 }
