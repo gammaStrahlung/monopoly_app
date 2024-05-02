@@ -20,4 +20,18 @@ public class DiceTest {
         assertEquals(1, dice.getValue1());
         assertEquals(2, dice.getValue2());
     }
+
+    @Test
+    void setDiceTest(){
+        Dice dice = new Dice(3,2);
+
+        assertEquals(3, dice.getValue1());
+        assertEquals(2, dice.getValue2());
+
+        dice.setValue1(4);
+        dice.setValue2(6);
+
+        assertEquals(4, dice.getValue1());
+        assertEquals(6, dice.getValue2());
+    }
 }
