@@ -21,7 +21,7 @@ class GameTest {
         assertNull(g1.getState());
         assertNull(g1.getGameOwner());
 
-        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, null);
+        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, null, null);
 
         assertEquals(1, g2.getGameId());
         assertEquals(Game.GameState.STARTED, g2.getState());
