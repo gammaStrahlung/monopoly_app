@@ -1,6 +1,7 @@
 package at.gammastrahlung.monopoly_app.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -69,6 +70,20 @@ public class BoardActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     buildGameBoard();
                     updatePlayerInfo();
+                });
+            }
+        });
+
+
+        // Update when dice value is changed
+        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId){
+                if (propertyId != BR.dice)
+                    return;
+
+                runOnUiThread(() -> {
+                    updateDices();
                 });
             }
         });
@@ -223,21 +238,14 @@ public class BoardActivity extends AppCompatActivity {
     }
 
     public void updateDices(){
-        int tem1 = getResources().getIdentifier("die_" + GameData.getGameData().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
-        int tem2 = getResources().getIdentifier("die_" + GameData.getGameData().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
+        int tem1 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
+        int tem2 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
 
         dice1.setImageResource(tem1);
         dice2.setImageResource(tem2);
-
     }
 
     public void rollDiceClick() {
-        int value1 = new Random().nextInt(6) + 1;
-        int value2 = new Random().nextInt(6) + 1;
-
-        String message = String.valueOf(value1) +
-                value2;
-
-        MonopolyClient.getMonopolyClient().rollDice(message);
+        MonopolyClient.getMonopolyClient().rollDice();
     }
 }
