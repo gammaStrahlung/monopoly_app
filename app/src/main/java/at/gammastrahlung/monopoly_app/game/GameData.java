@@ -6,6 +6,7 @@ import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableInt;
 import androidx.databinding.library.baseAdapters.BR;
 
+import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,4 +86,8 @@ public class GameData extends BaseObservable {
     public static void reset() {
         gameData = new GameData();
     }
+
+    @Getter
+    @Setter
+    ServerMessage.MessageType lastMessageType;
 }

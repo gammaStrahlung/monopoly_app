@@ -1,6 +1,5 @@
 package at.gammastrahlung.monopoly_app.network.dtos;
 
-import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.Player;
 import lombok.*;
 
@@ -16,13 +15,13 @@ public class ServerMessage {
      */
     private String messagePath;
 
+    private String updateType;
+
+    private String jsonData;
+
     private MessageType type;
 
-    private String message;
-
     private Player player;
-
-    private Game game;
 
     public enum MessageType {
         /**
