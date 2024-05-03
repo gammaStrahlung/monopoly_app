@@ -11,6 +11,9 @@ import at.gammastrahlung.monopoly_app.game.gameboard.Railroad;
 import at.gammastrahlung.monopoly_app.game.gameboard.Utility;
 
 public class Fields {
+
+    private Fields () {}
+
     public static List<Field> getOwnedFields(Player player) {
         ArrayList<Field> ownedFields = new ArrayList<>();
 
