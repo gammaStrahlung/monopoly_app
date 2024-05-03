@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/playerlist_border">
+    android:background="@drawable/list_border">
 
     <TextView
         android:id="@+id/player_name"
