@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
@@ -20,9 +20,9 @@ import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 
 public class FieldAdapter extends RecyclerView.Adapter<FieldAdapter.FieldViewHolder> {
 
-    ArrayList<Field> fields;
+    List<Field> fields;
     AppCompatActivity context;
-    public FieldAdapter(ArrayList<Field> fields, Context context) {
+    public FieldAdapter(List<Field> fields, Context context) {
         this.fields = fields;
         this.context = (AppCompatActivity) context;
     }

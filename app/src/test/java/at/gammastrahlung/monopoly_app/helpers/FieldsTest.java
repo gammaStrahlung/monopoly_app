@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import at.gammastrahlung.monopoly_app.game.Game;
@@ -96,7 +97,7 @@ class FieldsTest {
             properties.add((Property) f);
 
         for (Player p : players) {
-            ArrayList<Field> ownedFields = Fields.getOwnedFields(p);
+            List<Field> ownedFields = Fields.getOwnedFields(p);
 
             for (Property property : properties) {
                 if (property.getOwner().equals(p))
@@ -114,7 +115,7 @@ class FieldsTest {
             railroads.add((Railroad) f);
 
         for (Player p : players) {
-            ArrayList<Field> ownedFields = Fields.getOwnedFields(p);
+            List<Field> ownedFields = Fields.getOwnedFields(p);
 
             for (Railroad railroad : railroads) {
                 if (railroad.getOwner().equals(p))
@@ -132,7 +133,7 @@ class FieldsTest {
             utilities.add((Utility) f);
 
         for (Player p : players) {
-            ArrayList<Field> ownedFields = Fields.getOwnedFields(p);
+            List<Field> ownedFields = Fields.getOwnedFields(p);
 
             for (Utility utility : utilities) {
                 if (utility.getOwner().equals(p))
@@ -150,7 +151,7 @@ class FieldsTest {
             fields1.add((Field) f);
 
         for (Player p : players) {
-            ArrayList<Field> ownedFields = Fields.getOwnedFields(p);
+            List<Field> ownedFields = Fields.getOwnedFields(p);
             for (Field field : fields1) {
                 assertFalse(ownedFields.contains(field));
             }
@@ -164,7 +165,7 @@ class FieldsTest {
             taxFields.add((TaxField) f);
 
         for (Player p : players) {
-            ArrayList<Field> ownedFields = Fields.getOwnedFields(p);
+            List<Field> ownedFields = Fields.getOwnedFields(p);
             for (TaxField taxField : taxFields) {
                 assertFalse(ownedFields.contains(taxField));
             }
