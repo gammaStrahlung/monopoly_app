@@ -29,6 +29,9 @@ public class Game {
     // Player list
     private ObservableArrayList<Player> players;
 
+    // The dice
+    private Dice dice;
+
     public enum GameState {
         /**
          * Game was started but playing has not yet begun.

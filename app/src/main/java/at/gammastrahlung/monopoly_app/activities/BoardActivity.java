@@ -1,7 +1,12 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +23,9 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
-public class BoardActivity extends AppCompatActivity {
+public class BoardActivity extends AppCompatActivity implements SensorEventListener {
 
     private ConstraintLayout fieldRowTop; // Includes top corners
     private ConstraintLayout fieldRowBottom; // Includes bottom corners
@@ -27,6 +33,14 @@ public class BoardActivity extends AppCompatActivity {
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
+
+    private ImageView dice1;
+    private ImageView dice2;
+
+    private static final int THRESHOLD = 1000;
+    private long lastTime;
+    private float lastX, lastY, lastZ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,9 @@ public class BoardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
         fieldRowTop = findViewById(R.id.field_row_top);
         fieldRowBottom = findViewById(R.id.field_row_bottom);
         fieldRowLeft = findViewById(R.id.field_row_left);
@@ -45,6 +62,9 @@ public class BoardActivity extends AppCompatActivity {
         boardLayout = findViewById(R.id.boardLayout);
 
         moneyText = findViewById(R.id.moneyText);
+
+        dice1 = findViewById(R.id.imageView1);
+        dice2 = findViewById(R.id.imageView5);
 
         buildGameBoard();
         updatePlayerInfo();
@@ -60,6 +80,18 @@ public class BoardActivity extends AppCompatActivity {
                     buildGameBoard();
                     updatePlayerInfo();
                 });
+            }
+        });
+
+
+        // Update when dice value is changed
+        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId != BR.dice)
+                    return;
+
+                runOnUiThread(() -> updateDices());
             }
         });
     }
@@ -210,5 +242,51 @@ public class BoardActivity extends AppCompatActivity {
         constraints.applyTo(fieldRow);
         fieldRow.invalidate();
         boardLayout.invalidate();
+    }
+
+    // Updates ImageView of each die
+    public void updateDices() {
+        int value1 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
+        int value2 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
+
+        dice1.setImageResource(value1);
+        dice2.setImageResource(value2);
+    }
+
+    public void rollDice() {
+        MonopolyClient.getMonopolyClient().rollDice();
+    }
+
+    // Button is clicked to roll the dice
+    public void rollDiceClick(View v) {
+        rollDice();
+    }
+
+    // Motion Sensor that triggers rollDice as well
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            float x = event.values[0];      // acceleration force along the x axis
+            float y = event.values[1];      // acceleration force along the y axis
+            float z = event.values[2];      // acceleration force along the z axis
+
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastTime > 100) {
+                long diffTime = currentTime - lastTime;
+                float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
+
+                // certain speed needed to trigger event
+                if (speed > THRESHOLD) {
+                    rollDice();
+                }
+                lastTime = currentTime;
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 }

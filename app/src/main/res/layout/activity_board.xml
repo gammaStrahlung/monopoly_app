@@ -65,6 +65,44 @@
             app:layout_constraintStart_toEndOf="@id/field_row_left"
             app:layout_constraintTop_toBottomOf="@id/field_row_top">
 
+            <!-- ImageView1 -->
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/die_1"
+                app:layout_constraintBottom_toTopOf="@+id/rollDices"
+                app:layout_constraintEnd_toStartOf="@+id/imageView5"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <!-- ImageView5 -->
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/die_5"
+                app:layout_constraintBottom_toTopOf="@+id/rollDices"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/imageView1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+            <!-- Roll Dices Button -->
+            <Button
+                android:id="@+id/rollDices"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="rollDiceClick"
+                android:layout_marginBottom="30dp"
+                android:text="Roll Dice"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import at.gammastrahlung.monopoly_app.game.Game;
+import java.util.ArrayList;
+
+import at.gammastrahlung.monopoly_app.game.Dice;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -39,6 +42,9 @@ public class WebSocketHandler {
                 break;
             case "update":
                 update(message);
+                break;
+            case "roll_dice":
+                rollDice(message);
                 break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
@@ -147,5 +153,10 @@ public class WebSocketHandler {
         players.clear();
         players.addAll(game.getPlayers());
         game.setPlayers(players);
+    }
+
+    private void rollDice(ServerMessage message) {
+        GameData gameData = GameData.getGameData();
+        gameData.setDice(message.getGame().getDice());
     }
 }
