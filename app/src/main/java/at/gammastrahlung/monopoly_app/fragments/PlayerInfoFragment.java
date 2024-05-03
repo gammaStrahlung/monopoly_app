@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,9 @@ public class PlayerInfoFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View inflatedView = inflater.inflate(R.layout.fragment_playerinfo, null);
+
+        // Set Balance
+        ((TextView) inflatedView.findViewById(R.id.balance)).setText(getContext().getString(R.string.money, player.getBalance()));
 
         // Set RecyclerView adapter
         RecyclerView fieldList = inflatedView.findViewById(R.id.ownedFields);

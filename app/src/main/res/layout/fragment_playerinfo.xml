@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -20,6 +19,18 @@
         app:layout_constraintBottom_toTopOf="@id/ownedFieldsTitle"/>
 
     <TextView
+        android:id="@+id/balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:text="@string/money"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/player_name"
+        app:layout_constraintBottom_toTopOf="@id/ownedFieldsTitle"/>
+
+    <TextView
         android:id="@+id/ownedFieldsTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +39,7 @@
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/player_name"
+        app:layout_constraintTop_toBottomOf="@id/balance"
         app:layout_constraintBottom_toTopOf="@id/ownedFields"/>
 
     <androidx.recyclerview.widget.RecyclerView
