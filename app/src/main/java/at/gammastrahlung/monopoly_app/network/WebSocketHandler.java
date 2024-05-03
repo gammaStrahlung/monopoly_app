@@ -157,7 +157,6 @@ public class WebSocketHandler {
 
     private void rollDice(ServerMessage message) {
         GameData gameData = GameData.getGameData();
-
-        //gameData.setDice(message.);
+        gameData.setDice(message.getGame().getDice());
     }
 }
