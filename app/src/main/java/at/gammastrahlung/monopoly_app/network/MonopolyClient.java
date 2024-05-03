@@ -102,4 +102,13 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+
+    public void initiateRound() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("initiate_round")
+                .player(gameData.getPlayer())
+                .build());
+    }
 }

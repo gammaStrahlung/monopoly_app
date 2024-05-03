@@ -114,5 +114,6 @@ public class LobbyActivity extends AppCompatActivity {
     // Start button starts the game and opens BoardGameActivity
     public void startButtonClick(View view) {
         MonopolyClient.getMonopolyClient().startGame();
+        MonopolyClient.getMonopolyClient().initiateRound();
     }
 }
