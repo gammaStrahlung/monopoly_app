@@ -25,6 +25,7 @@ import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
+import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -80,7 +81,7 @@ public class LobbyActivity extends AppCompatActivity {
 
                 Game game = GameData.getGameData().getGame();
 
-                if (game == null) { // Starting the game was not successful
+                if (GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.ERROR) { // Starting the game was not successful
                     activity.runOnUiThread(() ->
                             Toast.makeText(activity, R.string.startGame_fail, Toast.LENGTH_LONG).show());
                 } else if (game.getState() == Game.GameState.PLAYING) { // Game was started
