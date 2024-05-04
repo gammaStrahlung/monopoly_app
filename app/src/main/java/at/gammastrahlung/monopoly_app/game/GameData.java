@@ -33,6 +33,11 @@ public class GameData extends BaseObservable {
     private Player player = new Player();
 
     @Bindable
+    @Setter
+    @Getter
+    private Player currentPlayer;
+
+    @Bindable
     public Player getPlayer() {
         return player;
     }
@@ -90,4 +95,5 @@ public class GameData extends BaseObservable {
     @Getter
     @Setter
     ServerMessage.MessageType lastMessageType;
+
 }

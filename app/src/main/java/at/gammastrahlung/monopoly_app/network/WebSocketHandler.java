@@ -43,6 +43,8 @@ public class WebSocketHandler {
             case "update":
                 update(message);
                 break;
+            case "initiate_round":
+                updatePlayerOnTurn(message.getJsonData());
             case "roll_dice":
                 rollDice(message);
                 break;
@@ -105,6 +107,11 @@ public class WebSocketHandler {
             case "game":
                 updateGame(message.getJsonData());
         }
+    }
+
+    private void updatePlayerOnTurn(String json) {
+        Player player = gson.fromJson(json, Player.class);
+        GameData.getGameData().setCurrentPlayer(player);
     }
 
     private void updateField(String json) {

@@ -41,6 +41,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private long lastTime;
     private float lastX, lastY, lastZ;
 
+    private TextView playerOnTurn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
+
+        playerOnTurn = findViewById(R.id.playerOnTurn);
 
         buildGameBoard();
         updatePlayerInfo();
@@ -242,6 +246,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         constraints.applyTo(fieldRow);
         fieldRow.invalidate();
         boardLayout.invalidate();
+    }
+
+    private void updatePlayerOnTurn(String playerName){
+        playerOnTurn.setText(playerName);
     }
 
     // Updates ImageView of each die
