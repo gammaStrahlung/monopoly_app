@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Player UUID and WebSocket URI
         updatePlayerUUID();
         WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
-
+        int width = 0;
         super.onResume();
     }
 
