@@ -73,6 +73,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         buildGameBoard();
         updatePlayerInfo();
+        updatePlayerOnTurn();
 
         // Update when game data changes
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
@@ -122,8 +123,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     }
 
     private void updatePlayerOnTurn(){
-        Log.d("BoardActivity", "Current player on turn: " + GameData.getGameData().getPlayer());
-        playerOnTurn.setText(getString(R.string.player_on_turn, GameData.getGameData().getPlayer().getName()));
+        playerOnTurn.setText(getString(R.string.player_on_turn, GameData.getGameData().getCurrentPlayer().getName()));
     }
 
 
