@@ -5,6 +5,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -98,6 +99,18 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 runOnUiThread(() -> updateDices());
             }
         });
+
+        // Update when player on turn changes
+        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId != BR.currentPlayer)
+                    return;
+
+                runOnUiThread(() -> updatePlayerOnTurn());
+            }
+        });
+
     }
 
     public void otherPlayersClick(View v) {
@@ -107,6 +120,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
     }
+
+    private void updatePlayerOnTurn(){
+        Log.d("BoardActivity", "Current player on turn: " + GameData.getGameData().getPlayer());
+        playerOnTurn.setText(getString(R.string.player_on_turn, GameData.getGameData().getPlayer().getName()));
+    }
+
 
     private void buildGameBoard() {
         GameBoard board = GameData.getGameData().getGame().getGameBoard();
@@ -246,10 +265,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         constraints.applyTo(fieldRow);
         fieldRow.invalidate();
         boardLayout.invalidate();
-    }
-
-    private void updatePlayerOnTurn(String playerName){
-        playerOnTurn.setText(playerName);
     }
 
     // Updates ImageView of each die

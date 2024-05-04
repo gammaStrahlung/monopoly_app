@@ -134,7 +134,7 @@
         android:layout_width="169dp"
         android:layout_height="24dp"
         android:layout_marginTop="31dp"
-        android:text="Player on turn: "
+        android:text="@string/player_on_turn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.172"

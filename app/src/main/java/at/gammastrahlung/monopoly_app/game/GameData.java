@@ -32,10 +32,19 @@ public class GameData extends BaseObservable {
      */
     private Player player = new Player();
 
-    @Bindable
-    @Setter
-    @Getter
+
     private Player currentPlayer;
+
+    @Bindable
+    public Player getCurrentPlayer(){
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer){
+        this.currentPlayer = currentPlayer;
+        notifyPropertyChanged(BR.currentPlayer);
+
+    }
 
     @Bindable
     public Player getPlayer() {

@@ -45,6 +45,7 @@ public class WebSocketHandler {
                 break;
             case "initiate_round":
                 updatePlayerOnTurn(message.getJsonData());
+                break;
             case "roll_dice":
                 rollDice(message);
                 break;
