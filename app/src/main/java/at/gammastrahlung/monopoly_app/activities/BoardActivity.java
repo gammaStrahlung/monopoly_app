@@ -122,8 +122,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
     }
 
-    private void updatePlayerOnTurn(){
+    private void updatePlayerOnTurn() {
         playerOnTurn.setText(getString(R.string.player_on_turn, GameData.getGameData().getCurrentPlayer().getName()));
+
+        // if current player is our player then enable roll dice button
+        if (isMyTurn()) {
+            rollDiceButton.setEnabled(true);
+        } else {
+            rollDiceButton.setEnabled(false);
+        }
     }
 
     private void updateRollDiceButton() {
@@ -279,6 +286,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice1.setImageResource(value1);
         dice2.setImageResource(value2);
     }
+
 
     public void moveAvatar() {
         // TODO: update UI
