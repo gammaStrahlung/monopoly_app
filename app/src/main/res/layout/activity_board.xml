@@ -99,6 +99,7 @@
                 android:layout_marginBottom="30dp"
                 android:onClick="rollDiceClick"
                 android:text="Roll Dice"
+                android:enabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -128,6 +129,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/moneyText"
         app:layout_constraintTop_toBottomOf="@id/boardLayout" />
+
+    <Button
+        android:id="@+id/endTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onEndTurnButtonClicked"
+        android:text="@string/end_turn"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/moneyText"
+        app:layout_constraintTop_toBottomOf="@id/boardLayout"
+        app:layout_constraintVertical_bias="0.724" />
 
     <TextView
         android:id="@+id/playerOnTurn"
