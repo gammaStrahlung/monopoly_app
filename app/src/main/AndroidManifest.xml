@@ -25,13 +25,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LobbyActivity">
+            android:name=".activities.LobbyActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.LOBBY" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activities.DiceRollingActivity">
         </activity>
         <activity
             android:name=".activities.BoardActivity">
+        </activity>
+        <activity
+            android:name=".activities.PropertyMenuActivity"
+            tools:ignore="ExtraText"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.PopertyActionsMenu" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.PropertyActionsMenu">
         </activity>
     </application>
 
