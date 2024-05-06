@@ -97,9 +97,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
+                android:enabled="false"
                 android:onClick="rollDiceClick"
                 android:text="Roll Dice"
-                android:enabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -114,10 +114,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/money"
-        app:layout_constraintTop_toBottomOf="@id/boardLayout"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/otherPlayers"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/otherPlayers" />
+        app:layout_constraintTop_toBottomOf="@id/boardLayout" />
 
     <Button
         android:id="@+id/otherPlayers"
