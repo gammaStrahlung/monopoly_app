@@ -24,4 +24,5 @@
     <string name="currencyDisplay">%1$d €</string>
     <string name="close">Schließen</string>
     <string name="owned_fields">Besitzte Felder:</string>
+    <string name="mortgage">Hypothek</string>
 </resources>

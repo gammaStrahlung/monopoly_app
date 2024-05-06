@@ -1,20 +1,13 @@
 package at.gammastrahlung.monopoly_app.network.dtos;
 
-import com.google.gson.annotations.Expose;
-
 import at.gammastrahlung.monopoly_app.game.Player;
-import lombok.*;
+import com.google.gson.annotations.Expose;
+import lombok.Builder;
+import lombok.Data;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Builder
 public class ClientMessage {
-
-    /**
-     * Used for matching the message to the message handler
-     */
     @Expose
     private String messagePath;
 
@@ -23,4 +16,7 @@ public class ClientMessage {
 
     @Expose
     private Player player;
+
+    @Expose
+    private int propertyId;  // This will be included in the builder
 }

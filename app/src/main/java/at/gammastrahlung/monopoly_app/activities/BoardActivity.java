@@ -1,11 +1,13 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +48,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Calls the superclass's onCreate method with the saved instance state
         setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
+        Button openMortgageActivityButton = findViewById(R.id.mortgage_button);
+        openMortgageActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BoardActivity.this, MortgageActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
