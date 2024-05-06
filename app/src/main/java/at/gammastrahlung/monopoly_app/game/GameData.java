@@ -18,7 +18,8 @@ public class GameData extends BaseObservable {
     @Getter
     private static GameData gameData = new GameData();
 
-    private GameData() {}
+    private GameData() {
+    }
 
     /**
      * The gameId of the current game
@@ -32,18 +33,16 @@ public class GameData extends BaseObservable {
      */
     private Player player = new Player();
 
-
     private Player currentPlayer;
 
     @Bindable
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
-    public void setCurrentPlayer(Player currentPlayer){
+    public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         notifyPropertyChanged(BR.currentPlayer);
-
     }
 
     @Bindable
@@ -77,7 +76,7 @@ public class GameData extends BaseObservable {
     private Dice dice;
 
     @Bindable
-    public Dice getDice(){
+    public Dice getDice() {
         return dice;
     }
 
@@ -85,7 +84,6 @@ public class GameData extends BaseObservable {
         this.dice = dice;
         notifyPropertyChanged(BR.dice);
     }
-
 
     /**
      * List of players of the game
