@@ -67,6 +67,17 @@ class GameDataTest {
         assertEquals(mockDice,gd.getDice());
     }
 
+    @Test
+    void currentPlayer() {
+        Player mockPlayer = Mockito.mock(Player.class);
+
+        GameData gd = GameData.getGameData();
+
+        gd.setCurrentPlayer(mockPlayer);
+
+        assertEquals(mockPlayer, gd.getCurrentPlayer());
+    }
+
     @AfterEach
     void cleanup() {
         GameData.reset();
