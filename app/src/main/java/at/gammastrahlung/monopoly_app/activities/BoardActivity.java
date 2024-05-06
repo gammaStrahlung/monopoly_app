@@ -40,9 +40,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ImageView dice2;
 
     private Button rollDiceButton;
-
     private Button endTurnButton;
-
 
     private static final int THRESHOLD = 1000;
     private long lastTime;
@@ -109,7 +107,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         });
     }
 
-
     private boolean isMyTurn() {
         return GameData.getGameData().getCurrentPlayer().equals(GameData.getGameData().getPlayer());
     }
@@ -132,11 +129,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             rollDiceButton.setEnabled(false);
         }
     }
-
-    private void updateRollDiceButton() {
-        rollDiceButton.setEnabled(true);
-    }
-
 
     private void buildGameBoard() {
         GameBoard board = GameData.getGameData().getGame().getGameBoard();
@@ -285,11 +277,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         dice1.setImageResource(value1);
         dice2.setImageResource(value2);
-    }
-
-
-    public void moveAvatar() {
-        // TODO: update UI
     }
 
     public void enableUserActions() {
