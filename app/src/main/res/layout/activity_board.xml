@@ -12,19 +12,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <!-- Top row also includes top corners -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/field_row_top"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/board_center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/board_center" />
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Bottom row also includes bottom corners -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,27 +32,27 @@
             android:layout_width="match_parent"
             android:layout_height="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/board_center" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/field_row_left"
             android:layout_width="80dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/field_row_top"
             app:layout_constraintBottom_toTopOf="@id/field_row_bottom"
-            app:layout_constraintEnd_toStartOf="@id/board_center" />
+            app:layout_constraintEnd_toStartOf="@id/board_center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/field_row_top" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/field_row_right"
             android:layout_width="80dp"
             android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/field_row_top"
             app:layout_constraintBottom_toTopOf="@id/field_row_bottom"
-            app:layout_constraintStart_toEndOf="@id/board_center" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/board_center"
+            app:layout_constraintTop_toBottomOf="@id/field_row_top" />
 
         <!-- Center of monopoly board for future use (dice display) -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -96,8 +96,9 @@
                 android:id="@+id/rollDices"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="rollDiceClick"
                 android:layout_marginBottom="30dp"
+                android:enabled="false"
+                android:onClick="rollDiceClick"
                 android:text="Roll Dice"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -113,10 +114,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/money"
-        app:layout_constraintTop_toBottomOf="@id/boardLayout"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/otherPlayers"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/otherPlayers" />
+        app:layout_constraintTop_toBottomOf="@id/boardLayout" />
 
     <Button
         android:id="@+id/otherPlayers"
@@ -128,5 +129,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/moneyText"
         app:layout_constraintTop_toBottomOf="@id/boardLayout" />
+
+    <Button
+        android:id="@+id/endTurn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onEndTurnButtonClicked"
+        android:text="@string/end_turn"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/moneyText"
+        app:layout_constraintTop_toBottomOf="@id/boardLayout"
+        app:layout_constraintVertical_bias="0.724" />
+
+    <TextView
+        android:id="@+id/playerOnTurn"
+        android:layout_width="169dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="31dp"
+        android:text="@string/player_on_turn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/boardLayout"
+        app:layout_constraintVertical_bias="0.066" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

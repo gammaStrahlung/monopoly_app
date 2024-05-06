@@ -102,4 +102,25 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+
+    /**
+     * Sends a initiate round message to the server.
+     */
+    public void initiateRound() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("initiate_round")
+                .player(gameData.getPlayer())
+                .build());
+    }
+
+    public void endCurrentPlayerTurn(){
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("end_current_player_turn")
+                .player(gameData.getPlayer())
+                .build());
+    }
 }
