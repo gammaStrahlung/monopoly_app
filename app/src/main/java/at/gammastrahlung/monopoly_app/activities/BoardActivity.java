@@ -279,6 +279,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice2.setImageResource(value2);
     }
 
+    public void moveAvatar() {
+        // TODO: update UI
+    }
+
     public void enableUserActions() {
         rollDiceButton.setEnabled(false);
         endTurnButton.setEnabled(false);
