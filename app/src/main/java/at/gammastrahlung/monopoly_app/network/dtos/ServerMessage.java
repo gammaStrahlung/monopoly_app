@@ -16,9 +16,11 @@ public class ServerMessage {
      */
     private String messagePath;
 
-    private MessageType type;
+    private String updateType;
 
-    private String message;
+    private String jsonData;
+
+    private MessageType type;
 
     private Player player;
 

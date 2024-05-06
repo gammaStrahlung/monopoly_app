@@ -2,12 +2,19 @@ package at.gammastrahlung.monopoly_app.network;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
+import androidx.databinding.ObservableArrayList;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import at.gammastrahlung.monopoly_app.game.Game;
 import java.util.ArrayList;
 
+import at.gammastrahlung.monopoly_app.game.Dice;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
+import at.gammastrahlung.monopoly_app.game.gameboard.Field;
+import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
 /**
@@ -15,27 +22,29 @@ import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
  */
 public class WebSocketHandler {
 
+    private final Gson gson =  new GsonBuilder()
+            .registerTypeAdapter(Field.class, new FieldDeserializer())
+            .create();
+
     /**
      * Main message handler that depending on message.messagePath calls the correct handler.
      *
      * @param message Message from the server
      */
     public void messageReceived(ServerMessage message) {
+        // Set message type
+        GameData.getGameData().setLastMessageType(message.getType());
+
         switch (message.getMessagePath()) {
             case "create":
-                create(message);
-                break;
             case "join":
-                join(message);
+                gameChange(message);
                 break;
-            case "players":
-                players(message);
+            case "update":
+                update(message);
                 break;
-            case "start":
-                start(message);
-                break;
-            case "end":
-                end(message);
+            case "roll_dice":
+                rollDice(message);
                 break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
@@ -43,19 +52,27 @@ public class WebSocketHandler {
     }
 
     /**
-     * Handles "create" ServerMessages
+     * Handles "create" and "join" ServerMessages
      *
      * @param message Message from the Server
      */
-    private void create(ServerMessage message) {
+    private void gameChange(ServerMessage message) {
         GameData gameData = GameData.getGameData();
 
         if (message.getType() == ServerMessage.MessageType.SUCCESS) {
             // Creating game was successful
-            gameData.getGameId().set(Integer.parseInt(message.getMessage()));
-            gameData.getPlayers().add(gameData.getPlayer());
-            gameData.setGame(message.getGame());
-            Log.d("WSHandler", "Create game: " + message.getMessage());
+            Game game = gson.fromJson(message.getJsonData(), Game.class);
+            gameData.getGameId().set(game.getGameId());
+            gameData.setGame(game);
+
+            // Update players
+            ObservableArrayList<Player> players = gameData.getPlayers();
+            players.clear();
+            players.addAll(game.getPlayers());
+            game.setPlayers(players);
+
+            gameData.setPlayer(message.getPlayer());
+            Log.d("WSHandler", "Create game: " + game.getGameId());
         } else {
             gameData.getGameId().set(-1);
             Log.d("WSHandler", "Could not join game");
@@ -63,106 +80,83 @@ public class WebSocketHandler {
     }
 
     /**
-     * Handles "join" ServerMessages
+     * Handles a "update" message
      *
-     * @param message Message from the Server
+     * @param message Message from the server
      */
-    private void join(ServerMessage message) {
-        GameData gameData = GameData.getGameData();
+    private void update(ServerMessage message) {
+        // Can't update game if game does not exist
+        if (GameData.getGameData().getGame() == null)
+            return;
 
-        if (message.getType() == ServerMessage.MessageType.SUCCESS) {
-
-            if (gameData.getPlayer().getId().equals(message.getPlayer().getId())) {
-                // This player has joined a game
-                gameData.getGameId().set(Integer.parseInt(message.getMessage()));
-                gameData.getPlayers().add(gameData.getPlayer());
-                gameData.setGame(message.getGame());
-                Log.d("WSHandler", "Player joined Game: " + message.getMessage());
-
-                // Sync the player list with the server
-                MonopolyClient.getMonopolyClient().getPlayers();
-            } else {
-                // Other player has joined the game
-                gameData.getPlayers().add(message.getPlayer());
-                Log.d("WSHandler", "Other player joined game: " + message.getPlayer().getName());
-            }
-
-        } else if (message.getType() == ServerMessage.MessageType.ERROR) {
-            if (gameData.getPlayer().getId().equals(message.getPlayer().getId())) {
-                gameData.getGameId().set(-1); // Could not join game
-                Log.d("WSHandler", "Could not join game");
-            }
+        switch (message.getUpdateType()) {
+            case "field":
+                updateField(message.getJsonData());
+                break;
+            case "player":
+                updatePlayer(message.getJsonData());
+                break;
+            case "gameboard":
+                updateGameBoard(message.getJsonData());
+                break;
+            case "gamestate":
+                updateGameState(message.getJsonData());
+                break;
+            case "game":
+                updateGame(message.getJsonData());
         }
     }
 
-    /**
-     * Adds new players in GameData
-     *
-     * @param message Message from the Server
-     */
-    private void players(ServerMessage message) {
-        GameData gameData = GameData.getGameData();
-        Gson gson = new Gson();
-
-        Player[] players = gson.fromJson(message.getMessage(), Player[].class);
-
-        ArrayList<Player> gamePlayers = gameData.getPlayers();
-
-        StringBuilder log = new StringBuilder("All other players:\n");
-
-        // Clear and add this player
-        gamePlayers.clear();
-
-        for (Player p : players) {
-            if (!p.getId().equals(gameData.getPlayer().getId())) { // Don't add this player
-                gamePlayers.add(p);
-                log.append(p.getName()).append("\n");
-            } else {
-                // Update local player with player from Server
-                gameData.setPlayer(p);
-                gamePlayers.add(p);
-            }
-        }
-
-        Log.d("WSHandler", log.toString());
+    private void updateField(String json) {
+        Field f = gson.fromJson(json, Field.class);
+        GameData.getGameData().getGame().getGameBoard().getGameBoard()[f.getFieldId()] = f;
     }
 
-    /**
-     * Handles when the game has been started
-     *
-     * @param message Message from the Server
-     */
-    private void start(ServerMessage message) {
+    private void updatePlayer(String json) {
+        Player p = gson.fromJson(json, Player.class);
         GameData gameData = GameData.getGameData();
+        gameData.getPlayers().add(p);
 
-        if (message.getType() == ServerMessage.MessageType.SUCCESS) {
-            // Starting the game was successful
-            Log.d("WSHandler", "Successfully started game");
-            gameData.setGame(message.getGame());
-        } else if (message.getType() == ServerMessage.MessageType.ERROR) {
-            // Starting the game failed
-            Log.d("WSHandler", "Failed to start the game");
-            gameData.setGame(null);
-        }
+        if (gameData.getPlayer().getId() == p.getId())
+            gameData.setPlayer(p);
+
+        if (gameData.getGame().getGameOwner().getId() == p.getId())
+            gameData.getGame().setGameOwner(p);
+
+        // Make sure GameData.players and Game.players are the same
+        gameData.getGame().setPlayers(gameData.getPlayers());
     }
 
-    /**
-     * Handles when the game has been ended
-     *
-     * @param message Message from the Server
-     */
-    private void end(ServerMessage message) {
+    private void updateGameBoard(String json) {
+        GameBoard gameBoard = gson.fromJson(json, GameBoard.class);
+        GameData.getGameData().getGame().setGameBoard(gameBoard);
+
+        // Update game to notify databinding
+        GameData.getGameData().setGame(GameData.getGameData().getGame());
+    }
+
+    private void updateGameState(String json) {
+        Game.GameState state = gson.fromJson(json, Game.GameState.class);
+        GameData.getGameData().getGame().setState(state);
+
+        // Update game to notify databinding
+        GameData.getGameData().setGame(GameData.getGameData().getGame());
+    }
+
+    private void updateGame(String json) {
+        Game game = gson.fromJson(json, Game.class);
         GameData gameData = GameData.getGameData();
+        gameData.setGame(game);
 
-        if (message.getType() == ServerMessage.MessageType.SUCCESS) {
-            // Ending the game was successful
-            Log.d("WSHandler", "Successfully ended game");
-        } else if (message.getType() == ServerMessage.MessageType.ERROR) {
-            // Ending the game failed
-            Log.d("WSHandler", "Failed to end the game");
-        }
+        // Update players
+        ObservableArrayList<Player> players = gameData.getPlayers();
+        players.clear();
+        players.addAll(game.getPlayers());
+        game.setPlayers(players);
+    }
 
-        // Game should be updated anyway. When game has ended, Game.state is set to GameState.ENDED
-        gameData.setGame(message.getGame());
+    private void rollDice(ServerMessage message) {
+        GameData gameData = GameData.getGameData();
+        gameData.setDice(message.getGame().getDice());
     }
 }

@@ -8,7 +8,6 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.Getter;
@@ -54,7 +53,6 @@ public class WebSocketClient {
             @Override
             public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
                 Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Field.class, new FieldDeserializer())
                         .create();
                 // Pass de-serialized message to messageHandler
                 messageHandler.messageReceived(gson.fromJson(text, ServerMessage.class));

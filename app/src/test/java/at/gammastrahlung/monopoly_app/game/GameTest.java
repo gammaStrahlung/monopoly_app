@@ -2,6 +2,8 @@ package at.gammastrahlung.monopoly_app.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import androidx.databinding.ObservableArrayList;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -15,17 +17,25 @@ class GameTest {
         Player mockPlayer = Mockito.mock(Player.class);
         Mockito.when(mockPlayer.getId()).thenReturn(UUID.randomUUID());
 
+        Dice mockDice = Mockito.mock(Dice.class);
+
+        GameBoard mockBoard = Mockito.mock(GameBoard.class);
+
         Game g1 = new Game();
 
         assertEquals(0, g1.getGameId()); // Default int value
         assertNull(g1.getState());
         assertNull(g1.getGameOwner());
 
-        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, null);
+        ObservableArrayList<Player> players = new ObservableArrayList<>();
+        players.add(mockPlayer);
+
+        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, mockBoard, players, mockDice);
 
         assertEquals(1, g2.getGameId());
         assertEquals(Game.GameState.STARTED, g2.getState());
         assertEquals(mockPlayer, g2.getGameOwner());
+        assertEquals(mockDice, g2.getDice());
     }
 
     @Test

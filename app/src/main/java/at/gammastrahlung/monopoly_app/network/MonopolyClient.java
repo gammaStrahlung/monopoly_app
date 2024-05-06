@@ -89,4 +89,17 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+
+    /**
+     * Sends a message roll_dice message to server.
+     * Transfer player which diced
+     */
+    public void rollDice() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("roll_dice")
+                .player(gameData.getPlayer())
+                .build());
+    }
 }

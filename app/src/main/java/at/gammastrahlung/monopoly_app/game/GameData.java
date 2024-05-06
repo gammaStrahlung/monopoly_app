@@ -6,6 +6,7 @@ import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableInt;
 import androidx.databinding.library.baseAdapters.BR;
 
+import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -57,6 +58,22 @@ public class GameData extends BaseObservable {
     }
 
     /**
+     * The diced values
+     */
+    private Dice dice;
+
+    @Bindable
+    public Dice getDice(){
+        return dice;
+    }
+
+    public void setDice(Dice dice) {
+        this.dice = dice;
+        notifyPropertyChanged(BR.dice);
+    }
+
+
+    /**
      * List of players of the game
      */
     @Getter
@@ -69,4 +86,8 @@ public class GameData extends BaseObservable {
     public static void reset() {
         gameData = new GameData();
     }
+
+    @Getter
+    @Setter
+    ServerMessage.MessageType lastMessageType;
 }

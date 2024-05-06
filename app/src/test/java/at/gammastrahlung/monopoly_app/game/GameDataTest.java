@@ -57,6 +57,16 @@ class GameDataTest {
         assertNotEquals(gameData1, gameData2);
     }
 
+    @Test
+    void dice(){
+        Dice mockDice = Mockito.mock(Dice.class);
+
+        GameData gd = GameData.getGameData();
+
+        gd.setDice(mockDice);
+        assertEquals(mockDice,gd.getDice());
+    }
+
     @AfterEach
     void cleanup() {
         GameData.reset();

@@ -1,5 +1,7 @@
 package at.gammastrahlung.monopoly_app.game;
 
+import androidx.databinding.ObservableArrayList;
+
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +15,6 @@ import lombok.Setter;
 public class Game {
 
     // The gameId of the game
-    @Getter
     private int gameId;
 
     // Current state of the game
@@ -23,7 +24,13 @@ public class Game {
     private Player gameOwner;
 
     // The game board
-    GameBoard gameBoard;
+    private GameBoard gameBoard;
+
+    // Player list
+    private ObservableArrayList<Player> players;
+
+    // The dice
+    private Dice dice;
 
     public enum GameState {
         /**
