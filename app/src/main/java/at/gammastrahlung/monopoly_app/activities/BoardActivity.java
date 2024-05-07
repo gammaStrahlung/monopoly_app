@@ -124,7 +124,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         if (player == null)
             return;
 
-        playerOnTurn.setText(getString(R.string.player_on_turn, player));
+        playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
 
         // if current player is our player then enable roll dice button
         if (isMyTurn()) {
