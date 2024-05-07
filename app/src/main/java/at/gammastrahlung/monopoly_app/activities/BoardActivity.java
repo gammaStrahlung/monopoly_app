@@ -5,7 +5,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +21,7 @@ import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
@@ -120,7 +120,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     }
 
     private void updatePlayerOnTurn() {
-        playerOnTurn.setText(getString(R.string.player_on_turn, GameData.getGameData().getCurrentPlayer().getName()));
+        Player player = GameData.getGameData().getCurrentPlayer();
+        if (player == null)
+            return;
+
+        playerOnTurn.setText(getString(R.string.player_on_turn, player));
 
         // if current player is our player then enable roll dice button
         if (isMyTurn()) {
