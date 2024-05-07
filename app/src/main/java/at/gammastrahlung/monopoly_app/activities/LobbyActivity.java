@@ -18,6 +18,7 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.adapters.PlayerListChangedCallback;
@@ -26,12 +27,15 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class LobbyActivity extends AppCompatActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_lobby);
@@ -42,76 +46,56 @@ public class LobbyActivity extends AppCompatActivity {
         });
 
         GameData gameData = GameData.getGameData();
+        Game game = gameData.getGame();
+
+        if (game == null) {
+            Toast.makeText(this, "Game data is not loaded.", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         TextView gameIdText = findViewById(R.id.lobby_gameId);
         RecyclerView playerList = findViewById(R.id.playersList);
-
-        String titleText = getString(R.string.gameID) + ": " + gameData.getGameId().get();
-
-        // Set game id text
+        String titleText = getString(R.string.gameID) + ": " + game.getGameId();
         gameIdText.setText(titleText);
 
-
-        // Initialize "playerList" RecyclerView
         playerList.setLayoutManager(new LinearLayoutManager(this));
-        ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
-        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this, false, false);
+        ObservableArrayList<Player> players = game.getPlayers();
+        PlayerAdapter adapter = new PlayerAdapter(players, this, false, false);
         playerList.setAdapter(adapter);
 
-        // Disable "Cancel" and "Start" buttons when player is not gameOwner
-        if (!gameData.getGame().getGameOwner().equals(gameData.getPlayer())) {
-            Button cancel = findViewById(R.id.button_cancel);
-            Button start = findViewById(R.id.button_start);
-
+        Button cancel = findViewById(R.id.button_cancel);
+        Button start = findViewById(R.id.button_start);
+        if (!game.getGameOwner().equals(gameData.getPlayer())) {
             cancel.setEnabled(false);
             start.setEnabled(false);
         }
 
-        LobbyActivity activity = this;
-
-        // Add list change callback
-        players.addOnListChangedCallback(new PlayerListChangedCallback(activity, adapter));
-
-        // Add handlers for game end and start
+        players.addOnListChangedCallback(new PlayerListChangedCallback(this, adapter));
         gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if (propertyId != BR.game)
-                    return; // Something other then game has changed -> Ignore
+                if (propertyId != BR.game) {
+                    return; // Only respond to changes in 'game'
+                }
 
-                Game game = GameData.getGameData().getGame();
-
-                if (GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.ERROR) { // Starting the game was not successful
-                    activity.runOnUiThread(() ->
-                            Toast.makeText(activity, R.string.startGame_fail, Toast.LENGTH_LONG).show());
-                } else if (game.getState() == Game.GameState.PLAYING) { // Game was started
-                    // Remove this callback
-                    GameData.getGameData().removeOnPropertyChangedCallback(this);
-
-                    activity.runOnUiThread(() -> {
-                        // Go to Board
-                        Intent intent = new Intent(activity, BoardActivity.class);
+                Game currentGame = GameData.getGameData().getGame(); // Re-fetch to ensure current data
+                if (currentGame.getState() == Game.GameState.PLAYING) {
+                    runOnUiThread(() -> {
+                        Intent intent = new Intent(LobbyActivity.this, BoardActivity.class);
                         startActivity(intent);
                     });
-                } else if (game.getState() == Game.GameState.ENDED) { // Game was cancelled
-                    // Remove this callback
-                    GameData.getGameData().removeOnPropertyChangedCallback(this);
-
-                    GameData.reset();
-                    activity.runOnUiThread(() -> {
-                        finish(); // Return to MainActivity
-                    });
+                } else if (currentGame.getState() == Game.GameState.ENDED) {
+                    runOnUiThread(() -> finish());
                 }
             }
         });
     }
 
-    // Cancel button ends the game and returns to main menu
     public void cancelButtonClick(View view) {
         MonopolyClient.getMonopolyClient().endGame();
     }
 
-    // Start button starts the game and opens BoardGameActivity
     public void startButtonClick(View view) {
         MonopolyClient.getMonopolyClient().startGame();
     }

@@ -10,6 +10,8 @@ import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+@Getter
+@Setter
 
 /**
  * Singleton that contains all game data

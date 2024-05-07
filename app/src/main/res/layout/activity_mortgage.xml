@@ -8,26 +8,26 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mortgage"
+        android:text="Mortgage Management"
         android:textSize="24sp" />
 
-    <EditText
-        android:id="@+id/property_id_input"
+    <ListView
+        android:id="@+id/property_list_view"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:hint="Enter Property ID"
-        android:inputType="number" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/mortgage_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mortgage Property" />
+        android:text="Mortgage Selected Property" />
 
     <Button
         android:id="@+id/unmortgage_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Repay Mortgage" />
+        android:text="Repay Mortgage on Selected Property" />
 
 </LinearLayout>
+
