@@ -36,7 +36,7 @@ android {
         }
     }
 
-    flavorDimensions 'websocket_uri'
+    flavorDimensions = ['websocket_uri']
     productFlavors {
         localhost {
             dimension 'websocket_uri'
@@ -52,7 +52,7 @@ android {
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn "testDebugUnitTest"
+    dependsOn "testLocalhostDebugUnitTest"
     description = "Generate Jacoco coverage reports"
 
     reports {
