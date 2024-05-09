@@ -1,12 +1,15 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    id "jacoco"
     id "org.sonarqube" version "4.4.1.3373"
 }
 
 android {
     namespace 'at.gammastrahlung.monopoly_app'
     compileSdk 34
+
+    jacoco {
+        version = "0.8.12"
+    }
 
     defaultConfig {
         applicationId "at.gammastrahlung.monopoly_app"
@@ -22,6 +25,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            enableUnitTestCoverage true
         }
     }
 
@@ -61,12 +67,12 @@ tasks.register('jacocoTestReport', JacocoReport) {
     }
 
     def fileFilter = ['**/AndroidManifest.xml', '**/strings.xml', '**/*.xml', '**/*.json', '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/debug", excludes: fileFilter)
+    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/localhostDebug/compileLocalhostDebugJavaWithJavac/classes", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.setFrom(files([mainSrc]))
     classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec"))
+    executionData.setFrom(files("${project.layout.buildDirectory.get().asFile}/outputs/unit_test_code_coverage/localhostDebugUnitTest/testLocalhostDebugUnitTest.exec"))
 }
 
 sonar {
