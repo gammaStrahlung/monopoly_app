@@ -23,6 +23,7 @@ import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -191,7 +192,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         int[] players;
 
-        if(countPlayersOnField(playerList, fieldId) > 0) {
+        if (countPlayersOnField(playerList, fieldId) > 0) {
             players = new int[countPlayersOnField(playerList, fieldId)];
 
             int x = 0;
@@ -204,7 +205,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
                 x = players[i];
             }
-        }else{
+        } else {
             players = null;
         }
 
@@ -304,10 +305,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice2.setImageResource(value2);
     }
 
-    public void moveAvatar() {
-        // TODO: update UI
-    }
-
     public void enableUserActions() {
         rollDiceButton.setEnabled(false);
         endTurnButton.setEnabled(false);
@@ -368,5 +365,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             }
         }
         return count;
+    }
+
+    // After dice roll, the avatar will be moved
+    public void moveAvatar() {
+        MonopolyClient.getMonopolyClient().moveAvatar();
     }
 }
