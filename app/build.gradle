@@ -16,9 +16,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // WebSocket connection URI
-        resValue "string", "websocket_uri", "ws://10.0.2.2:53211/monopoly"
     }
 
     buildTypes {
@@ -38,10 +35,24 @@ android {
             finalizedBy jacocoTestReport
         }
     }
+
+    flavorDimensions = ['websocket_uri']
+    productFlavors {
+        localhost {
+            dimension 'websocket_uri'
+            // WebSocket connection URI
+            resValue "string", "websocket_uri", "ws://10.0.2.2:53211/monopoly"
+        }
+        'se2-demo' {
+            dimension 'websocket_uri'
+            // WebSocket connection URI
+            resValue "string", "websocket_uri", "ws://se2-demo.aau.at:53211/monopoly"
+        }
+    }
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn "testDebugUnitTest"
+    dependsOn "testLocalhostDebugUnitTest"
     description = "Generate Jacoco coverage reports"
 
     reports {
