@@ -102,8 +102,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when dice value is changed
                 else if (propertyId == BR.dice) {
                     runOnUiThread(() -> {
-                        updateDices();
-                        moveAvatar();
+                        updateDices();      // updating the view of each die
+                        moveAvatar();       // after the dice are changed, the avatar will be moved accordingly
                         enableUserActions();
                     });
                 }
@@ -188,22 +188,23 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
 
+        // List of currently playing players
         ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
-
         int[] players;
 
+        // Check if there are any players on currently build field
         if (countPlayersOnField(playerList, fieldId) > 0) {
             players = new int[countPlayersOnField(playerList, fieldId)];
 
-            int x = 0;
+            int temp = 0;
             for (int i = 0; i < players.length; i++) {
-                for (int j = x; j < playerList.size(); j++) {
+                for (int j = temp; j < playerList.size(); j++) {
                     if (fieldId == playerList.get(j).getCurrentFieldIndex()) {
-                        players[i] = j + 1;
+                        players[i] = j + 1;     // each player with unique icon
                         break;
                     }
                 }
-                x = players[i];
+                temp = players[i];
             }
         } else {
             players = null;
