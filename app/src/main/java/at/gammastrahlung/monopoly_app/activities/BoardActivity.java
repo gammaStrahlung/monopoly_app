@@ -14,7 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
+import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
+
+import java.util.Arrays;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -184,8 +187,26 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
 
-        // Add players on the field here (Not currently tracked on the server):
-        int[] players = null;
+        ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
+
+        int[] players;
+
+        if(countPlayersOnField(playerList, fieldId) > 0) {
+            players = new int[countPlayersOnField(playerList, fieldId)];
+
+            int x = 0;
+            for (int i = 0; i < players.length; i++) {
+                for (int j = x; j < playerList.size(); j++) {
+                    if (fieldId == playerList.get(j).getCurrentFieldIndex()) {
+                        players[i] = j + 1;
+                        break;
+                    }
+                }
+                x = players[i];
+            }
+        }else{
+            players = null;
+        }
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
@@ -336,5 +357,16 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     public void onEndTurnButtonClicked(View view) {
         endTurnButton.setEnabled(false);
         MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
+    }
+
+    // Counts how many players are on the field that is currently being built
+    public int countPlayersOnField(ObservableArrayList<Player> list, int field) {
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (field == list.get(i).getCurrentFieldIndex()) {
+                count++;
+            }
+        }
+        return count;
     }
 }
