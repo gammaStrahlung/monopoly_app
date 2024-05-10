@@ -73,11 +73,12 @@ public class FieldFragment extends Fragment {
         ((TextView) inflatedView.findViewById(R.id.field_title)).setText(title);
     }
 
-    private void setPlayers(int[] players) {
+    public void setPlayers(int[] players) {
+        LinearLayout playerIcons = inflatedView.findViewById(R.id.playerIcons);
+        playerIcons.removeAllViews();
+
         if (players == null)
             return;
-
-        LinearLayout playerIcons = inflatedView.findViewById(R.id.playerIcons);
 
         for (int playerId : players) {
             if (playerId < 1 || playerId > 8)

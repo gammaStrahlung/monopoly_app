@@ -16,8 +16,11 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.fragment.app.FragmentManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -52,16 +55,13 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private TextView playerOnTurn;
 
+    ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Calls the superclass's onCreate method with the saved instance state
         setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -91,7 +91,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when game data changes
                 if (propertyId == BR.game) {
                     runOnUiThread(() -> {
-                        buildGameBoard();
+                        if (fieldFragments.isEmpty()) {
+                            buildGameBoard();
+                        } else {
+                            updateGameBoard();
+                        }
                         updatePlayerInfo();
                     });
                 }
@@ -135,6 +139,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             rollDiceButton.setEnabled(true);
         } else {
             rollDiceButton.setEnabled(false);
+        }
+    }
+
+    private void updateGameBoard() {
+        Field[] fields = GameData.getGameData().getGame().getGameBoard().getGameBoard();
+        ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
+
+        for (int i = 0; i < fields.length; i++) {
+            fieldFragments.get(i).setPlayers(generatePlayerArray(players, i));
         }
     }
 
@@ -184,12 +197,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGAME_BOARD_SIZE(); i++)
             addFieldToBoard(fieldRowRight, board.getGameBoard()[i], false, i);
         addConstraints(fieldRowRight);
+
+        getSupportFragmentManager().executePendingTransactions();
+
+        for (int i = 0; i < board.getGameBoard().length; i++) {
+            fieldFragments.add((FieldFragment) getSupportFragmentManager().findFragmentByTag("FIELD" + i));
+        }
     }
 
-    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
-
-        // List of currently playing players
-        ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
+    private int[] generatePlayerArray(ObservableArrayList<Player> playerList, int fieldId) {
         int[] players;
 
         // Check if there are any players on currently build field
@@ -203,12 +219,26 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         players[i] = j + 1;     // each player with unique icon
                         break;
                     }
+                    if (j == playerList.size() - 1) {
+                        break;
+                    }
                 }
                 temp = players[i];
             }
         } else {
             players = null;
         }
+
+        return players;
+    }
+
+    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
+
+        // List of currently playing players
+        ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
+        int[] players;
+
+        players = generatePlayerArray(playerList, fieldId);
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
@@ -260,9 +290,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getGameBoard()[fieldId])
                 .show(getSupportFragmentManager(), "FieldInfo"));
 
-        getSupportFragmentManager().beginTransaction()
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
-                .add(layout.getId(), FieldFragment.class, bundle, "FRAG")
+                .add(layout.getId(), FieldFragment.class, bundle, "FIELD" + fieldId)
+                .addToBackStack(null)
                 .commit();
     }
 
