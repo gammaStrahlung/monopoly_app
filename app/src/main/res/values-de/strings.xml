@@ -24,5 +24,6 @@
     <string name="currencyDisplay">%1$d €</string>
     <string name="close">Schließen</string>
     <string name="owned_fields">Besitzte Felder:</string>
-    <string name="mortgage">Hypothek</string>
+    <string name="player_on_turn">Spieler am Zug: %s</string>
+    <string name="end_turn">Ende Zug</string>
 </resources>

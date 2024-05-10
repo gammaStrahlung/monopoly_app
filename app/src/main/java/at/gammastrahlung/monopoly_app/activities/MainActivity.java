@@ -34,15 +34,6 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-        // Set OnClickListener for Roll Dice button
-        Button rollDiceButton = findViewById(R.id.rollDiceButton);
-        rollDiceButton.setOnClickListener(v -> {
-            // Create an intent to start the DiceRollingActivity
-            Intent intent = new Intent(MainActivity.this, DiceRollingActivity.class);
-            // Start the DiceRollingActivity
-            startActivity(intent);
-        });
     }
 
     @Override

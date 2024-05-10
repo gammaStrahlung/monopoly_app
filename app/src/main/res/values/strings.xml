@@ -23,5 +23,6 @@
     <string name="currencyDisplay">%1$d $</string>
     <string name="close">Close</string>
     <string name="owned_fields">Owned Fields:</string>
-    <string name="mortgage">Mortgage</string>
+    <string name="player_on_turn">Player on Turn: %s</string>
+    <string name="end_turn">End Turn</string>
 </resources>
