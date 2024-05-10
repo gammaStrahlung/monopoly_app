@@ -26,6 +26,8 @@ public class Player {
     @Expose
     private String name;
 
+    private int currentFieldIndex;
+
     private int balance;
 
     @Override

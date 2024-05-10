@@ -17,7 +17,7 @@ class PlayerTest {
 
         UUID uuid = UUID.randomUUID();
 
-        Player p2 = new Player(uuid, "NAME", 0);
+        Player p2 = new Player(uuid, "NAME", 0,0);
         assertEquals(uuid, p2.getId());
         assertEquals("NAME", p2.getName());
     }
