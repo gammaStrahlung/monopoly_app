@@ -1,16 +1,8 @@
 package at.gammastrahlung.monopoly_app.network;
 
-
-import at.gammastrahlung.monopoly_app.game.Player;
-import lombok.Builder;
-import lombok.Data;
-
-
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
-@Data
-
 
 /**
  * Singleton used to send messages to server
@@ -111,6 +103,34 @@ public class MonopolyClient {
                 .build());
     }
 
+    public void sendMortgageMessage(boolean mortgage, int propertyId) {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath(mortgage ? "mortgage" : "unmortgage")
+                .propertyId(propertyId)  // Properly use the builder pattern
+                .player(GameData.getGameData().getPlayer())
+                .build();
+
+        webSocketClient.sendMessage(message);
+    }
+
+
+    public void sendPaymentMessage(int amount, String targetPlayerId) {
+        // Accessing game data
+        GameData gameData = GameData.getGameData();
+
+        // Building client message
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("payment")
+                .player(gameData.getPlayer())
+                .message(String.valueOf(amount))
+                .targetPlayerId(targetPlayerId)
+                .build();
+
+        // Sending message via WebSocket client
+        webSocketClient.sendMessage(message);
+    }
+
+
     /**
      * Sends a initiate round message to the server.
      */
@@ -140,16 +160,7 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
-//    --------------------------------------------------------------------------------
-public void sendMortgageMessage(boolean mortgage, int propertyId) {
-    ClientMessage message = ClientMessage.builder()
-            .messagePath(mortgage ? "mortgage" : "unmortgage")
-            .propertyId(propertyId)  // Properly use the builder pattern
-            .player(GameData.getGameData().getPlayer())
-            .build();
 
-    webSocketClient.sendMessage(message);
-}
 
 
 }

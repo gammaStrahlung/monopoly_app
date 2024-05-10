@@ -91,4 +91,17 @@ public class WebSocketClient {
             super.finalize();
         }
     }
+
+    // Updated method in the WebSocketClient class
+    public boolean isConnected() {
+        return webSocket != null;
+    }
+
+    public void ensureConnected() {
+        if (!isConnected()) {
+            connect(new WebSocketHandler());
+        }
+    }
+
+
 }

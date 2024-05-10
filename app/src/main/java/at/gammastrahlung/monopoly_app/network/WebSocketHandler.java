@@ -34,6 +34,9 @@ public class WebSocketHandler {
         GameData.getGameData().setLastMessageType(message.getType());
 
         switch (message.getMessagePath()) {
+            case "payment_update":
+                handlePaymentUpdate(message);
+                break;
             case "create":
             case "join":
                 gameChange(message);
@@ -50,6 +53,20 @@ public class WebSocketHandler {
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
+    }
+    private void handlePaymentUpdate(ServerMessage message) {
+        if (message.getType() == ServerMessage.MessageType.PAYMENT_UPDATE) {
+            // Hier Logik für die Zahlungsaktualisierung implementieren
+            updatePlayerBalances(message.getJsonData());
+            Log.d("WebSocketHandler", "Payment update received: " + message.getJsonData());
+        }
+    }
+
+    private void updatePlayerBalances(String jsonData) {
+        // Annahme: jsonData enthält Informationen über die beteiligten Spieler und deren neue Kontostände
+        Player updatedPlayer = gson.fromJson(jsonData, Player.class);
+        GameData.getGameData().updatePlayerBalance(updatedPlayer);
+        Log.d("WebSocketHandler", "Player balance updated: " + updatedPlayer.getName());
     }
 
     /**

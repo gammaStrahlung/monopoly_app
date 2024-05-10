@@ -40,6 +40,8 @@ public class ServerMessage {
         /**
          * Informational message for the client
          */
-        INFO
+        INFO,
+
+        PAYMENT_UPDATE
     }
 }

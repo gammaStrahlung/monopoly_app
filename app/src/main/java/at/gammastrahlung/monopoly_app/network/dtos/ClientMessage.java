@@ -19,4 +19,6 @@ public class ClientMessage {
 
     @Expose
     private int propertyId;  // This will be included in the builder
+    @Expose
+    private String targetPlayerId;
 }
