@@ -40,7 +40,7 @@ public class FieldFragment extends Fragment {
 
         setColorBar(requireArguments().getInt("color_bar_position"), requireArguments().getString("color_bar_color"));
         setFieldTitle(requireArguments().getString("title"));
-        setPlayers(requireArguments().getIntArray("players"));
+        setPlayers(requireArguments().getIntArray("players"), requireArguments().getInt("orientation"));
     }
 
     private void setColorBar(int location, String color) {
@@ -73,11 +73,15 @@ public class FieldFragment extends Fragment {
         ((TextView) inflatedView.findViewById(R.id.field_title)).setText(title);
     }
 
-    private void setPlayers(int[] players) {
+    public void setPlayers(int[] players, int fieldRowOrientation) {
+        LinearLayout playerIcons = inflatedView.findViewById(R.id.playerIcons);
+        playerIcons.removeAllViews();
+
         if (players == null)
             return;
 
-        LinearLayout playerIcons = inflatedView.findViewById(R.id.playerIcons);
+        // depending on field location, players will be placed horizontally or vertically
+        playerIcons.setOrientation(fieldRowOrientation);
 
         for (int playerId : players) {
             if (playerId < 1 || playerId > 8)
@@ -87,7 +91,7 @@ public class FieldFragment extends Fragment {
             int iconId = getResources().getIdentifier("playericon_" + playerId, "drawable", getActivity().getPackageName());
 
             iv.setImageDrawable(AppCompatResources.getDrawable(getActivity(), iconId));
-            iv.setLayoutParams(new LinearLayout.LayoutParams(30, 30));
+            iv.setLayoutParams(new LinearLayout.LayoutParams(22, 22));
 
             playerIcons.addView(iv);
         }

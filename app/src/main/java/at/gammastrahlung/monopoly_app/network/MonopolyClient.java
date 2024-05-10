@@ -182,4 +182,13 @@ public class MonopolyClient {
                 .player(GameData.getGameData().getPlayer())
                 .build());
     }
+
+    public void moveAvatar(){
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("move_avatar")
+                .player(gameData.getPlayer())
+                .build());
+    }
 }

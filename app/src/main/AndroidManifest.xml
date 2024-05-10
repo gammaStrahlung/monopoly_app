@@ -28,9 +28,6 @@
             android:name=".activities.LobbyActivity">
         </activity>
         <activity
-            android:name=".activities.DiceRollingActivity">
-        </activity>
-        <activity
             android:name=".activities.BoardActivity">
         </activity>
     </application>
