@@ -123,4 +123,63 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+
+    /**
+     * Sends a payment message to the server.
+     * @param amount The amount to be paid.
+     * @param targetPlayerId The ID of the player to receive the payment.
+     */
+    // New method in the MonopolyClient class
+    public void sendPaymentMessage(int amount, String targetPlayerId) {
+        // Accessing game data
+        GameData gameData = GameData.getGameData();
+
+        // Building client message
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("payment")
+                .player(gameData.getPlayer())
+                .message(String.valueOf(amount))
+                .targetPlayerId(targetPlayerId) // You may need to add this field to the ClientMessage.
+                .build();
+
+        // Sending message via WebSocket client
+        webSocketClient.sendMessage(message);
+    }
+
+
+    /**
+     * Sends a message to start an auction for a specific property.
+     *
+     * @param propertyId The ID of the property for which the auction is to start.
+     */
+    public void startAuction(int propertyId) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("start_auction")
+                .message(String.valueOf(propertyId))
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a bid for the current auction.
+     *
+     * @param bid The bid amount.
+     */
+    public void placeBid(int bid) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("place_bid")
+                .message(String.valueOf(bid))
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a message to finalize the current auction.
+     */
+    public void finalizeAuction() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("finalize_auction")
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
 }

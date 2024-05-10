@@ -42,7 +42,7 @@ public class GameData extends BaseObservable {
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
-        notifyPropertyChanged(BR.currentPlayer);
+        notifyPropertyChanged(BR.player);
     }
 
     @Bindable

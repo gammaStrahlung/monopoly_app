@@ -23,4 +23,6 @@ public class ClientMessage {
 
     @Expose
     private Player player;
+    @Expose
+    private String targetPlayerId;
 }
