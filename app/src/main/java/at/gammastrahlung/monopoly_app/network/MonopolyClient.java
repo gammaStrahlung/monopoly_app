@@ -112,4 +112,22 @@ public class MonopolyClient {
 
         webSocketClient.sendMessage(message);
     }
+
+
+    public void sendPaymentMessage(int amount, String targetPlayerId) {
+        // Accessing game data
+        GameData gameData = GameData.getGameData();
+
+        // Building client message
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("payment")
+                .player(gameData.getPlayer())
+                .message(String.valueOf(amount))
+                .targetPlayerId(targetPlayerId)
+                .build();
+
+        // Sending message via WebSocket client
+        webSocketClient.sendMessage(message);
+    }
+
 }
