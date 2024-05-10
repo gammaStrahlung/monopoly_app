@@ -43,7 +43,7 @@ A running [Monopoly Server](https://github.com/gammaStrahlung/monopoly_server). 
       ./gradlew build
       ```
    * To install it to a running emulator or a connected device use:
-      ```
+      ```sh
       ./gradlew installDebug
       ```
 
