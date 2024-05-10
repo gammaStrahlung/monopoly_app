@@ -109,7 +109,7 @@ public class GameData extends BaseObservable {
     @Setter
     ServerMessage.MessageType lastMessageType;
 
-    private ServerMessage.MessageType lastMessageType;
+
 
     public void updatePlayerBalance(Player updatedPlayer) {
         // Updating player balance
