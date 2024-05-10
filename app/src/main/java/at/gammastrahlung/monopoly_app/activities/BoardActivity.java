@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,14 +20,11 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
-import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -147,7 +145,16 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
 
         for (int i = 0; i < fields.length; i++) {
-            fieldFragments.get(i).setPlayers(generatePlayerArray(players, i));
+            int fieldOrientation;
+
+            // how the players should be placed depending on the field location
+            if ((fields[i].getFieldId() >= 1 && fields[i].getFieldId() <= 9) || (fields[i].getFieldId() >= 21 && fields[i].getFieldId() <= 29)) {
+                fieldOrientation = LinearLayout.VERTICAL;
+            } else {
+                fieldOrientation = LinearLayout.HORIZONTAL;
+            }
+
+            fieldFragments.get(i).setPlayers(generatePlayerArray(players, i), fieldOrientation);
         }
     }
 
@@ -252,6 +259,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void addFieldToBoard(ConstraintLayout fieldRow, String fieldTitle, int[] playerIds, boolean showColorBar, String colorBarColor, boolean isEdge, int fieldId) {
         Bundle bundle = new Bundle();
         int colorBarPosition = FieldFragment.COLOR_BAR_NONE;
+        int fieldOrientation;
 
         int height = 0;
         int width = 0;
@@ -276,10 +284,17 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 colorBarPosition = FieldFragment.COLOR_BAR_LEFT;
         }
 
+        if (fieldRow == fieldRowBottom || fieldRow == fieldRowTop) {
+            fieldOrientation = LinearLayout.VERTICAL;
+        } else {
+            fieldOrientation = LinearLayout.HORIZONTAL;
+        }
+
         bundle.putInt("color_bar_position", colorBarPosition);
         bundle.putString("color_bar_color", colorBarColor);
         bundle.putString("title", fieldTitle);
         bundle.putIntArray("players", playerIds);
+        bundle.putInt("orientation", fieldOrientation);
 
         ConstraintLayout layout = new ConstraintLayout(this);
         fieldRow.addView(layout);
