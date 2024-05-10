@@ -98,5 +98,6 @@ public class LobbyActivity extends AppCompatActivity {
 
     public void startButtonClick(View view) {
         MonopolyClient.getMonopolyClient().startGame();
+        MonopolyClient.getMonopolyClient().initiateRound();
     }
 }

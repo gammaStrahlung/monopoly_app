@@ -14,15 +14,34 @@ import lombok.Setter;
 @Setter
 public class GameData extends BaseObservable {
     @Getter
-    private static final GameData gameData = new GameData();
+    private static GameData gameData = new GameData();
 
-    private GameData() {}
+    private GameData() {
+    }
 
+    /**
+     * The gameId of the current game
+     */
     @Getter
     @Setter(AccessLevel.NONE)
-    private final ObservableInt gameId = new ObservableInt();
+    private ObservableInt gameId = new ObservableInt();
 
+    /**
+     * Our player
+     */
     private Player player = new Player();
+
+    private Player currentPlayer;
+
+    @Bindable
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+        notifyPropertyChanged(BR.currentPlayer);
+    }
 
     @Bindable
     public Player getPlayer() {
@@ -34,6 +53,9 @@ public class GameData extends BaseObservable {
         notifyPropertyChanged(BR.player);
     }
 
+    /**
+     * The game and its data
+     */
     private Game game;
 
     @Bindable
@@ -46,6 +68,9 @@ public class GameData extends BaseObservable {
         notifyPropertyChanged(BR.game);
     }
 
+    /**
+     * The diced values
+     */
     private Dice dice;
 
     @Bindable
@@ -58,6 +83,9 @@ public class GameData extends BaseObservable {
         notifyPropertyChanged(BR.dice);
     }
 
+    /**
+     * List of players of the game
+     */
     @Getter
     private final ObservableArrayList<Player> players = new ObservableArrayList<>();
 
@@ -74,12 +102,13 @@ public class GameData extends BaseObservable {
     }
 
     public static void reset() {
-        // Resetting game data
-//        gameData = new GameData();
+        gameData = new GameData();
     }
 
     @Getter
     @Setter
+    ServerMessage.MessageType lastMessageType;
+
     private ServerMessage.MessageType lastMessageType;
 
     public void updatePlayerBalance(Player updatedPlayer) {

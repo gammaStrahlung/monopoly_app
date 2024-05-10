@@ -22,6 +22,7 @@ import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
@@ -39,9 +40,14 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ImageView dice1;
     private ImageView dice2;
 
+    private Button rollDiceButton;
+    private Button endTurnButton;
+
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
+
+    private TextView playerOnTurn;
 
 
     @Override
@@ -77,34 +83,42 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
 
+        rollDiceButton = findViewById(R.id.rollDices);
+        endTurnButton = findViewById(R.id.endTurn);
+        playerOnTurn = findViewById(R.id.playerOnTurn);
+
         buildGameBoard();
         updatePlayerInfo();
+        updatePlayerOnTurn();
 
-        // Update when game data changes
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if (propertyId != BR.game)
-                    return;
-
-                runOnUiThread(() -> {
-                    buildGameBoard();
-                    updatePlayerInfo();
-                });
+                // Update when game data changes
+                if (propertyId == BR.game) {
+                    runOnUiThread(() -> {
+                        buildGameBoard();
+                        updatePlayerInfo();
+                    });
+                }
+                // Update when player on turn changes
+                else if (propertyId == BR.currentPlayer) {
+                    runOnUiThread(() -> updatePlayerOnTurn());
+                }
+                // Update when dice value is changed
+                else if (propertyId == BR.dice) {
+                    runOnUiThread(() -> {
+                        updateDices();
+                        moveAvatar();
+                        enableUserActions();
+                    });
+                }
             }
         });
+    }
 
-
-        // Update when dice value is changed
-        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                if (propertyId != BR.dice)
-                    return;
-
-                runOnUiThread(() -> updateDices());
-            }
-        });
+    private boolean isMyTurn() {
+        return GameData.getGameData().getCurrentPlayer().equals(GameData.getGameData().getPlayer());
     }
 
     public void otherPlayersClick(View v) {
@@ -113,6 +127,21 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
+    }
+
+    private void updatePlayerOnTurn() {
+        Player player = GameData.getGameData().getCurrentPlayer();
+        if (player == null)
+            return;
+
+        playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
+
+        // if current player is our player then enable roll dice button
+        if (isMyTurn()) {
+            rollDiceButton.setEnabled(true);
+        } else {
+            rollDiceButton.setEnabled(false);
+        }
     }
 
     private void buildGameBoard() {
@@ -264,6 +293,19 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice2.setImageResource(value2);
     }
 
+    public void moveAvatar() {
+        // TODO: update UI
+    }
+
+    public void enableUserActions() {
+        rollDiceButton.setEnabled(false);
+        endTurnButton.setEnabled(false);
+
+        if (isMyTurn()) {
+            endTurnButton.setEnabled(true);
+        }
+    }
+
     public void rollDice() {
         MonopolyClient.getMonopolyClient().rollDice();
     }
@@ -299,5 +341,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void onEndTurnButtonClicked(View view) {
+        endTurnButton.setEnabled(false);
+        MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
     }
 }
