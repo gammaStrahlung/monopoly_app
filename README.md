@@ -51,7 +51,7 @@ A running [Monopoly Server](https://github.com/gammaStrahlung/monopoly_server). 
 
 This project uses [OkHTTP](https://square.github.io/okhttp/) for the WebSocket connection to the server.
 
-Code quality checking and coverage analysis is provided by [SonarCloud](https://sonarcloud.io/project/overview?id=gammaStrahlung_monopoly_server).
+Code quality checking and coverage analysis is provided by [SonarCloud](https://sonarcloud.io/project/overview?id=gammaStrahlung_monopoly_app).
 
 ### Testing
 
