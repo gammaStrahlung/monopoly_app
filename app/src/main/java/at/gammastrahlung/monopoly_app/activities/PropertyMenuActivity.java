@@ -24,7 +24,7 @@ public class PropertyMenuActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Set OnClickListener for Button button
+        // Set OnClickListener for Button button, which opens the PropertyActionsMenue
         Button propertyActionsMenu = findViewById(R.id.button);
         propertyActionsMenu.setOnClickListener(v -> {
             // Create an intent to start the PropertyActionsMenu
