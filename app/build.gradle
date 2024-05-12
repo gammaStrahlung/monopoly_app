@@ -1,12 +1,15 @@
 plugins {
     alias(libs.plugins.androidApplication)
-    id "jacoco"
     id "org.sonarqube" version "4.4.1.3373"
 }
 
 android {
     namespace 'at.gammastrahlung.monopoly_app'
     compileSdk 34
+
+    jacoco {
+        version = "0.8.12"
+    }
 
     defaultConfig {
         applicationId "at.gammastrahlung.monopoly_app"
@@ -16,15 +19,15 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        // WebSocket connection URI
-        resValue "string", "websocket_uri", "ws://10.0.2.2:53211/monopoly"
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            enableUnitTestCoverage true
         }
     }
 
@@ -38,10 +41,24 @@ android {
             finalizedBy jacocoTestReport
         }
     }
+
+    flavorDimensions = ['websocket_uri']
+    productFlavors {
+        localhost {
+            dimension 'websocket_uri'
+            // WebSocket connection URI
+            resValue "string", "websocket_uri", "ws://10.0.2.2:53211/monopoly"
+        }
+        'se2-demo' {
+            dimension 'websocket_uri'
+            // WebSocket connection URI
+            resValue "string", "websocket_uri", "ws://se2-demo.aau.at:53211/monopoly"
+        }
+    }
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
-    dependsOn "testDebugUnitTest"
+    dependsOn "testLocalhostDebugUnitTest"
     description = "Generate Jacoco coverage reports"
 
     reports {
@@ -50,12 +67,12 @@ tasks.register('jacocoTestReport', JacocoReport) {
     }
 
     def fileFilter = ['**/AndroidManifest.xml', '**/strings.xml', '**/*.xml', '**/*.json', '**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
-    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/debug", excludes: fileFilter)
+    def debugTree = fileTree(dir: "${project.layout.buildDirectory.get().asFile}/intermediates/javac/localhostDebug/compileLocalhostDebugJavaWithJavac/classes", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
 
     sourceDirectories.setFrom(files([mainSrc]))
     classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(files("${project.layout.buildDirectory.get().asFile}/jacoco/testDebugUnitTest.exec"))
+    executionData.setFrom(files("${project.layout.buildDirectory.get().asFile}/outputs/unit_test_code_coverage/localhostDebugUnitTest/testLocalhostDebugUnitTest.exec"))
 }
 
 sonar {

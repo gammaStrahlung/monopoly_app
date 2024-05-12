@@ -6,20 +6,27 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
+import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.fragment.app.FragmentManager;
+
+import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
@@ -37,20 +44,22 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ImageView dice1;
     private ImageView dice2;
 
+    private Button rollDiceButton;
+    private Button endTurnButton;
+
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
+
+    private TextView playerOnTurn;
+
+    ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Calls the superclass's onCreate method with the saved instance state
         setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -66,34 +75,46 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
 
+        rollDiceButton = findViewById(R.id.rollDices);
+        endTurnButton = findViewById(R.id.endTurn);
+        playerOnTurn = findViewById(R.id.playerOnTurn);
+
         buildGameBoard();
         updatePlayerInfo();
+        updatePlayerOnTurn();
 
-        // Update when game data changes
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                if (propertyId != BR.game)
-                    return;
-
-                runOnUiThread(() -> {
-                    buildGameBoard();
-                    updatePlayerInfo();
-                });
+                // Update when game data changes
+                if (propertyId == BR.game) {
+                    runOnUiThread(() -> {
+                        if (fieldFragments.isEmpty()) {
+                            buildGameBoard();
+                        } else {
+                            updateGameBoard();
+                        }
+                        updatePlayerInfo();
+                    });
+                }
+                // Update when player on turn changes
+                else if (propertyId == BR.currentPlayer) {
+                    runOnUiThread(() -> updatePlayerOnTurn());
+                }
+                // Update when dice value is changed
+                else if (propertyId == BR.dice) {
+                    runOnUiThread(() -> {
+                        updateDices();      // updating the view of each die
+                        moveAvatar();       // after the dice are changed, the avatar will be moved accordingly
+                        enableUserActions();
+                    });
+                }
             }
         });
+    }
 
-
-        // Update when dice value is changed
-        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId) {
-                if (propertyId != BR.dice)
-                    return;
-
-                runOnUiThread(() -> updateDices());
-            }
-        });
+    private boolean isMyTurn() {
+        return GameData.getGameData().getCurrentPlayer().equals(GameData.getGameData().getPlayer());
     }
 
     public void otherPlayersClick(View v) {
@@ -102,6 +123,39 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
+    }
+
+    private void updatePlayerOnTurn() {
+        Player player = GameData.getGameData().getCurrentPlayer();
+        if (player == null)
+            return;
+
+        playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
+
+        // if current player is our player then enable roll dice button
+        if (isMyTurn()) {
+            rollDiceButton.setEnabled(true);
+        } else {
+            rollDiceButton.setEnabled(false);
+        }
+    }
+
+    private void updateGameBoard() {
+        Field[] fields = GameData.getGameData().getGame().getGameBoard().getGameBoard();
+        ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
+
+        for (int i = 0; i < fields.length; i++) {
+            int fieldOrientation;
+
+            // how the players should be placed depending on the field location
+            if ((fields[i].getFieldId() >= 1 && fields[i].getFieldId() <= 9) || (fields[i].getFieldId() >= 21 && fields[i].getFieldId() <= 29)) {
+                fieldOrientation = LinearLayout.VERTICAL;
+            } else {
+                fieldOrientation = LinearLayout.HORIZONTAL;
+            }
+
+            fieldFragments.get(i).setPlayers(generatePlayerArray(players, i), fieldOrientation);
+        }
     }
 
     private void buildGameBoard() {
@@ -150,12 +204,48 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGAME_BOARD_SIZE(); i++)
             addFieldToBoard(fieldRowRight, board.getGameBoard()[i], false, i);
         addConstraints(fieldRowRight);
+
+        getSupportFragmentManager().executePendingTransactions();
+
+        for (int i = 0; i < board.getGameBoard().length; i++) {
+            fieldFragments.add((FieldFragment) getSupportFragmentManager().findFragmentByTag("FIELD" + i));
+        }
+    }
+
+    private int[] generatePlayerArray(ObservableArrayList<Player> playerList, int fieldId) {
+        int[] players;
+
+        // Check if there are any players on currently build field
+        if (countPlayersOnField(playerList, fieldId) > 0) {
+            players = new int[countPlayersOnField(playerList, fieldId)];
+
+            int temp = 0;
+            for (int i = 0; i < players.length; i++) {
+                for (int j = temp; j < playerList.size(); j++) {
+                    if (fieldId == playerList.get(j).getCurrentFieldIndex()) {
+                        players[i] = j + 1;     // each player with unique icon
+                        break;
+                    }
+                    if (j == playerList.size() - 1) {
+                        break;
+                    }
+                }
+                temp = players[i];
+            }
+        } else {
+            players = null;
+        }
+
+        return players;
     }
 
     private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
 
-        // Add players on the field here (Not currently tracked on the server):
-        int[] players = null;
+        // List of currently playing players
+        ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
+        int[] players;
+
+        players = generatePlayerArray(playerList, fieldId);
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
@@ -169,6 +259,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void addFieldToBoard(ConstraintLayout fieldRow, String fieldTitle, int[] playerIds, boolean showColorBar, String colorBarColor, boolean isEdge, int fieldId) {
         Bundle bundle = new Bundle();
         int colorBarPosition = FieldFragment.COLOR_BAR_NONE;
+        int fieldOrientation;
 
         int height = 0;
         int width = 0;
@@ -193,10 +284,17 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 colorBarPosition = FieldFragment.COLOR_BAR_LEFT;
         }
 
+        if (fieldRow == fieldRowBottom || fieldRow == fieldRowTop) {
+            fieldOrientation = LinearLayout.VERTICAL;
+        } else {
+            fieldOrientation = LinearLayout.HORIZONTAL;
+        }
+
         bundle.putInt("color_bar_position", colorBarPosition);
         bundle.putString("color_bar_color", colorBarColor);
         bundle.putString("title", fieldTitle);
         bundle.putIntArray("players", playerIds);
+        bundle.putInt("orientation", fieldOrientation);
 
         ConstraintLayout layout = new ConstraintLayout(this);
         fieldRow.addView(layout);
@@ -207,9 +305,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getGameBoard()[fieldId])
                 .show(getSupportFragmentManager(), "FieldInfo"));
 
-        getSupportFragmentManager().beginTransaction()
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
                 .setReorderingAllowed(true)
-                .add(layout.getId(), FieldFragment.class, bundle, "FRAG")
+                .add(layout.getId(), FieldFragment.class, bundle, "FIELD" + fieldId)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -253,6 +354,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice2.setImageResource(value2);
     }
 
+    public void enableUserActions() {
+        rollDiceButton.setEnabled(false);
+        endTurnButton.setEnabled(false);
+
+        if (isMyTurn()) {
+            endTurnButton.setEnabled(true);
+        }
+    }
+
     public void rollDice() {
         MonopolyClient.getMonopolyClient().rollDice();
     }
@@ -288,5 +398,26 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void onEndTurnButtonClicked(View view) {
+        endTurnButton.setEnabled(false);
+        MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
+    }
+
+    // Counts how many players are on the field that is currently being built
+    public int countPlayersOnField(ObservableArrayList<Player> list, int field) {
+        int count = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (field == list.get(i).getCurrentFieldIndex()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    // After dice roll, the avatar will be moved
+    public void moveAvatar() {
+        MonopolyClient.getMonopolyClient().moveAvatar();
     }
 }

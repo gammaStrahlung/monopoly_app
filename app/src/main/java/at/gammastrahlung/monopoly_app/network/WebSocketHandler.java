@@ -8,9 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import at.gammastrahlung.monopoly_app.game.Game;
-import java.util.ArrayList;
 
-import at.gammastrahlung.monopoly_app.game.Dice;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -22,7 +20,7 @@ import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
  */
 public class WebSocketHandler {
 
-    private final Gson gson =  new GsonBuilder()
+    private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(Field.class, new FieldDeserializer())
             .create();
 
@@ -42,6 +40,9 @@ public class WebSocketHandler {
                 break;
             case "update":
                 update(message);
+                break;
+            case "initiate_round":
+                updatePlayerOnTurn(message.getJsonData());
                 break;
             case "roll_dice":
                 rollDice(message);
@@ -107,6 +108,11 @@ public class WebSocketHandler {
         }
     }
 
+    private void updatePlayerOnTurn(String json) {
+        Player player = gson.fromJson(json, Player.class);
+        GameData.getGameData().setCurrentPlayer(player);
+    }
+
     private void updateField(String json) {
         Field f = gson.fromJson(json, Field.class);
         GameData.getGameData().getGame().getGameBoard().getGameBoard()[f.getFieldId()] = f;
@@ -157,6 +163,10 @@ public class WebSocketHandler {
 
     private void rollDice(ServerMessage message) {
         GameData gameData = GameData.getGameData();
+        if (gameData.getGame() == null) {
+            return;
+        }
         gameData.setDice(message.getGame().getDice());
     }
 }
+
