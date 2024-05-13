@@ -26,4 +26,13 @@
     <string name="owned_fields">Besitzte Felder:</string>
     <string name="player_on_turn">Spieler am Zug: %s</string>
     <string name="end_turn">Ende Zug</string>
+    <string name="Property_Name">Name</string>
+    <string name="back">Zurück</string>
+    <string name="Submit_bid">OK</string>
+    <string name="enter_bid">Gebe Bid ein</string>
+    <string name="result">Resultat</string>
+    <string name="error_invalid_bid">nicht valide bid</string>
+    <string name="purchase_prompt">Möchtest du dieses Feld kaufen?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

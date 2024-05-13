@@ -1,12 +1,15 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,14 +20,17 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
+import at.gammastrahlung.monopoly_app.fragments.PurchaseDialogFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -111,7 +117,29 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId == BR.game || propertyId == BR.dice) {
+                    runOnUiThread(() -> updateGameUI());
+                }
+            }
+        });
+
+        // Listen to property purchase decisions
+        // Assume there's a mechanism or method trigger called 'propertyDecisionMade' when player lands on a property
+        propertyDecisionMade(false, "Example Property", 1); // Example call
+
     }
+    private void propertyDecisionMade(boolean purchase, String propertyName, int propertyId) {
+        if (!purchase) {
+            showAuctionDialog(propertyName, propertyId);
+        }
+    }
+    private void updateGameUI() {
+        // Update game board and UI based on game state changes
+    }
+
 
     private boolean isMyTurn() {
         return GameData.getGameData().getCurrentPlayer().equals(GameData.getGameData().getPlayer());
@@ -133,11 +161,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
 
         // if current player is our player then enable roll dice button
-        if (isMyTurn()) {
-            rollDiceButton.setEnabled(true);
-        } else {
-            rollDiceButton.setEnabled(false);
-        }
+        rollDiceButton.setEnabled(isMyTurn());
     }
 
     private void updateGameBoard() {
@@ -420,4 +444,16 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     public void moveAvatar() {
         MonopolyClient.getMonopolyClient().moveAvatar();
     }
+//////////////////////////////////////////////////////////////////////////////////////////
+public void handlePropertyPurchaseDecision(boolean purchase) {
+    if (!purchase) {
+        showAuctionDialog("Property Name", 1); //  Property Name and Property ID
+    }
+}
+
+    public void showAuctionDialog(String propertyName, int propertyId) {
+        DialogFragment auctionDialog = AuctionDialogFragment.newInstance(propertyName, propertyId); // Create a new instance of the dialog
+        auctionDialog.show(getSupportFragmentManager(), "auctionDialog");   // show the dialog
+    }
+
 }

@@ -139,48 +139,11 @@ public class MonopolyClient {
                 .messagePath("payment")
                 .player(gameData.getPlayer())
                 .message(String.valueOf(amount))
-                .targetPlayerId(targetPlayerId) // You may need to add this field to the ClientMessage.
+                .targetPlayerId(targetPlayerId)
                 .build();
 
         // Sending message via WebSocket client
         webSocketClient.sendMessage(message);
-    }
-
-
-    /**
-     * Sends a message to start an auction for a specific property.
-     *
-     * @param propertyId The ID of the property for which the auction is to start.
-     */
-    public void startAuction(int propertyId) {
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("start_auction")
-                .message(String.valueOf(propertyId))
-                .player(GameData.getGameData().getPlayer())
-                .build());
-    }
-
-    /**
-     * Sends a bid for the current auction.
-     *
-     * @param bid The bid amount.
-     */
-    public void placeBid(int bid) {
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("place_bid")
-                .message(String.valueOf(bid))
-                .player(GameData.getGameData().getPlayer())
-                .build());
-    }
-
-    /**
-     * Sends a message to finalize the current auction.
-     */
-    public void finalizeAuction() {
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("finalize_auction")
-                .player(GameData.getGameData().getPlayer())
-                .build());
     }
 
     public void moveAvatar(){
@@ -190,5 +153,38 @@ public class MonopolyClient {
                 .messagePath("move_avatar")
                 .player(gameData.getPlayer())
                 .build());
+    }
+    /**
+     * Sends a request to start an auction for a specified property.
+     * @param propertyId The ID of the property for the auction.
+     */
+    public void startAuction(int propertyId) {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("start_auction")
+                .message(String.valueOf(propertyId))
+                .build();
+        webSocketClient.sendMessage(message);
+    }
+
+    /**
+     * Sends a bid in an ongoing auction.
+     * @param bid The bid amount.
+     */
+    public void placeBid(int bid) {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("place_bid")
+                .message(String.valueOf(bid))
+                .build();
+        webSocketClient.sendMessage(message);
+    }
+
+    /**
+     * Requests to finalize the current auction.
+     */
+    public void finalizeAuction() {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("finalize_auction")
+                .build();
+        webSocketClient.sendMessage(message);
     }
 }

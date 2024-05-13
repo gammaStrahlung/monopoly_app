@@ -25,4 +25,14 @@
     <string name="owned_fields">Owned Fields:</string>
     <string name="player_on_turn">Player on Turn: %s</string>
     <string name="end_turn">End Turn</string>
+    <string name="Property_Name">Name</string>
+    <string name="back">Back</string>
+    <string name="Submit_bid">Submit Bid</string>
+    <string name="enter_bid">Enter your bid</string>
+    <string name="result">Result will be displayed here</string>
+    <string name="error_invalid_bid">error_invalid_bid</string>
+    <string name="purchase_prompt">Do you want to buy this property?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
 </resources>
