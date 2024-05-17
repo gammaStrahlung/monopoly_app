@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 public class GameBoard {
     private Player bank;
-    private Field[] gameBoard;
-    private int GAME_BOARD_SIZE;
-    private String FULL_SET;
-    private String HOTEL;
+    private Field[] fields;
+    private int gameBoardSize;
+    private String fullSet;
+    private String hotel;
 }
