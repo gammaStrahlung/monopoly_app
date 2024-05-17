@@ -115,7 +115,7 @@ public class WebSocketHandler {
 
     private void updateField(String json) {
         Field f = gson.fromJson(json, Field.class);
-        GameData.getGameData().getGame().getGameBoard().getGameBoard()[f.getFieldId()] = f;
+        GameData.getGameData().getGame().getGameBoard().getFields()[f.getFieldId()] = f;
     }
 
     private void updatePlayer(String json) {

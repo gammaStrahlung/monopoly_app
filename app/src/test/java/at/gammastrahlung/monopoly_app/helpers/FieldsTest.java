@@ -81,7 +81,7 @@ class FieldsTest {
 
         // Initialize GameData mock objects
         GameBoard gameBoard = Mockito.mock(GameBoard.class);
-        Mockito.when(gameBoard.getGameBoard()).thenReturn(fields.toArray(new Field[0]));
+        Mockito.when(gameBoard.getFields()).thenReturn(fields.toArray(new Field[0]));
 
         Game g = Mockito.mock(Game.class);
         Mockito.when(g.getGameBoard()).thenReturn(gameBoard);

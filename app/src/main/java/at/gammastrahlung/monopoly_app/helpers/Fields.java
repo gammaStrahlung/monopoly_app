@@ -17,7 +17,7 @@ public class Fields {
     public static List<Field> getOwnedFields(Player player) {
         ArrayList<Field> ownedFields = new ArrayList<>();
 
-        for (Field field : GameData.getGameData().getGame().getGameBoard().getGameBoard()) {
+        for (Field field : GameData.getGameData().getGame().getGameBoard().getFields()) {
             if (field instanceof Property && ((Property) field).getOwner().equals(player) ||
                     field instanceof Railroad && ((Railroad) field).getOwner().equals(player) ||
                     field instanceof Utility && ((Utility) field).getOwner().equals(player))
