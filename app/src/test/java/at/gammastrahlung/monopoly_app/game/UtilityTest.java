@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 import at.gammastrahlung.monopoly_app.game.gameboard.Utility;
 
 
-public class UtilityTest {
+class UtilityTest {
     Utility u;
 
     @BeforeEach
