@@ -132,4 +132,37 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+    /**
+     * Sends a request to start an auction for a specified property.
+     * @param propertyId The ID of the property for the auction.
+     */
+    public void startAuction(int propertyId) {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("start_auction")
+                .message(String.valueOf(propertyId))
+                .build();
+        webSocketClient.sendMessage(message);
+    }
+
+    /**
+     * Sends a bid in an ongoing auction.
+     * @param bid The bid amount.
+     */
+    public void placeBid(int bid) {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("place_bid")
+                .message(String.valueOf(bid))
+                .build();
+        webSocketClient.sendMessage(message);
+    }
+
+    /**
+     * Requests to finalize the current auction.
+     */
+    public void finalizeAuction() {
+        ClientMessage message = ClientMessage.builder()
+                .messagePath("finalize_auction")
+                .build();
+        webSocketClient.sendMessage(message);
+    }
 }

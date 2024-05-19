@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,49 +18,47 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
+import at.gammastrahlung.monopoly_app.fragments.PurchaseDialogFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.helpers.FieldHelper;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class BoardActivity extends AppCompatActivity implements SensorEventListener {
 
-    private ConstraintLayout fieldRowTop; // Includes top corners
-    private ConstraintLayout fieldRowBottom; // Includes bottom corners
+    private ConstraintLayout fieldRowTop;
+    private ConstraintLayout fieldRowBottom;
     private ConstraintLayout fieldRowLeft;
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
-
     private ImageView dice1;
     private ImageView dice2;
-
     private Button rollDiceButton;
     private Button endTurnButton;
-
+    private TextView playerOnTurn;
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
-
-    private TextView playerOnTurn;
-
-    ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
-
+    private ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState); // Calls the superclass's onCreate method with the saved instance state
-        setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_board);
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
@@ -69,12 +68,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         fieldRowLeft = findViewById(R.id.field_row_left);
         fieldRowRight = findViewById(R.id.field_row_right);
         boardLayout = findViewById(R.id.boardLayout);
-
         moneyText = findViewById(R.id.moneyText);
-
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
-
         rollDiceButton = findViewById(R.id.rollDices);
         endTurnButton = findViewById(R.id.endTurn);
         playerOnTurn = findViewById(R.id.playerOnTurn);
@@ -86,7 +82,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
-                // Update when game data changes
                 if (propertyId == BR.game) {
                     runOnUiThread(() -> {
                         if (fieldFragments.isEmpty()) {
@@ -96,21 +91,39 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         }
                         updatePlayerInfo();
                     });
-                }
-                // Update when player on turn changes
-                else if (propertyId == BR.currentPlayer) {
-                    runOnUiThread(() -> updatePlayerOnTurn());
-                }
-                // Update when dice value is changed
-                else if (propertyId == BR.dice) {
+                } else if (propertyId == BR.currentPlayer) {
+                    runOnUiThread(BoardActivity.this::updatePlayerOnTurn);
+                } else if (propertyId == BR.dice) {
                     runOnUiThread(() -> {
-                        updateDices();      // updating the view of each die
-                        moveAvatar();       // after the dice are changed, the avatar will be moved accordingly
+                        updateDices();
+                        moveAvatar();
                         enableUserActions();
                     });
                 }
             }
         });
+
+        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId == BR.game || propertyId == BR.dice) {
+                    runOnUiThread(BoardActivity.this::updateGameUI);
+                }
+            }
+        });
+
+        propertyDecisionMade(false, "Example Property", 1); // Example call
+        checkCurrentPlayerField();
+    }
+
+    private void propertyDecisionMade(boolean purchase, String propertyName, int propertyId) {
+        if (!purchase) {
+            showAuctionDialog(propertyName, propertyId);
+        }
+    }
+
+    private void updateGameUI() {
+        // Update game board and UI based on game state changes
     }
 
     private boolean isMyTurn() {
@@ -127,17 +140,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerOnTurn() {
         Player player = GameData.getGameData().getCurrentPlayer();
-        if (player == null)
-            return;
+        if (player == null) return;
 
         playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
-
-        // if current player is our player then enable roll dice button
-        if (isMyTurn()) {
-            rollDiceButton.setEnabled(true);
-        } else {
-            rollDiceButton.setEnabled(false);
-        }
+        rollDiceButton.setEnabled(isMyTurn());
     }
 
     private void updateGameBoard() {
@@ -145,14 +151,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
 
         for (int i = 0; i < fields.length; i++) {
-            int fieldOrientation;
-
-            // how the players should be placed depending on the field location
-            if ((fields[i].getFieldId() >= 1 && fields[i].getFieldId() <= 9) || (fields[i].getFieldId() >= 21 && fields[i].getFieldId() <= 29)) {
-                fieldOrientation = LinearLayout.VERTICAL;
-            } else {
-                fieldOrientation = LinearLayout.HORIZONTAL;
-            }
+            int fieldOrientation = ((fields[i].getFieldId() >= 1 && fields[i].getFieldId() <= 9) || (fields[i].getFieldId() >= 21 && fields[i].getFieldId() <= 29))
+                    ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL;
 
             fieldFragments.get(i).setPlayers(generatePlayerArray(players, i), fieldOrientation);
         }
@@ -160,70 +160,54 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void buildGameBoard() {
         GameBoard board = GameData.getGameData().getGame().getGameBoard();
-        if (board == null)
-            return; // Don't build board if it does not exist
+        if (board == null) return;
 
-        // Clear views
         fieldRowTop.removeAllViews();
         fieldRowBottom.removeAllViews();
         fieldRowLeft.removeAllViews();
         fieldRowRight.removeAllViews();
 
         int boardSideLength = board.getGameBoardSize() / 4;
+        int horizontalFieldCount = boardSideLength + 2;
+        int verticalFieldCount = boardSideLength - 2;
 
-        int horizontalFieldCount = boardSideLength + 2; // Includes edges
-        int verticalFieldCount = boardSideLength - 2; // Does not include edges
-
-        /* Monopoly game starts bottom right and then goes in clockwise direction
-        [6] [7] [8] [ 9]
-        [5] ->      [10]
-        [4]      <- [11]
-        [3] [2] [1] [ 0] (Start)
-         */
-
-        // Bottom row (right to left)
         for (int i = horizontalFieldCount - 2; i >= 0; i--) {
             boolean isEdge = i == 0 || i == horizontalFieldCount - 2;
             addFieldToBoard(fieldRowBottom, board.getFields()[i], isEdge, i);
         }
         addConstraints(fieldRowBottom);
 
-        // Left row (bottom to top)
         for (int i = horizontalFieldCount + verticalFieldCount - 1; i >= horizontalFieldCount - 1; i--)
             addFieldToBoard(fieldRowLeft, board.getFields()[i], false, i);
         addConstraints(fieldRowLeft);
 
-        // Top row (left to right)
         for (int i = horizontalFieldCount + verticalFieldCount; i < horizontalFieldCount * 2 + verticalFieldCount - 1; i++) {
             boolean isEdge = i == horizontalFieldCount + verticalFieldCount || i == horizontalFieldCount * 2 + verticalFieldCount - 2;
             addFieldToBoard(fieldRowTop, board.getFields()[i], isEdge, i);
         }
         addConstraints(fieldRowTop);
 
-        // Right row (top to bottom)
-        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGameBoardSize(); i++)
+        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getFields().length; i++)
             addFieldToBoard(fieldRowRight, board.getFields()[i], false, i);
         addConstraints(fieldRowRight);
 
         getSupportFragmentManager().executePendingTransactions();
-
         for (int i = 0; i < board.getFields().length; i++) {
             fieldFragments.add((FieldFragment) getSupportFragmentManager().findFragmentByTag("FIELD" + i));
         }
     }
 
     private int[] generatePlayerArray(ObservableArrayList<Player> playerList, int fieldId) {
-        int[] players;
+        int[] players = countPlayersOnField(playerList, fieldId) > 0
+                ? new int[countPlayersOnField(playerList, fieldId)]
+                : null;
 
-        // Check if there are any players on currently build field
-        if (countPlayersOnField(playerList, fieldId) > 0) {
-            players = new int[countPlayersOnField(playerList, fieldId)];
-
+        if (players != null) {
             int temp = 0;
             for (int i = 0; i < players.length; i++) {
                 for (int j = temp; j < playerList.size(); j++) {
                     if (fieldId == playerList.get(j).getCurrentFieldIndex()) {
-                        players[i] = j + 1;     // each player with unique icon
+                        players[i] = j + 1;
                         break;
                     }
                     if (j == playerList.size() - 1) {
@@ -232,25 +216,20 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
                 temp = players[i];
             }
-        } else {
-            players = null;
         }
 
         return players;
     }
 
-    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
+    private void addFieldToBoard(ConstraintLayout
 
-        // List of currently playing players
+                                         fieldRow, Field field, boolean isEdge, int fieldId) {
         ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
-        int[] players;
-
-        players = generatePlayerArray(playerList, fieldId);
+        int[] players = generatePlayerArray(playerList, fieldId);
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
             addFieldToBoard(fieldRow, p.getName(), players, true, p.getColor().getColorString(), isEdge, fieldId);
-
         } else {
             addFieldToBoard(fieldRow, field.getName(), players, false, null, isEdge, fieldId);
         }
@@ -259,35 +238,22 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void addFieldToBoard(ConstraintLayout fieldRow, String fieldTitle, int[] playerIds, boolean showColorBar, String colorBarColor, boolean isEdge, int fieldId) {
         Bundle bundle = new Bundle();
         int colorBarPosition = FieldFragment.COLOR_BAR_NONE;
-        int fieldOrientation;
-
+        int fieldOrientation = (fieldRow == fieldRowBottom || fieldRow == fieldRowTop) ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL;
         int height = 0;
         int width = 0;
 
         if (fieldRow == fieldRowTop || fieldRow == fieldRowBottom) {
             height = fieldRow.getLayoutParams().height;
-
-            if (isEdge)
-                width = fieldRowLeft.getLayoutParams().width;
+            if (isEdge) width = fieldRowLeft.getLayoutParams().width;
         } else {
             width = fieldRow.getLayoutParams().width;
         }
 
         if (showColorBar) {
-            if (fieldRow == fieldRowTop)
-                colorBarPosition = FieldFragment.COLOR_BAR_BOTTOM;
-            else if (fieldRow == fieldRowBottom)
-                colorBarPosition = FieldFragment.COLOR_BAR_TOP;
-            else if (fieldRow == fieldRowLeft)
-                colorBarPosition = FieldFragment.COLOR_BAR_RIGHT;
-            else if (fieldRow == fieldRowRight)
-                colorBarPosition = FieldFragment.COLOR_BAR_LEFT;
-        }
-
-        if (fieldRow == fieldRowBottom || fieldRow == fieldRowTop) {
-            fieldOrientation = LinearLayout.VERTICAL;
-        } else {
-            fieldOrientation = LinearLayout.HORIZONTAL;
+            colorBarPosition = (fieldRow == fieldRowTop) ? FieldFragment.COLOR_BAR_BOTTOM :
+                    (fieldRow == fieldRowBottom) ? FieldFragment.COLOR_BAR_TOP :
+                            (fieldRow == fieldRowLeft) ? FieldFragment.COLOR_BAR_RIGHT :
+                                    FieldFragment.COLOR_BAR_LEFT;
         }
 
         bundle.putInt("color_bar_position", colorBarPosition);
@@ -302,20 +268,13 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         layout.getLayoutParams().height = height;
         layout.getLayoutParams().width = width;
         layout.setId(View.generateViewId());
-        layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getFields()[fieldId])
-                .show(getSupportFragmentManager(), "FieldInfo"));
+        layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getFields()[fieldId]).show(getSupportFragmentManager(), "FieldInfo"));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .setReorderingAllowed(true)
-                .add(layout.getId(), FieldFragment.class, bundle, "FIELD" + fieldId)
-                .addToBackStack(null)
-                .commit();
+        fragmentManager.beginTransaction().setReorderingAllowed(true).add(layout.getId(), FieldFragment.class, bundle, "FIELD" + fieldId).addToBackStack(null).commit();
     }
 
     private void addConstraints(ConstraintLayout fieldRow) {
-        // If direction is horizontal
         boolean horizontal = fieldRow == fieldRowTop || fieldRow == fieldRowBottom;
 
         ConstraintSet constraints = new ConstraintSet();
@@ -345,7 +304,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         boardLayout.invalidate();
     }
 
-    // Updates ImageView of each die
     public void updateDices() {
         int value1 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue1(), "drawable", "at.gammastrahlung.monopoly_app");
         int value2 = getResources().getIdentifier("die_" + GameData.getGameData().getDice().getValue2(), "drawable", "at.gammastrahlung.monopoly_app");
@@ -367,24 +325,21 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         MonopolyClient.getMonopolyClient().rollDice();
     }
 
-    // Button is clicked to roll the dice
     public void rollDiceClick(View v) {
         rollDice();
     }
 
-    // Motion Sensor that triggers rollDice as well
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];      // acceleration force along the x axis
-            float y = event.values[1];      // acceleration force along the y axis
-            float z = event.values[2];      // acceleration force along the z axis
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
 
             long currentTime = System.currentTimeMillis();
             if (currentTime - lastTime > 100) {
                 long diffTime = currentTime - lastTime;
                 float speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000;
 
-                // certain speed needed to trigger event
                 if (speed > THRESHOLD) {
                     rollDice();
                 }
@@ -405,7 +360,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
     }
 
-    // Counts how many players are on the field that is currently being built
     public int countPlayersOnField(ObservableArrayList<Player> list, int field) {
         int count = 0;
         for (int i = 0; i < list.size(); i++) {
@@ -416,8 +370,55 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         return count;
     }
 
-    // After dice roll, the avatar will be moved
     public void moveAvatar() {
         MonopolyClient.getMonopolyClient().moveAvatar();
+    }
+
+    public void handlePropertyPurchaseDecision(boolean purchase) {
+        if (!purchase) {
+            showAuctionDialog("Property Name", 1); // Replace with actual property name and ID
+        }
+    }
+
+    public void showAuctionDialog(String propertyName, int propertyId) {
+        DialogFragment auctionDialog = AuctionDialogFragment.newInstance(propertyName, propertyId);
+        auctionDialog.show(getSupportFragmentManager(), "auctionDialog");
+    }
+
+    private void showPurchaseDialog(String propertyName, int propertyId) {
+        PurchaseDialogFragment dialog = PurchaseDialogFragment.newInstance(propertyName, propertyId);
+        dialog.setPurchaseDialogListener(new PurchaseDialogFragment.PurchaseDialogListener() {
+            @Override
+            public void onNoButtonClicked() {
+                showAuctionDialog(propertyName, propertyId);
+            }
+
+            @Override
+            public void onYesButtonClicked() {
+                // Handle the purchase logic here
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "purchaseDialog");
+    }
+
+
+
+    private void checkCurrentPlayerField() {
+        Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+        Field currentField = GameData.getGameData().getGame().getGameBoard().getFields()[currentPlayer.getCurrentFieldIndex()];
+
+        if (FieldHelper.isProperty(currentField)) {
+            Property property = (Property) currentField;
+            int propertyId = property.getFieldId();
+            handleProperty(propertyId, property);
+        }
+    }
+
+    private void handleProperty(int propertyId, Property property) {
+        if (FieldHelper.isOwnedByBank(property)) {
+            showPurchaseDialog(property.getName(), propertyId); // Füge propertyId hinzu
+        } else {
+            // Handle already owned property
+        }
     }
 }
