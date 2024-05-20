@@ -1,6 +1,7 @@
 package at.gammastrahlung.monopoly_app.fragments;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +12,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.activities.BoardActivity;
+import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
-
 
 public class AuctionDialogFragment extends DialogFragment {
 
     private MonopolyClient monopolyClient;
     private EditText bidInput;
     private TextView resultTextView;
+    private Button bidButton;
 
     public static AuctionDialogFragment newInstance(String propertyName, int propertyId) {
         AuctionDialogFragment fragment = new AuctionDialogFragment();
@@ -38,7 +42,7 @@ public class AuctionDialogFragment extends DialogFragment {
 
         TextView propertyNameView = view.findViewById(R.id.property_name);
         bidInput = view.findViewById(R.id.bid_input);
-        Button bidButton = view.findViewById(R.id.bid_button);
+        bidButton = view.findViewById(R.id.bid_button);
         resultTextView = view.findViewById(R.id.result);
         Button backButton = view.findViewById(R.id.back_button);
 
@@ -47,29 +51,45 @@ public class AuctionDialogFragment extends DialogFragment {
 
         propertyNameView.setText(propertyName);
 
-        bidButton.setOnClickListener(v -> onBidButtonClicked());
-        backButton.setOnClickListener(v -> dismiss());
+        bidButton.setOnClickListener(v -> onBidButtonClicked(propertyId));
+        backButton.setOnClickListener(v -> {
+            dismiss();
+            ((BoardActivity) getActivity()).returnToBoard();
+        });
 
-        builder.setView(view)
-                .setNegativeButton("Cancel", (dialog, id) -> dismiss())
-                .setPositiveButton("End Auction", (dialog, id) -> finalizeAuction(propertyId));
-
+        builder.setView(view);
         return builder.create();
     }
 
-    private void onBidButtonClicked() {
+    private void onBidButtonClicked(int propertyId) {
         try {
             int bid = Integer.parseInt(bidInput.getText().toString());
-            monopolyClient.placeBid(bid); // Assume placeBid only needs bid amount
-            resultTextView.setText(getString(R.string.enter_bid) + " " + bid);
+            Player currentPlayer = GameData.getGameData().getPlayer();
+
+            if (currentPlayer.getBalance() >= bid) {
+                monopolyClient.placeBid(bid); // Assume placeBid only needs bid amount
+                currentPlayer.setBalance(currentPlayer.getBalance() - bid); // Deduct the bid amount from the player's balance
+                bidInput.setVisibility(View.GONE);
+                int remainingBalance = currentPlayer.getBalance(); // Calculate remaining balance
+                resultTextView.setText(getString(R.string.result) + " " + remainingBalance); // Display remaining balance
+                resultTextView.setVisibility(View.VISIBLE);
+                bidButton.setEnabled(false); // Disable the submit button after successful bid
+            } else {
+                resultTextView.setText(R.string.error_insufficient_funds);
+                resultTextView.setVisibility(View.VISIBLE);
+            }
         } catch (NumberFormatException e) {
             resultTextView.setText(R.string.error_invalid_bid);
+            resultTextView.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            resultTextView.setText("An error occurred: " + e.getMessage());
+            resultTextView.setVisibility(View.VISIBLE);
         }
     }
 
-    private void finalizeAuction(int propertyId) {
-        // Logic to finalize the auction
-        monopolyClient.finalizeAuction();
-        dismiss();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        monopolyClient = MonopolyClient.getMonopolyClient();
     }
 }

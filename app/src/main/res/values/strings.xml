@@ -34,7 +34,7 @@
     <string name="no"> No</string>
     <string name="purchase_prompt">Would you like to purchase this property?</string>
     <string name="error_invalid_bid"> Invalid bid. Please enter a valid number.</string>
-
+    <string name="error_insufficient_funds">Insufficient funds. Please enter a valid bid.</string>
 
 
 </resources>

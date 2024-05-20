@@ -421,4 +421,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             // Handle already owned property
         }
     }
+    public void returnToBoard() {
+        // Logic to update the board UI after returning from the auction
+        updateGameBoard();
+        updatePlayerOnTurn();
+        Toast.makeText(this, "Returned to Board", Toast.LENGTH_SHORT).show();
+    }
 }

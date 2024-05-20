@@ -35,4 +35,5 @@
     <string name="no"> Nein</string>
     <string name="purchase_prompt">Möchten Sie dieses Feld kaufen?</string>
     <string name="error_invalid_bid"> Ungültiges Gebot. Bitte geben Sie eine gültige Zahl ein.</string>
+    <string name="error_insufficient_funds">Nicht genügend Geld. Bitte geben Sie ein gültiges Gebot ein.</string>
 </resources>
