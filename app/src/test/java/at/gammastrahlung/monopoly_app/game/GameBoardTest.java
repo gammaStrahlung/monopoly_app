@@ -29,25 +29,25 @@ class GameBoardTest {
     void gameBoard() {
         Field[] fields = new Field[40];
 
-        b.setGameBoard(fields);
-        assertEquals(fields, b.getGameBoard());
+        b.setFields(fields);
+        assertEquals(fields, b.getFields());
     }
 
     @Test
     void boardSize() {
-        b.setGAME_BOARD_SIZE(40);
-        assertEquals(40, b.getGAME_BOARD_SIZE());
+        b.setGameBoardSize(40);
+        assertEquals(40, b.getGameBoardSize());
     }
 
     @Test
     void fullSet() {
-        b.setFULL_SET("full_set");
-        assertEquals("full_set", b.getFULL_SET());
+        b.setFullSet("full_set");
+        assertEquals("full_set", b.getFullSet());
     }
 
     @Test
     void hotel() {
-        b.setHOTEL("hotel");
-        assertEquals("hotel", b.getHOTEL());
+        b.setHotel("hotel");
+        assertEquals("hotel", b.getHotel());
     }
 }

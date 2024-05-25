@@ -141,7 +141,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     }
 
     private void updateGameBoard() {
-        Field[] fields = GameData.getGameData().getGame().getGameBoard().getGameBoard();
+        Field[] fields = GameData.getGameData().getGame().getGameBoard().getFields();
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
 
         for (int i = 0; i < fields.length; i++) {
@@ -169,7 +169,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         fieldRowLeft.removeAllViews();
         fieldRowRight.removeAllViews();
 
-        int boardSideLength = board.getGAME_BOARD_SIZE() / 4;
+        int boardSideLength = board.getGameBoardSize() / 4;
 
         int horizontalFieldCount = boardSideLength + 2; // Includes edges
         int verticalFieldCount = boardSideLength - 2; // Does not include edges
@@ -184,30 +184,30 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         // Bottom row (right to left)
         for (int i = horizontalFieldCount - 2; i >= 0; i--) {
             boolean isEdge = i == 0 || i == horizontalFieldCount - 2;
-            addFieldToBoard(fieldRowBottom, board.getGameBoard()[i], isEdge, i);
+            addFieldToBoard(fieldRowBottom, board.getFields()[i], isEdge, i);
         }
         addConstraints(fieldRowBottom);
 
         // Left row (bottom to top)
         for (int i = horizontalFieldCount + verticalFieldCount - 1; i >= horizontalFieldCount - 1; i--)
-            addFieldToBoard(fieldRowLeft, board.getGameBoard()[i], false, i);
+            addFieldToBoard(fieldRowLeft, board.getFields()[i], false, i);
         addConstraints(fieldRowLeft);
 
         // Top row (left to right)
         for (int i = horizontalFieldCount + verticalFieldCount; i < horizontalFieldCount * 2 + verticalFieldCount - 1; i++) {
             boolean isEdge = i == horizontalFieldCount + verticalFieldCount || i == horizontalFieldCount * 2 + verticalFieldCount - 2;
-            addFieldToBoard(fieldRowTop, board.getGameBoard()[i], isEdge, i);
+            addFieldToBoard(fieldRowTop, board.getFields()[i], isEdge, i);
         }
         addConstraints(fieldRowTop);
 
         // Right row (top to bottom)
-        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGAME_BOARD_SIZE(); i++)
-            addFieldToBoard(fieldRowRight, board.getGameBoard()[i], false, i);
+        for (int i = horizontalFieldCount * 2 + verticalFieldCount - 1; i < board.getGameBoardSize(); i++)
+            addFieldToBoard(fieldRowRight, board.getFields()[i], false, i);
         addConstraints(fieldRowRight);
 
         getSupportFragmentManager().executePendingTransactions();
 
-        for (int i = 0; i < board.getGameBoard().length; i++) {
+        for (int i = 0; i < board.getFields().length; i++) {
             fieldFragments.add((FieldFragment) getSupportFragmentManager().findFragmentByTag("FIELD" + i));
         }
     }
@@ -302,7 +302,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         layout.getLayoutParams().height = height;
         layout.getLayoutParams().width = width;
         layout.setId(View.generateViewId());
-        layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getGameBoard()[fieldId])
+        layout.setOnClickListener(v -> new FieldInfoFragment(GameData.getGameData().getGame().getGameBoard().getFields()[fieldId])
                 .show(getSupportFragmentManager(), "FieldInfo"));
 
         FragmentManager fragmentManager = getSupportFragmentManager();
