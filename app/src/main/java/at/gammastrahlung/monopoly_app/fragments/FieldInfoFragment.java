@@ -2,6 +2,7 @@ package at.gammastrahlung.monopoly_app.fragments;
 
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,7 +38,7 @@ public class FieldInfoFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View inflatedView;
-        if(field.getType() == FieldType.PROPERTY){
+        if(field instanceof Property){
             inflatedView = inflater.inflate(R.layout.fragment_propertyinfo, null);
         }else{
             inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, null);
@@ -64,7 +65,7 @@ public class FieldInfoFragment extends DialogFragment {
 
         View view;
 
-        if(field.getType() == FieldType.PROPERTY){
+        if(field instanceof Property){
            view = setUpPropertyInfo(inflater, container, savedInstanceState);
         }else{
             view = inflater.inflate(R.layout.fragment_fieldinfo, container, false);
@@ -75,6 +76,7 @@ public class FieldInfoFragment extends DialogFragment {
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private View setUpPropertyInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
 
         Property property;
@@ -100,7 +102,8 @@ public class FieldInfoFragment extends DialogFragment {
         ImageView buildingSlotFour = view.findViewById(R.id.buildingSlot4);
 
         propertyName.setText(property.getName());
-        owner.setText(property.getOwner().getName());
+        owner.setText(getString(R.string.owner) +  property.getOwner().getName());
+        fullStackRent.setText(property.getRentPrices().toString());
 
         return view;
 
