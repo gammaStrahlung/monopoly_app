@@ -15,7 +15,8 @@ public class FieldHelper {
     public static boolean isOwnedByBank(Field field) {
         if (field instanceof Property) {
             Property property = (Property) field;
-            return property.getOwner() == null; // belongs to the bank if owner is null
+            Player bank = GameData.getGameData().getGame().getGameBoard().getBank();
+            return property.getOwner().equals(bank); // belongs to the bank if owner is the bank player
         }
         return false; // if it's not a property, it can't be owned by the bank
     }

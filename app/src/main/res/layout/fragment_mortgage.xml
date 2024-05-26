@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mortgage Management"
+        android:textSize="24sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/current_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Current Balance: $1000"
+        android:textSize="18sp"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="8dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/property_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/current_balance"
+        android:layout_above="@+id/mortgage_button"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/mortgage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mortgage Selected Property"
+        android:layout_above="@+id/unmortgage_button"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/unmortgage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Repay Mortgage on Selected Property"
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:id="@+id/sale_value_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:gravity="center_horizontal"
+        android:text="Sale Value Displayed Here Temporarily"
+        android:layout_above="@+id/mortgage_button"
+        android:layout_marginBottom="8dp"/>
+
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -74,7 +75,14 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         rollDiceButton = findViewById(R.id.rollDices);
         endTurnButton = findViewById(R.id.endTurn);
         playerOnTurn = findViewById(R.id.playerOnTurn);
-
+        // **ADDED**: Mortgage button setup
+        Button mortgageButton = findViewById(R.id.mortgage_button);
+        mortgageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMortgageManagementFragment();
+            }
+        });
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
@@ -112,7 +120,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             }
         });
 
-        propertyDecisionMade(false, "Example Property", 1); // Example call
+
         checkCurrentPlayerField();
     }
 
@@ -151,8 +159,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
 
         for (int i = 0; i < fields.length; i++) {
-            int fieldOrientation = ((fields[i].getFieldId() >= 1 && fields[i].getFieldId() <= 9) || (fields[i].getFieldId() >= 21 && fields[i].getFieldId() <= 29))
-                    ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL;
+            int fieldOrientation = ((fields[i].getFieldId() >= 1 && fields[i].getFieldId() <= 9) || (fields[i].getFieldId() >= 21 && fields[i].getFieldId() <= 29)) ? LinearLayout.VERTICAL : LinearLayout.HORIZONTAL;
 
             fieldFragments.get(i).setPlayers(generatePlayerArray(players, i), fieldOrientation);
         }
@@ -198,9 +205,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     }
 
     private int[] generatePlayerArray(ObservableArrayList<Player> playerList, int fieldId) {
-        int[] players = countPlayersOnField(playerList, fieldId) > 0
-                ? new int[countPlayersOnField(playerList, fieldId)]
-                : null;
+        int[] players = countPlayersOnField(playerList, fieldId) > 0 ? new int[countPlayersOnField(playerList, fieldId)] : null;
 
         if (players != null) {
             int temp = 0;
@@ -250,10 +255,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         }
 
         if (showColorBar) {
-            colorBarPosition = (fieldRow == fieldRowTop) ? FieldFragment.COLOR_BAR_BOTTOM :
-                    (fieldRow == fieldRowBottom) ? FieldFragment.COLOR_BAR_TOP :
-                            (fieldRow == fieldRowLeft) ? FieldFragment.COLOR_BAR_RIGHT :
-                                    FieldFragment.COLOR_BAR_LEFT;
+            colorBarPosition = (fieldRow == fieldRowTop) ? FieldFragment.COLOR_BAR_BOTTOM : (fieldRow == fieldRowBottom) ? FieldFragment.COLOR_BAR_TOP : (fieldRow == fieldRowLeft) ? FieldFragment.COLOR_BAR_RIGHT : FieldFragment.COLOR_BAR_LEFT;
         }
 
         bundle.putInt("color_bar_position", colorBarPosition);
@@ -374,11 +376,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         MonopolyClient.getMonopolyClient().moveAvatar();
     }
 
-    public void handlePropertyPurchaseDecision(boolean purchase) {
-        if (!purchase) {
-            showAuctionDialog("Property Name", 1); // Replace with actual property name and ID
-        }
-    }
+
 
     public void showAuctionDialog(String propertyName, int propertyId) {
         DialogFragment auctionDialog = AuctionDialogFragment.newInstance(propertyName, propertyId);
@@ -402,7 +400,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     }
 
 
-
     private void checkCurrentPlayerField() {
         Player currentPlayer = GameData.getGameData().getCurrentPlayer();
         Field currentField = GameData.getGameData().getGame().getGameBoard().getFields()[currentPlayer.getCurrentFieldIndex()];
@@ -421,10 +418,19 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             // Handle already owned property
         }
     }
+
     public void returnToBoard() {
         // Logic to update the board UI after returning from the auction
         updateGameBoard();
         updatePlayerOnTurn();
         Toast.makeText(this, "Returned to Board", Toast.LENGTH_SHORT).show();
+
     }
+
+    private void showMortgageManagementFragment() {
+        Intent intent = new Intent(this, MortgageActivity.class);
+        startActivity(intent);
+    }
+
+
 }

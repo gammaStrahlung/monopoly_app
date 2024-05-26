@@ -131,6 +131,18 @@
         app:layout_constraintTop_toBottomOf="@id/boardLayout" />
 
     <Button
+        android:id="@+id/mortgage_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="otherPlayersClick"
+        android:text="@string/mortgage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/moneyText"
+        app:layout_constraintTop_toBottomOf="@id/boardLayout"
+        app:layout_constraintVertical_bias="0.941" />
+
+    <Button
         android:id="@+id/endTurn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
