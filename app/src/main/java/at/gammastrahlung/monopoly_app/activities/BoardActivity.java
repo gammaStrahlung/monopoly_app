@@ -23,6 +23,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
@@ -119,16 +121,13 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+        Property property = new Property();
+        property.setName("Test");
+        handleProperty(1,   property);
 
-
-        checkCurrentPlayerField();
     }
 
-    private void propertyDecisionMade(boolean purchase, String propertyName, int propertyId) {
-        if (!purchase) {
-            showAuctionDialog(propertyName, propertyId);
-        }
-    }
+
 
     private void updateGameUI() {
         // Update game board and UI based on game state changes
@@ -226,9 +225,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         return players;
     }
 
-    private void addFieldToBoard(ConstraintLayout
-
-                                         fieldRow, Field field, boolean isEdge, int fieldId) {
+    private void addFieldToBoard(ConstraintLayout fieldRow, Field field, boolean isEdge, int fieldId) {
         ObservableArrayList<Player> playerList = GameData.getGameData().getPlayers();
         int[] players = generatePlayerArray(playerList, fieldId);
 
@@ -400,17 +397,29 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     }
 
 
-    private void checkCurrentPlayerField() {
+    private void checkAndShowPurchaseDialog() {
         Player currentPlayer = GameData.getGameData().getCurrentPlayer();
         Field currentField = GameData.getGameData().getGame().getGameBoard().getFields()[currentPlayer.getCurrentFieldIndex()];
+        String currentFieldName = currentField.getName();
 
-        if (FieldHelper.isProperty(currentField)) {
-            Property property = (Property) currentField;
-            int propertyId = property.getFieldId();
-            handleProperty(propertyId, property);
+        List<String> propertyNames = Arrays.asList(
+                "Mediterranean Avenue", "Baltic Avenue", "Oriental Avenue", "Vermont Avenue",
+                "Connecticut Avenue", "St Charles Place", "States Avenue", "Virginia Avenue",
+                "St. James Place", "Tennessee Avenue", "New York Avenue", "Kentucky Avenue",
+                "Indiana Avenue", "Illinois Avenue", "Atlantic Avenue", "Ventnor Avenue",
+                "Marvin Gardens", "Pacific Avenue", "North Carolina Avenue", "Pennsylvania Avenue",
+                "Park Place", "Boardwalk"
+        );
+
+            showPurchaseDialog(currentFieldName, currentField.getFieldId());
+        }
+
+
+    public void handlePropertyPurchaseDecision(boolean purchase) {
+        if (!purchase) {
+            showAuctionDialog("Property Name", 1); // Replace with actual property name and ID
         }
     }
-
     private void handleProperty(int propertyId, Property property) {
         if (FieldHelper.isOwnedByBank(property)) {
             showPurchaseDialog(property.getName(), propertyId); // Füge propertyId hinzu
