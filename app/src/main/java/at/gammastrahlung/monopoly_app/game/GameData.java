@@ -86,6 +86,24 @@ public class GameData extends BaseObservable {
     }
 
     /**
+     * List of log messages
+     */
+    @Getter
+    @Bindable
+    private final ObservableArrayList<String> logMessages = new ObservableArrayList<>();
+
+    /**
+     * Add a log message to the list of log messages
+     *
+     * @param logMessage The log message to add
+     */
+    public void addLogMessage(String logMessage) {
+        logMessages.add(logMessage);
+        // Notify observers that log messages have changed
+        notifyPropertyChanged(BR.logMessages);
+    }
+
+    /**
      * List of players of the game
      */
     @Getter

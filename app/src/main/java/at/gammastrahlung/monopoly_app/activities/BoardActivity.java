@@ -20,6 +20,7 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -46,6 +47,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private Button rollDiceButton;
     private Button endTurnButton;
+    private TextView logTextView;
+    private List<String> logEntries = new ArrayList<>();
 
     private static final int THRESHOLD = 1000;
     private long lastTime;
@@ -79,6 +82,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         endTurnButton = findViewById(R.id.endTurn);
         playerOnTurn = findViewById(R.id.playerOnTurn);
 
+        logTextView = findViewById(R.id.logTextView);
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
@@ -100,6 +105,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when player on turn changes
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
+                }
+                else if (propertyId == BR.logMessages){
+                    runOnUiThread(() -> updateLogMessages());
                 }
                 // Update when dice value is changed
                 else if (propertyId == BR.dice) {
@@ -125,6 +133,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
     }
 
+    private void updateLogMessages() {
+        List<String> logMessages = GameData.getGameData().getLogMessages();
+        StringBuilder logText = new StringBuilder();
+        for (String logMessage : logMessages) {
+            logText.append(logMessage).append("\n");
+        }
+        logTextView.setText(logText.toString());
+    }
+
     private void updatePlayerOnTurn() {
         Player player = GameData.getGameData().getCurrentPlayer();
         if (player == null)
@@ -132,12 +149,25 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
 
+        addLogEntry(player.getName() + " is now on turn.");
+
         // if current player is our player then enable roll dice button
         if (isMyTurn()) {
             rollDiceButton.setEnabled(true);
         } else {
             rollDiceButton.setEnabled(false);
         }
+    }
+
+    private void addLogEntry(String entry){
+        logEntries.add(0, entry);
+        StringBuilder logText = new StringBuilder();
+
+        for (String logEntry : logEntries) {
+            logText.append(logEntry).append("\n");
+        }
+
+        logTextView.setText(logText.toString());
     }
 
     private void updateGameBoard() {
@@ -402,6 +432,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     public void onEndTurnButtonClicked(View view) {
         endTurnButton.setEnabled(false);
+        addLogEntry(GameData.getGameData().getCurrentPlayer().getName() + " ended their turn.");
         MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
     }
 
