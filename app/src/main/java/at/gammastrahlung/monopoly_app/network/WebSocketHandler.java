@@ -6,6 +6,7 @@ import androidx.databinding.ObservableArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import at.gammastrahlung.monopoly_app.game.Game;
 
@@ -47,6 +48,8 @@ public class WebSocketHandler {
             case "roll_dice":
                 rollDice(message);
                 break;
+            case "log":
+                handleLogMessage(message.getJsonData());
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -159,6 +162,13 @@ public class WebSocketHandler {
         players.clear();
         players.addAll(game.getPlayers());
         game.setPlayers(players);
+    }
+
+    private void handleLogMessage(String jsonData){
+        // Deserialize jsonData to get the log message
+        String logMessage = new Gson().fromJson(jsonData, JsonObject.class).get("log").getAsString();
+
+        GameData.getGameData().addLogMessage(logMessage);
     }
 
     private void rollDice(ServerMessage message) {
