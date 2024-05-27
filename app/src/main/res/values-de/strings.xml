@@ -27,4 +27,5 @@
     <string name="player_on_turn">Spieler am Zug: %s</string>
     <string name="end_turn">Ende Zug</string>
     <string name="owner">Besitzer: </string>
+    <string name="current_rent">Miete aktuell: </string>
 </resources>

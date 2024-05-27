@@ -103,7 +103,24 @@ public class FieldInfoFragment extends DialogFragment {
 
         propertyName.setText(property.getName());
         owner.setText(getString(R.string.owner) +  property.getOwner().getName());
-        fullStackRent.setText(property.getRentPrices().toString());
+        fullStackRent.setText(property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet()).toString());
+
+
+        boolean isFullStack = property.buildable();
+        String currentRentString = setCurrentRentString(ServerHouseCount);
+        int ServerHouseCount = property.getHouseCount();
+
+        private void setCurrentRentString(int houses){
+            if (houses == 0){
+                if (isFullStack){
+                    currentRentString = property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet()).toString();
+                }
+                currentRentString = property.getRentPrices(0);
+            }
+
+        }
+
+
 
         return view;
 
