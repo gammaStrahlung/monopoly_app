@@ -26,4 +26,7 @@
     <string name="owned_fields">Besitzte Felder:</string>
     <string name="player_on_turn">Spieler am Zug: %s</string>
     <string name="end_turn">Ende Zug</string>
+    <string name="do_you_want_to_forward_the_diced_value_or_select_a_different_one">Willst du den gewürfelten Wert fahren, oder einen anderen?</string>
+    <string name="cheat">Schummeln</string>
+    <string name="forward">Weiterfahren</string>
 </resources>
