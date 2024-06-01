@@ -107,7 +107,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                     runOnUiThread(() -> {
                         updateDices();      // updating the view of each die
                         selectValue();
-                        moveAvatar();       // after the dice are changed, the avatar will be moved accordingly
                         enableUserActions();
                     });
                 }
@@ -429,5 +428,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         if(isMyTurn()) {
             new SelectValueFragment().show(getSupportFragmentManager(), "selectedValue");
         }
+    }
+
+    public void forwardButtonClick(View v){
+        moveAvatar();
     }
 }
