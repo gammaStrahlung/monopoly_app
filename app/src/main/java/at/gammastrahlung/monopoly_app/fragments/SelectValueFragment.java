@@ -14,6 +14,10 @@ import at.gammastrahlung.monopoly_app.R;
 
 public class SelectValueFragment extends DialogFragment {
 
+    public interface OnValueSelectedListener {
+        void onValueSelected(int value);
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
