@@ -26,6 +26,6 @@
     <string name="player_on_turn">Player on Turn: %s</string>
     <string name="end_turn">End Turn</string>
     <string name="do_you_want_to_forward_the_diced_value_or_select_a_different_one">Do you want to forward the diced value or select a different one?</string>
-    <string name="select">Select</string>
+    <string name="cheat">Cheat</string>
     <string name="forward">Forward</string>
 </resources>
