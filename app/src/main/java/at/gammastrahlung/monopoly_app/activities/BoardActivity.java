@@ -33,7 +33,7 @@ import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
-public class BoardActivity extends AppCompatActivity implements SensorEventListener {
+public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
 
     private ConstraintLayout fieldRowTop; // Includes top corners
     private ConstraintLayout fieldRowBottom; // Includes bottom corners
@@ -106,7 +106,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 else if (propertyId == BR.dice) {
                     runOnUiThread(() -> {
                         updateDices();      // updating the view of each die
-                        selectValue();
+                        if (isMyTurn()) {
+                            new SelectValueFragment().show(getSupportFragmentManager(), "selectedValue");
+                        }
                         enableUserActions();
                     });
                 }
@@ -422,15 +424,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         MonopolyClient.getMonopolyClient().moveAvatar();
     }
 
-    // After dice roll, the player will be asked if he wants to forward the diced value or start cheating
-    // Player can select a different value
-    public void selectValue(){
-        if(isMyTurn()) {
-            new SelectValueFragment().show(getSupportFragmentManager(), "selectedValue");
-        }
-    }
-
-    public void forwardButtonClick(View v){
+    @Override
+    public void onValueSelected(int value) {
         moveAvatar();
     }
 }
