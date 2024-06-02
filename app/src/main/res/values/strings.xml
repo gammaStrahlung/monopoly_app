@@ -25,6 +25,6 @@
     <string name="owned_fields">Owned Fields:</string>
     <string name="player_on_turn">Player on Turn: %s</string>
     <string name="end_turn">End Turn</string>
-    <string name="owner">Owner: </string>
-    <string name="current_rent">Current rent: </string>
+    <string name="owner">Owner: %s</string>
+    <string name="current_rent">Current rent: %1$d $</string>
 </resources>

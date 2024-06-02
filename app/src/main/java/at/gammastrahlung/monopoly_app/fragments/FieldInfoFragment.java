@@ -76,7 +76,7 @@ public class FieldInfoFragment extends DialogFragment {
         return view;
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "StringFormatInvalid"})
     private View setUpPropertyInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
 
         Property property;
@@ -102,11 +102,11 @@ public class FieldInfoFragment extends DialogFragment {
         ImageView buildingSlotFour = view.findViewById(R.id.buildingSlot4);
 
         propertyName.setText(property.getName());
-        owner.setText(getString(R.string.owner) +  property.getOwner().getName());
-        fullStackRent.setText(property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet()).toString());
+        owner.setText(getString(R.string.owner, property.getOwner().getName()));
+        //fullStackRent.setText(property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet()).toString());
 
 
-        boolean isFullStack = property.buildable();
+/*boolean isFullStack = property.buildable();
         String currentRentString = setCurrentRentString(ServerHouseCount);
         int ServerHouseCount = property.getHouseCount();
 
@@ -119,7 +119,7 @@ public class FieldInfoFragment extends DialogFragment {
             }
 
         }
-
+*/
 
 
         return view;
