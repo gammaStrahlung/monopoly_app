@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.fragment.app.Fragment;
+
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
+import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 
 public class MortgageManagementFragment extends Fragment {
     private TextView titleTextView;
@@ -17,11 +19,11 @@ public class MortgageManagementFragment extends Fragment {
     private TextView saleValueTextView;
     private Button mortgageButton;
     private Button unmortgageButton;
+    private Property selectedProperty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_mortgage, container, false);
 
         titleTextView = view.findViewById(R.id.title);
@@ -30,28 +32,41 @@ public class MortgageManagementFragment extends Fragment {
         mortgageButton = view.findViewById(R.id.mortgage_button);
         unmortgageButton = view.findViewById(R.id.unmortgage_button);
 
-        mortgageButton.setOnClickListener(v -> handleMortgage());
-        unmortgageButton.setOnClickListener(v -> handleUnmortgage());
+        Player currentPlayer = GameData.getGameData().getPlayer();
+        mortgageButton.setOnClickListener(v -> {
+            if (selectedProperty != null) {
+                mortgageProperty(selectedProperty);
+            }
+        });
+        unmortgageButton.setOnClickListener(v -> {
+            if (selectedProperty != null) {
+                unmortgageProperty(selectedProperty);
+            }
+        });
 
         updateBalanceDisplay();
-
         return view;
     }
 
-    private void handleMortgage() {
-        // Logic to mortgage a property
-        Player currentPlayer = GameData.getGameData().getPlayer();
-        currentPlayer.setBalance(currentPlayer.getBalance() - 100); // Dummy value for mortgage
-        updateBalanceDisplay();
-        showTemporarySaleValue(true, 100); // Dummy mortgage value
+    private void mortgageProperty(Property property) {
+        if (!property.isMortgaged()) {
+            Player currentPlayer = GameData.getGameData().getPlayer();
+            currentPlayer.setBalance(currentPlayer.getBalance() + property.getMortgageValue());
+            property.setMortgaged(true);
+            updateBalanceDisplay();
+            showTemporarySaleValue(true, property.getMortgageValue());
+        }
     }
 
-    private void handleUnmortgage() {
-        // Logic to unmortgage a property
-        Player currentPlayer = GameData.getGameData().getPlayer();
-        currentPlayer.setBalance(currentPlayer.getBalance() + 110); // Dummy value for unmortgage
-        updateBalanceDisplay();
-        showTemporarySaleValue(false, 110); // Dummy unmortgage value
+    private void unmortgageProperty(Property property) {
+        if (property.isMortgaged()) {
+            Player currentPlayer = GameData.getGameData().getPlayer();
+            int unmortgageCost = (int) (property.getMortgageValue() * 1.1); // 10% fee
+            currentPlayer.setBalance(currentPlayer.getBalance() - unmortgageCost);
+            property.setMortgaged(false);
+            updateBalanceDisplay();
+            showTemporarySaleValue(false, unmortgageCost);
+        }
     }
 
     private void updateBalanceDisplay() {
@@ -66,8 +81,6 @@ public class MortgageManagementFragment extends Fragment {
         } else {
             saleValueTextView.setText("Unmortgaged for: $" + amount);
         }
-
-        // This TextView could be hidden after a delay or based on user interaction
         saleValueTextView.postDelayed(() -> saleValueTextView.setVisibility(View.GONE), 2000);
     }
 }

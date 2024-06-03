@@ -17,4 +17,5 @@ public class Property extends Field {
     private int houseCost;
     private int hotelCost;
     private int houseCount;
+    private boolean mortgaged;
 }

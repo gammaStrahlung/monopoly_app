@@ -29,24 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_below="@id/current_balance"
-        android:layout_above="@+id/mortgage_button"
+        android:layout_above="@id/sale_value_display"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"/>
-
-    <Button
-        android:id="@+id/mortgage_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mortgage Selected Property"
-        android:layout_above="@+id/unmortgage_button"
-        android:layout_marginBottom="8dp"/>
-
-    <Button
-        android:id="@+id/unmortgage_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Repay Mortgage on Selected Property"
-        android:layout_alignParentBottom="true"/>
 
     <TextView
         android:id="@+id/sale_value_display"
@@ -59,4 +44,20 @@
         android:layout_above="@+id/mortgage_button"
         android:layout_marginBottom="8dp"/>
 
+    <Button
+        android:id="@+id/mortgage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mortgage Selected Property"
+        android:layout_above="@+id/unmortgage_button"
+        android:layout_marginBottom="8dp"
+        android:enabled="false"/>
+
+    <Button
+        android:id="@+id/unmortgage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Repay Mortgage on Selected Property"
+        android:layout_alignParentBottom="true"
+        android:enabled="false"/>
 </RelativeLayout>

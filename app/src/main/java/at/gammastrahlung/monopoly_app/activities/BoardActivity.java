@@ -88,8 +88,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         updatePlayerOnTurn();
 
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+
                 if (propertyId == BR.game) {
                     runOnUiThread(() -> {
                         if (fieldFragments.isEmpty()) {
@@ -106,8 +108,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         updateDices();
                         moveAvatar();
                         enableUserActions();
+
                     });
                 }
+
             }
         });
 
@@ -121,12 +125,16 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         });
 
 
-        checkCurrentPlayerField();
     }
 
-    private void propertyDecisionMade(boolean purchase, String propertyName, int propertyId) {
+    public void handlePropertyPurchaseDecision(boolean purchase) {
         if (!purchase) {
-            showAuctionDialog(propertyName, propertyId);
+            Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+            Field currentField = GameData.getGameData().getGame().getGameBoard().getFields()[currentPlayer.getCurrentFieldIndex()];
+            Property property = (Property) currentField;
+            int propertyId = property.getFieldId();
+
+            showAuctionDialog(property.getName(), propertyId);
         }
     }
 
@@ -374,8 +382,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     public void moveAvatar() {
         MonopolyClient.getMonopolyClient().moveAvatar();
+        checkCurrentPlayerField();
     }
-
 
 
     public void showAuctionDialog(String propertyName, int propertyId) {
@@ -383,7 +391,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         auctionDialog.show(getSupportFragmentManager(), "auctionDialog");
     }
 
-    private void showPurchaseDialog(String propertyName, int propertyId) {
+    private void showPurchaseDialog(String propertyName, int propertyId, Property property) {
         PurchaseDialogFragment dialog = PurchaseDialogFragment.newInstance(propertyName, propertyId);
         dialog.setPurchaseDialogListener(new PurchaseDialogFragment.PurchaseDialogListener() {
             @Override
@@ -393,8 +401,30 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
             @Override
             public void onYesButtonClicked() {
-                // Handle the purchase logic here
+                // Get the current player
+                Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+
+                // Get the current field
+                Field currentField = GameData.getGameData().getGame().getGameBoard().getFields()[currentPlayer.getCurrentFieldIndex()];
+
+
+                // Check if the player has enough money to buy the property
+                if (currentPlayer.getBalance() >= property.getPrice()) {
+                    // Deduct the price of the property from the player's balance
+                    currentPlayer.setBalance(currentPlayer.getBalance() - property.getPrice());
+
+                    // Set the player as the new owner of the property
+                    property.setOwner(currentPlayer);
+
+                    // Update the player info
+                    updatePlayerInfo();
+
+                    Toast.makeText(BoardActivity.this, "Property purchased successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BoardActivity.this, "Not enough money to purchase this property", Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
         dialog.show(getSupportFragmentManager(), "purchaseDialog");
     }
@@ -402,6 +432,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void checkCurrentPlayerField() {
         Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+        if (!isMyTurn()) {
+            return;
+        }
         Field currentField = GameData.getGameData().getGame().getGameBoard().getFields()[currentPlayer.getCurrentFieldIndex()];
 
         if (FieldHelper.isProperty(currentField)) {
@@ -413,9 +446,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void handleProperty(int propertyId, Property property) {
         if (FieldHelper.isOwnedByBank(property)) {
-            showPurchaseDialog(property.getName(), propertyId); // Füge propertyId hinzu
-        } else {
-            // Handle already owned property
+
+            showPurchaseDialog(property.getName(), propertyId, property); // Füge propertyId hinzu
         }
     }
 
