@@ -28,4 +28,13 @@
     <string name="end_turn">Ende Zug</string>
     <string name="owner">Besitzer: %s</string>
     <string name="current_rent">Miete aktuell: %1$d</string>
+    <string name="rent_full_set">Miete Full-Set: %1$d €</string>
+    <string name="house_count">Häuser %1$d</string>
+    <string name="hotel_count">Hotels %1$d</string>
+    <string name="hotel_rent">Miete mit Hotel: %1$d €</string>
+    <string name="base_rent">Grundmiete: %1$d €</string>
+    <string name="one_house_rent">Miete ein Haus: %1$d €</string>
+    <string name="three_house_rent">Miete drei Häuser: %1$d €</string>
+    <string name="four_houses_rent">Miete vier Häuser: %1$d €</string>
+    <string name="price">Preis: %1$d €</string>
 </resources>

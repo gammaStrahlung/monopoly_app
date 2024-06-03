@@ -18,6 +18,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textview.MaterialTextView;
 
+import java.util.Map;
+
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.FieldType;
@@ -76,7 +78,7 @@ public class FieldInfoFragment extends DialogFragment {
         return view;
     }
 
-    @SuppressLint({"SetTextI18n", "StringFormatInvalid"})
+    @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
     private View setUpPropertyInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
 
         Property property;
@@ -85,7 +87,7 @@ public class FieldInfoFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_propertyinfo, container, false);
         TextView propertyName = view.findViewById(R.id.property_name);
         TextView currentRent = view.findViewById(R.id.current_rent);
-        TextView fullStackRent = view.findViewById(R.id.full_stack_rent);
+        TextView fullSetRent = view.findViewById(R.id.full_set_rent);
         TextView houseCount = view.findViewById(R.id.house_count);
         TextView hotelRent = view.findViewById(R.id.hotel_rent);
         TextView hotelCount = view.findViewById(R.id.hotel_count);
@@ -101,28 +103,36 @@ public class FieldInfoFragment extends DialogFragment {
         ImageView buildingSlotThree = view.findViewById(R.id.buildingSlot3);
         ImageView buildingSlotFour = view.findViewById(R.id.buildingSlot4);
 
+        int currentRentString;
+        Map<Object, Integer> rentPrices;
+        rentPrices = property.getRentPrices();
+
+        if (property.getHouseCount() < 4) {
+            currentRentString = rentPrices.get(property.getHouseCount());
+            houseCount.setText(getString(R.string.house_count, property.getHouseCount()));
+        }else {
+            currentRentString = rentPrices.get("HOTEL");
+            houseCount.setText(getString(R.string.house_count, 0));
+            hotelCount.setText(getString(R.string.hotel_count, 1));
+        }
+
         propertyName.setText(property.getName());
         owner.setText(getString(R.string.owner, property.getOwner().getName()));
-        //fullStackRent.setText(property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet()).toString());
+        currentRent.setText(getString(R.string.current_rent,currentRentString));
+        fullSetRent.setText(getString(R.string.rent_full_set, property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet())));
+        hotelRent.setText(getString(R.string.hotel_rent, rentPrices.get("HOTEL")));
+        baseRent.setText(getString(R.id.base_rent, rentPrices.get(0)));
+        oneHouseRent.setText(getString(R.id.one_house_rent, rentPrices.get(1)));
+        twoHouseRent.setText(getString(R.id.two_house_rent, rentPrices.get(2)));
+        threeHouseRent.setText(getString(R.id.three_house_rent, rentPrices.get(3)));
+        fourHouseRent.setText(getString(R.id.four_house_rent, rentPrices.get(4)));
+        price.setText(getString(R.id.price, property.getPrice()));
 
 
-/*boolean isFullStack = property.buildable();
-        String currentRentString = setCurrentRentString(ServerHouseCount);
-        int ServerHouseCount = property.getHouseCount();
-
-        private void setCurrentRentString(int houses){
-            if (houses == 0){
-                if (isFullStack){
-                    currentRentString = property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet()).toString();
-                }
-                currentRentString = property.getRentPrices(0);
-            }
-
-        }
-*/
 
 
         return view;
 
     }
 }
+
