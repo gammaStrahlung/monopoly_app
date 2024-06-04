@@ -424,8 +424,19 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         MonopolyClient.getMonopolyClient().moveAvatar();
     }
 
+    public void moveAvatarAfterCheating() {
+        MonopolyClient.getMonopolyClient().moveAvatarAfterCheating();
+    }
+
+    // Player does not want to cheat and moves to diced value forward
     @Override
-    public void onValueSelected(int value) {
+    public void onForward(int value) {
         moveAvatar();
+    }
+
+    // Player does want to cheat and moves a selected value forward
+    @Override
+    public void onSelectedValue(int value){
+        moveAvatarAfterCheating();
     }
 }
