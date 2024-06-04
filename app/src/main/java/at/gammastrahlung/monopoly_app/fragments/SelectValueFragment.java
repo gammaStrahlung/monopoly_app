@@ -15,18 +15,19 @@ import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class SelectValueFragment extends DialogFragment {
 
     public interface OnValueSelectedListener {
-        void onValueSelected(int value);
+        void onForward(int value);
+        void onSelectedValue(int value);
     }
 
     private OnValueSelectedListener listener;
     private EditText diceValueEditText;
     private Button buttonForward;
     private Button buttonSelect;
-
 
     @NonNull
     @Override
@@ -61,7 +62,7 @@ public class SelectValueFragment extends DialogFragment {
 
     private void forwardButtonClick() {
         int selectedValue = Integer.parseInt(diceValueEditText.getText().toString());
-        listener.onValueSelected(selectedValue);
+        listener.onForward(selectedValue);
         dismiss();
     }
 
@@ -75,8 +76,14 @@ public class SelectValueFragment extends DialogFragment {
             buttonSelect.setText("Submit");
 
         } else {
+
             int selectedValue = Integer.parseInt(diceValueEditText.getText().toString());
-            listener.onValueSelected(selectedValue);
+            int value1 = selectedValue/2;
+            int value2 = selectedValue - value1;
+
+            MonopolyClient.getMonopolyClient().cheating(value1, value2);
+
+            listener.onSelectedValue(selectedValue);
             dismiss();
         }
     }
