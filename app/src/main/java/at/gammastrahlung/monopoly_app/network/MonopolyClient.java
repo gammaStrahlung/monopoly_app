@@ -124,11 +124,39 @@ public class MonopolyClient {
                 .build());
     }
 
-    public void moveAvatar(){
+    public void moveAvatar() {
         GameData gameData = GameData.getGameData();
 
         webSocketClient.sendMessage(ClientMessage.builder()
                 .messagePath("move_avatar")
+                .player(gameData.getPlayer())
+                .build());
+    }
+
+    public void moveAvatarAfterCheating() {
+        GameData gameData = GameData.getGameData();
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("move_avatar_cheating")
+                .player(gameData.getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends the new selected values
+     * @param value1
+     * @param value2
+     */
+    public void cheating(int value1, int value2) {
+        GameData gameData = GameData.getGameData();
+
+        gameData.getDice().setTotalValue(value1 + value2);
+        gameData.getDice().setValue1(value1);
+        gameData.getDice().setValue2(value2);
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("cheating")
+                .message(String.valueOf(value1 + value2))
                 .player(gameData.getPlayer())
                 .build());
     }
