@@ -150,7 +150,6 @@ public class MonopolyClient {
     public void cheating(int value1, int value2) {
         GameData gameData = GameData.getGameData();
 
-        gameData.getDice().setTotalValue(value1 + value2);
         gameData.getDice().setValue1(value1);
         gameData.getDice().setValue2(value2);
 

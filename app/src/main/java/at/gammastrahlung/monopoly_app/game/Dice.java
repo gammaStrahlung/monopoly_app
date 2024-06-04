@@ -17,6 +17,4 @@ public class Dice {
     @Expose
     private int value2;
 
-    @Expose
-    private int totalValue;
 }

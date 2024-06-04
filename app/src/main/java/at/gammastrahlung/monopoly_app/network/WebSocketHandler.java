@@ -47,6 +47,8 @@ public class WebSocketHandler {
             case "roll_dice":
                 rollDice(message);
                 break;
+            case "cheating":
+                cheat(message);
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -167,6 +169,10 @@ public class WebSocketHandler {
             return;
         }
         gameData.setDice(message.getGame().getDice());
+    }
+
+    private void cheat(ServerMessage message){
+
     }
 }
 
