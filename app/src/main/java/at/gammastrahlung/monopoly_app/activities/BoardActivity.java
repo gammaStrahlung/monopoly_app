@@ -149,25 +149,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
 
-        addLogEntry(player.getName() + " is now on turn.");
-
         // if current player is our player then enable roll dice button
         if (isMyTurn()) {
             rollDiceButton.setEnabled(true);
         } else {
             rollDiceButton.setEnabled(false);
         }
-    }
-
-    private void addLogEntry(String entry){
-        logEntries.add(0, entry);
-        StringBuilder logText = new StringBuilder();
-
-        for (String logEntry : logEntries) {
-            logText.append(logEntry).append("\n");
-        }
-
-        logTextView.setText(logText.toString());
     }
 
     private void updateGameBoard() {
@@ -382,6 +369,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         dice1.setImageResource(value1);
         dice2.setImageResource(value2);
+
+        int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
+        Player player = GameData.getGameData().getCurrentPlayer();
+        String logMessage = player.getName() + " diced " + dicedValue;
+        GameData.getGameData().addLogMessage(logMessage);
     }
 
     public void enableUserActions() {
@@ -432,7 +424,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     public void onEndTurnButtonClicked(View view) {
         endTurnButton.setEnabled(false);
-        addLogEntry(GameData.getGameData().getCurrentPlayer().getName() + " ended their turn.");
+        String logMessage = GameData.getGameData().getCurrentPlayer().getName() + " ended their turn.";
+        GameData.getGameData().addLogMessage(logMessage);
         MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
     }
 
