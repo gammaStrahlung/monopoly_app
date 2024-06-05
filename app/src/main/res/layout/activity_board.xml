@@ -124,8 +124,8 @@
 
     <ScrollView
         android:id="@+id/logScrollView"
-        android:layout_width="370dp"
-        android:layout_height="87dp"
+        android:layout_width="366dp"
+        android:layout_height="110dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/otherPlayers"
         app:layout_constraintEnd_toEndOf="parent"

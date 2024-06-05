@@ -50,6 +50,7 @@ public class WebSocketHandler {
                 break;
             case "log":
                 handleLogMessage(message.getJsonData());
+                break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
