@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private Button rollDiceButton;
     private Button endTurnButton;
     private TextView logTextView;
+    private ScrollView logScrollView;
     private List<String> logEntries = new ArrayList<>();
 
     private static final int THRESHOLD = 1000;
@@ -83,6 +85,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         playerOnTurn = findViewById(R.id.playerOnTurn);
 
         logTextView = findViewById(R.id.logTextView);
+        logScrollView = findViewById(R.id.logScrollView);
 
         buildGameBoard();
         updatePlayerInfo();
@@ -142,6 +145,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
             logText.append(logMessage).append("\n");
         }
         logTextView.setText(logText.toString());
+        // Scroll ScrollView to the bottom
+        logScrollView.post(() -> logScrollView.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePlayerOnTurn() {
@@ -423,8 +428,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     public void onEndTurnButtonClicked(View view) {
         endTurnButton.setEnabled(false);
-        String logMessage = GameData.getGameData().getCurrentPlayer().getName() + " ended their turn.";
-        GameData.getGameData().addLogMessage(logMessage);
         MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
     }
 
