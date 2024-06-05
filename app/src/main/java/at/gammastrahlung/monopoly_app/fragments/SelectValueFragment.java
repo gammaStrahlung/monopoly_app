@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -78,6 +79,12 @@ public class SelectValueFragment extends DialogFragment {
         } else {
 
             int selectedValue = Integer.parseInt(diceValueEditText.getText().toString());
+            if (selectedValue <= 1) {
+                Toast.makeText(getContext(), R.string.the_selected_value_needs_to_be_greater_than_1, Toast.LENGTH_SHORT).show();
+                diceValueEditText.setText("");
+                diceValueEditText.requestFocus();
+                return;
+            }
             int value1 = selectedValue/2;
             int value2 = selectedValue - value1;
 

@@ -28,4 +28,5 @@
     <string name="do_you_want_to_forward_the_diced_value_or_select_a_different_one">Do you want to forward the diced value or select a different one?</string>
     <string name="cheat">Cheat</string>
     <string name="forward">Forward</string>
+    <string name="the_selected_value_needs_to_be_greater_than_1">The selected value needs to be greater than 1.</string>
 </resources>
