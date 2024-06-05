@@ -126,10 +126,10 @@ public class WebSocketHandler {
         GameData gameData = GameData.getGameData();
         gameData.getPlayers().add(p);
 
-        if (gameData.getPlayer().getId() == p.getId())
+        if (gameData.getPlayer().equals(p))
             gameData.setPlayer(p);
 
-        if (gameData.getGame().getGameOwner().getId() == p.getId())
+        if (gameData.getGame().getGameOwner().equals(p))
             gameData.getGame().setGameOwner(p);
 
         // Make sure GameData.players and Game.players are the same
@@ -177,6 +177,13 @@ public class WebSocketHandler {
             return;
         }
         gameData.setDice(message.getGame().getDice());
+
+        if (message.getGame().getPlayers() != null) {
+            for (Player player : message.getGame().getPlayers()) {
+                updatePlayer(gson.toJson(player));
+            }
+        }
+
     }
 }
 

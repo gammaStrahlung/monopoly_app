@@ -101,6 +101,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         }
                         updatePlayerInfo();
                     });
+                } else if (propertyId == BR.player) {
+                    runOnUiThread(() -> updatePlayerInfo());
                 }
                 // Update when player on turn changes
                 else if (propertyId == BR.currentPlayer) {
@@ -371,9 +373,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         dice2.setImageResource(value2);
 
         int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
-        Player player = GameData.getGameData().getCurrentPlayer();
-        String logMessage = player.getName() + " diced " + dicedValue;
-        GameData.getGameData().addLogMessage(logMessage);
     }
 
     public void enableUserActions() {
