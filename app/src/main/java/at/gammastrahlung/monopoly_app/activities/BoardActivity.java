@@ -51,8 +51,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private Button endTurnButton;
     private TextView logTextView;
     private ScrollView logScrollView;
-    private List<String> logEntries = new ArrayList<>();
-
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
