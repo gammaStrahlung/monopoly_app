@@ -109,6 +109,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- ScrollView for log messages -->
+
     <TextView
         android:id="@+id/moneyText"
         android:layout_width="wrap_content"
@@ -117,31 +119,58 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/otherPlayers"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/boardLayout" />
+        app:layout_constraintTop_toBottomOf="@id/boardLayout"
+        app:layout_constraintVertical_bias="0.614" />
+
+    <ScrollView
+        android:id="@+id/logScrollView"
+        android:layout_width="366dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@id/otherPlayers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.39"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playerOnTurn"
+        app:layout_constraintVertical_bias="0.185">
+
+        <TextView
+            android:id="@+id/logTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:minHeight="100dp"
+            android:padding="8dp"
+            android:text=""
+            android:textAppearance="?attr/textAppearanceBody1" />
+    </ScrollView>
 
     <Button
         android:id="@+id/otherPlayers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:onClick="otherPlayersClick"
         android:text="@string/otherPlayers"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/moneyText"
-        app:layout_constraintTop_toBottomOf="@id/boardLayout" />
+        app:layout_constraintTop_toBottomOf="@id/boardLayout"
+        app:layout_constraintVertical_bias="0.64" />
 
     <Button
         android:id="@+id/endTurn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:onClick="onEndTurnButtonClicked"
         android:text="@string/end_turn"
-        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toEndOf="@id/moneyText"
         app:layout_constraintTop_toBottomOf="@id/boardLayout"
-        app:layout_constraintVertical_bias="0.724" />
+        app:layout_constraintVertical_bias="0.856" />
 
     <TextView
         android:id="@+id/playerOnTurn"
@@ -149,11 +178,12 @@
         android:layout_height="24dp"
         android:layout_marginTop="31dp"
         android:text="@string/player_on_turn"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/logScrollView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.172"
+        app:layout_constraintHorizontal_bias="0.066"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/boardLayout"
-        app:layout_constraintVertical_bias="0.066" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

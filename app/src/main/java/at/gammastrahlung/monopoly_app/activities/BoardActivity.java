@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -47,7 +49,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private Button rollDiceButton;
     private Button endTurnButton;
-
+    private TextView logTextView;
+    private ScrollView logScrollView;
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
@@ -80,6 +83,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         endTurnButton = findViewById(R.id.endTurn);
         playerOnTurn = findViewById(R.id.playerOnTurn);
 
+        logTextView = findViewById(R.id.logTextView);
+        logScrollView = findViewById(R.id.logScrollView);
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
@@ -97,10 +103,15 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         }
                         updatePlayerInfo();
                     });
+                } else if (propertyId == BR.player) {
+                    runOnUiThread(() -> updatePlayerInfo());
                 }
                 // Update when player on turn changes
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
+                }
+                else if (propertyId == BR.logMessages){
+                    runOnUiThread(() -> updateLogMessages());
                 }
                 // Update when dice value is changed
                 else if (propertyId == BR.dice) {
@@ -126,6 +137,17 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
+    }
+
+    private void updateLogMessages() {
+        List<String> logMessages = GameData.getGameData().getLogMessages();
+        StringBuilder logText = new StringBuilder();
+        for (String logMessage : logMessages) {
+            logText.append(logMessage).append("\n");
+        }
+        logTextView.setText(logText.toString());
+        // Scroll ScrollView to the bottom
+        logScrollView.post(() -> logScrollView.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePlayerOnTurn() {
@@ -355,6 +377,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         dice1.setImageResource(value1);
         dice2.setImageResource(value2);
+
+        int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
     }
 
     public void enableUserActions() {

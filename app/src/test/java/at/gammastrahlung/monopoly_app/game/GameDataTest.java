@@ -78,6 +78,30 @@ class GameDataTest {
         assertEquals(mockPlayer, gd.getCurrentPlayer());
     }
 
+    @Test
+    void addLogMessage(){
+        GameData gameData = GameData.getGameData();
+
+        String logMessage = "Test log message";
+        gameData.addLogMessage(logMessage);
+        assertTrue(gameData.getLogMessages().contains(logMessage));
+    }
+
+    @Test
+    void testMultipleLogMessages() {
+        GameData gameData = GameData.getGameData();
+
+        String logMessage1 = "Test log message 1";
+        String logMessage2 = "Test log message 2";
+        gameData.addLogMessage(logMessage1);
+        gameData.addLogMessage(logMessage2);
+
+        assertTrue(gameData.getLogMessages().contains(logMessage1));
+        assertTrue(gameData.getLogMessages().contains(logMessage2));
+    }
+
+
+
     @AfterEach
     void cleanup() {
         GameData.reset();
