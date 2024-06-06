@@ -1,7 +1,6 @@
 package at.gammastrahlung.monopoly_app.game;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -89,7 +88,7 @@ class GameDataTest {
     }
 
     @Test
-    public void testMultipleLogMessages() {
+    void testMultipleLogMessages() {
         GameData gameData = GameData.getGameData();
 
         String logMessage1 = "Test log message 1";
