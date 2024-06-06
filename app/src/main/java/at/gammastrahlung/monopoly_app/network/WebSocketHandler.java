@@ -51,6 +51,8 @@ public class WebSocketHandler {
             case "log":
                 handleLogMessage(message.getJsonData());
                 break;
+            case "cheating":
+                cheat(message);
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -184,6 +186,10 @@ public class WebSocketHandler {
                 updatePlayer(gson.toJson(player));
             }
         }
+
+    }
+
+    private void cheat(ServerMessage message){
 
     }
 }

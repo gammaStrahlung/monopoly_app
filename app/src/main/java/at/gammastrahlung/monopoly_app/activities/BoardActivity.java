@@ -27,6 +27,7 @@ import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
+import at.gammastrahlung.monopoly_app.fragments.SelectValueFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -34,7 +35,7 @@ import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
-public class BoardActivity extends AppCompatActivity implements SensorEventListener {
+public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
 
     private ConstraintLayout fieldRowTop; // Includes top corners
     private ConstraintLayout fieldRowBottom; // Includes bottom corners
@@ -118,7 +119,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 else if (propertyId == BR.dice) {
                     runOnUiThread(() -> {
                         updateDices();      // updating the view of each die
-                        moveAvatar();       // after the dice are changed, the avatar will be moved accordingly
+                        if (isMyTurn()) {
+                            new SelectValueFragment().show(getSupportFragmentManager(), "selectedValue");
+                        }
                         enableUserActions();
                     });
                 }
@@ -445,5 +448,21 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     // After dice roll, the avatar will be moved
     public void moveAvatar() {
         MonopolyClient.getMonopolyClient().moveAvatar();
+    }
+
+    public void moveAvatarAfterCheating() {
+        MonopolyClient.getMonopolyClient().moveAvatarAfterCheating();
+    }
+
+    // Player does not want to cheat and moves to diced value forward
+    @Override
+    public void onForward(int value) {
+        moveAvatar();
+    }
+
+    // Player does want to cheat and moves a selected value forward
+    @Override
+    public void onSelectedValue(int value){
+        moveAvatarAfterCheating();
     }
 }
