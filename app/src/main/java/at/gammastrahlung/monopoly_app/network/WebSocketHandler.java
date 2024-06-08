@@ -48,6 +48,9 @@ public class WebSocketHandler {
             case "roll_dice":
                 rollDice(message);
                 break;
+            case "move_player":
+                movePlayer(message);
+                break;
             case "log":
                 handleLogMessage(message.getJsonData());
                 break;
@@ -186,7 +189,14 @@ public class WebSocketHandler {
                 updatePlayer(gson.toJson(player));
             }
         }
+    }
 
+    private void movePlayer(ServerMessage message){
+        if (message.getGame().getPlayers() != null) {
+            for (Player player : message.getGame().getPlayers()) {
+                updatePlayer(gson.toJson(player));
+            }
+        }
     }
 
     private void cheat(ServerMessage message){
