@@ -5,7 +5,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -123,6 +122,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when player on turn changes
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
+                    runOnUiThread(() -> updatePlayerList());
                 }
                 else if (propertyId == BR.logMessages){
                     runOnUiThread(() -> updateLogMessages());
@@ -139,6 +139,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+    }
+
+    private void updatePlayerList() {
+        List<Player> players = GameData.getGameData().getPlayers();
+
+        playerAdapter.updatePlayers(players);
     }
 
     private boolean isMyTurn() {
@@ -177,12 +183,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         } else {
             rollDiceButton.setEnabled(false);
         }
-    }
-
-    // Update player list whenever current player changes
-    private void updatePlayerList() {
-        List<Player> updatedPlayers = new ArrayList<>(GameData.getGameData().getPlayers());
-        playerAdapter.updatePlayers(updatedPlayers);
     }
 
     private void updateGameBoard() {
@@ -450,8 +450,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     public void onEndTurnButtonClicked(View view) {
         endTurnButton.setEnabled(false);
         MonopolyClient.getMonopolyClient().endCurrentPlayerTurn();
-
-        updatePlayerList();
     }
 
     // Counts how many players are on the field that is currently being built

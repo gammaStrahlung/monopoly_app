@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +16,6 @@ import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.PlayerInfoFragment;
-import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 
@@ -38,6 +36,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         this.showOwner = showOwner;
         this.emphasizeCurrentPlayer = emphasizeCurrentPlayer;
     }
+
+
 
     @NonNull
     @Override
@@ -81,9 +81,10 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
             holder.itemView.setOnClickListener(v -> new PlayerInfoFragment(player).show(context.getSupportFragmentManager(), "PlayerInfo"));
     }
 
-    public void updatePlayers(List<Player> players) {
-
-
+    public void updatePlayers(List<Player> updatedPlayers) {
+        players = new ObservableArrayList<>();
+        players.addAll(updatedPlayers);
+        notifyDataSetChanged();
     }
 
     @Override
