@@ -19,11 +19,14 @@ import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
@@ -55,6 +58,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private long lastTime;
     private float lastX, lastY, lastZ;
 
+    private RecyclerView playersRecyclerView;
+    private PlayerAdapter playerAdapter;
+
     private TextView playerOnTurn;
 
     ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
@@ -85,6 +91,13 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         logTextView = findViewById(R.id.logTextView);
         logScrollView = findViewById(R.id.logScrollView);
+
+        playersRecyclerView = findViewById(R.id.players_recycler_view);
+        playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false);
+
+        playersRecyclerView.setAdapter(playerAdapter);
 
         buildGameBoard();
         updatePlayerInfo();
