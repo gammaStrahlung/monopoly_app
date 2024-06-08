@@ -95,7 +95,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         playersRecyclerView = findViewById(R.id.players_recycler_view);
         playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false);
+        playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false, false);
 
         playersRecyclerView.setAdapter(playerAdapter);
 

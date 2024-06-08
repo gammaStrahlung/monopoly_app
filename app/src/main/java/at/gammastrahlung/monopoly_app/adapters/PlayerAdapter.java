@@ -22,12 +22,14 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     AppCompatActivity context;
     private final boolean showMoney;
     private final boolean enablePlayerInfo;
+    private final boolean showOwner;
 
-    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney, boolean enablePlayerInfo) {
+    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney, boolean enablePlayerInfo, boolean showOwner) {
         this.players = players;
         this.context = (AppCompatActivity) context;
         this.showMoney = showMoney;
         this.enablePlayerInfo = enablePlayerInfo;
+        this.showOwner = showOwner;
     }
 
     @NonNull
@@ -52,8 +54,10 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         if (player.equals(thisPlayer))
             holder.isCurrentPlayer.setText(R.string.playerList_IsYou);
 
-        if (player.equals(gameOwner))
-            holder.isGameOwner.setText(R.string.playerList_gameOwner);
+        if (showOwner) {
+            if (player.equals(gameOwner))
+                holder.isGameOwner.setText(R.string.playerList_gameOwner);
+        }
 
         if (showMoney)
             holder.playerMoney.setText(context.getString(R.string.currencyDisplay, thisPlayer.getBalance()));
