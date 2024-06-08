@@ -186,4 +186,14 @@
         app:layout_constraintTop_toBottomOf="@+id/boardLayout"
         app:layout_constraintVertical_bias="0.0" />
 
+    <Button
+        android:id="@+id/uncoverCheatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/uncover_cheat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/moneyText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
