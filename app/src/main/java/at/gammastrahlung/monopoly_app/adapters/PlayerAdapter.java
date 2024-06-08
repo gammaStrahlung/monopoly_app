@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,8 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         Player player = players.get(position);
 
         holder.playerNameView.setText(player.getName());
+        int playerIconResourceId = context.getResources().getIdentifier("playericon_" + (position + 1), "drawable", context.getPackageName());
+        holder.playerIcon.setImageResource(playerIconResourceId);
 
         if (player.equals(thisPlayer))
             holder.isCurrentPlayer.setText(R.string.playerList_IsYou);
@@ -99,12 +102,15 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         protected TextView isCurrentPlayer;
         protected TextView playerMoney;
 
+        protected ImageView playerIcon;
+
         public PlayerViewHolder(@NonNull View itemView) {
             super(itemView);
             playerNameView = itemView.findViewById(R.id.player_name);
             isGameOwner = itemView.findViewById(R.id.isGameOwner);
             isCurrentPlayer = itemView.findViewById(R.id.isCurrentPlayer);
             playerMoney = itemView.findViewById(R.id.playerMoney);
+            playerIcon = itemView.findViewById(R.id.player_icon);
         }
     }
 }
