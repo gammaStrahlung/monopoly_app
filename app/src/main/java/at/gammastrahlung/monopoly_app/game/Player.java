@@ -30,6 +30,8 @@ public class Player {
 
     private int balance;
 
+    private boolean isCurrentPlayer;
+
     @Override
     public boolean equals(Object obj) {
         if (! (obj instanceof Player))

@@ -55,7 +55,7 @@ public class LobbyActivity extends AppCompatActivity {
         // Initialize "playerList" RecyclerView
         playerList.setLayoutManager(new LinearLayoutManager(this));
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
-        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this, false, false, true);
+        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, this, false, false, true, false);
         playerList.setAdapter(adapter);
 
         // Disable "Cancel" and "Start" buttons when player is not gameOwner

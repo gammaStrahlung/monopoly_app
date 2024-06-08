@@ -1,6 +1,7 @@
 package at.gammastrahlung.monopoly_app.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.ObservableArrayList;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.PlayerInfoFragment;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 
@@ -23,13 +28,15 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
     private final boolean showMoney;
     private final boolean enablePlayerInfo;
     private final boolean showOwner;
+    private boolean emphasizeCurrentPlayer;
 
-    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney, boolean enablePlayerInfo, boolean showOwner) {
+    public PlayerAdapter(ObservableArrayList<Player> players, Context context, boolean showMoney, boolean enablePlayerInfo, boolean showOwner, boolean emphasizeCurrentPlayer) {
         this.players = players;
         this.context = (AppCompatActivity) context;
         this.showMoney = showMoney;
         this.enablePlayerInfo = enablePlayerInfo;
         this.showOwner = showOwner;
+        this.emphasizeCurrentPlayer = emphasizeCurrentPlayer;
     }
 
     @NonNull
@@ -46,7 +53,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
 
         Player thisPlayer = GameData.getGameData().getPlayer();
         Player gameOwner = GameData.getGameData().getGame().getGameOwner();
-
+        Player currentPlayer = GameData.getGameData().getCurrentPlayer();
         Player player = players.get(position);
 
         holder.playerNameView.setText(player.getName());
@@ -59,11 +66,24 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
                 holder.isGameOwner.setText(R.string.playerList_gameOwner);
         }
 
+        if (emphasizeCurrentPlayer) {
+            if (player.equals(currentPlayer)) {
+                holder.itemView.setBackgroundColor(Color.GRAY);
+            } else {
+                holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+            }
+        }
+
         if (showMoney)
             holder.playerMoney.setText(context.getString(R.string.currencyDisplay, thisPlayer.getBalance()));
 
         if (enablePlayerInfo)
             holder.itemView.setOnClickListener(v -> new PlayerInfoFragment(player).show(context.getSupportFragmentManager(), "PlayerInfo"));
+    }
+
+    public void updatePlayers(List<Player> players) {
+
+
     }
 
     @Override
