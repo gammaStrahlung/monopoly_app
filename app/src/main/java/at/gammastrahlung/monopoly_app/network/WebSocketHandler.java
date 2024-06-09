@@ -56,6 +56,10 @@ public class WebSocketHandler {
                 break;
             case "cheating":
                 cheat(message);
+                break;
+            case "game_state":
+                gameState(message.getJsonData());
+                break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -201,6 +205,10 @@ public class WebSocketHandler {
 
     private void cheat(ServerMessage message){
 
+    }
+
+    private void gameState(String json) {
+        GameData.getGameData().setGameState(gson.fromJson(json, Game.GameState.class));
     }
 }
 
