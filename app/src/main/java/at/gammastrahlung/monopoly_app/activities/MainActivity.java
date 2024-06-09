@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                             preferenceEditor.remove("gameId");
                             preferenceEditor.apply();
                         }
+                        GameData.getGameData().removeOnPropertyChangedCallback(this);
                     }
                 }
             });
