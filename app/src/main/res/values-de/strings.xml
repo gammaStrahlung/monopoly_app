@@ -33,4 +33,5 @@
     <string name="rejoin_dialog_text">Das letzte Spiel wurde nicht beendet, möchtest du versuchen wieder beizutreten?</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
+    <string name="disconnected">Die Vervindung zum Server wurde unterbrochen.</string>
 </resources>

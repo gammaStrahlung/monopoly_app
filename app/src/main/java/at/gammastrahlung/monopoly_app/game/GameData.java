@@ -137,4 +137,15 @@ public class GameData extends BaseObservable {
     @Setter
     ServerMessage.MessageType lastMessageType;
 
+    private boolean webSocketConnected = false;
+
+    @Bindable
+    public boolean isWebSocketConnected() {
+        return webSocketConnected;
+    }
+
+    public void setWebSocketConnected(boolean webSocketConnected) {
+        this.webSocketConnected = webSocketConnected;
+        notifyPropertyChanged(BR.webSocketConnected);
+    }
 }

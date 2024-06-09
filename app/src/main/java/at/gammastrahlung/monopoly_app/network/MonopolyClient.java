@@ -10,13 +10,17 @@ import lombok.Getter;
 public class MonopolyClient {
 
     @Getter
-    private static final MonopolyClient monopolyClient = new MonopolyClient();
+    private static MonopolyClient monopolyClient = new MonopolyClient();
 
     private final WebSocketClient webSocketClient;
 
     private MonopolyClient() {
         webSocketClient = WebSocketClient.getWebSocketClient();
         webSocketClient.connect(new WebSocketHandler());
+    }
+
+    public static void reset() {
+        monopolyClient = new MonopolyClient();
     }
 
     /**

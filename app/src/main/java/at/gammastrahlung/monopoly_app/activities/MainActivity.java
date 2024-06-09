@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Player UUID and WebSocket URI
         updatePlayer();
         WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
+    }
+
+    private void tryReconnect() {
+
+        if (!GameData.getGameData().isWebSocketConnected()) {
+            MonopolyClient.reset();
+        }
 
         // Check last game and show dialog when it has not ended
         int lastGameId = sharedPreferences.getInt("gameId", 0);
@@ -72,11 +79,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tryReconnect();
+    }
+
     public void startButtonClick(View view) {
+        if (!GameData.getGameData().isWebSocketConnected()) {
+            MonopolyClient.reset();
+        }
+
         new NewGameFragment().show(getSupportFragmentManager(), "NEW_DIALOG");
     }
 
     public void joinButtonClick(View view) {
+        if (!GameData.getGameData().isWebSocketConnected()) {
+            MonopolyClient.reset();
+        }
+
         new JoinGameFragment().show(getSupportFragmentManager(), "JOIN_DIALOG");
     }
 

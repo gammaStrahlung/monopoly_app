@@ -78,6 +78,14 @@ public class LobbyActivity extends AppCompatActivity {
         gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+                if (!GameData.getGameData().isWebSocketConnected()) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(), R.string.disconnected, Toast.LENGTH_LONG).show();
+                        GameData.getGameData().removeOnPropertyChangedCallback(this);
+                        finish();
+                    });
+                }
+
                 if (propertyId != BR.game)
                     return; // Something other then game has changed -> Ignore
 
@@ -113,6 +121,18 @@ public class LobbyActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        GameData gameData = GameData.getGameData();
+        if (!gameData.isWebSocketConnected() || gameData.getGame() == null ||
+                gameData.getGame().getState() == Game.GameState.ENDED) {
+            // WebSocket disconnected or Game has ended
+            finish();
+        }
     }
 
     // Cancel button ends the game and returns to main menu
