@@ -36,7 +36,7 @@ public class UncoverPlayerListFragment extends DialogFragment {
         RecyclerView playersList = inflatedView.findViewById(R.id.cheaterPlayerList);
         playersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
-        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, getActivity(), false, false);
+        RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, getActivity(), false, false, false, false);
         playersList.setAdapter(adapter);
 
         builder.setView(inflatedView).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));

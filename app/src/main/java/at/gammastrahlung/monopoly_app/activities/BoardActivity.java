@@ -19,12 +19,15 @@ import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.UncoverPlayerListFragment;
+import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
@@ -55,6 +58,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
+
+    private RecyclerView playersRecyclerView;
+    private PlayerAdapter playerAdapter;
 
     private TextView playerOnTurn;
 
@@ -87,6 +93,13 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         logTextView = findViewById(R.id.logTextView);
         logScrollView = findViewById(R.id.logScrollView);
 
+        playersRecyclerView = findViewById(R.id.players_recycler_view);
+        playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false, false, true);
+
+        playersRecyclerView.setAdapter(playerAdapter);
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
@@ -110,6 +123,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when player on turn changes
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
+                    runOnUiThread(() -> updatePlayerList());
                 }
                 else if (propertyId == BR.logMessages){
                     runOnUiThread(() -> updateLogMessages());
@@ -126,6 +140,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+    }
+
+    private void updatePlayerList() {
+        List<Player> players = GameData.getGameData().getPlayers();
+
+        playerAdapter.updatePlayers(players);
     }
 
     private boolean isMyTurn() {
