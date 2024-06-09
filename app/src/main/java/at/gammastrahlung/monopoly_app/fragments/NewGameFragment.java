@@ -3,7 +3,9 @@ package at.gammastrahlung.monopoly_app.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,9 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.Observable;
-import androidx.databinding.ObservableInt;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
@@ -27,6 +30,7 @@ public class NewGameFragment extends DialogFragment {
 
     private EditText playerNameEditText;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -44,25 +48,29 @@ public class NewGameFragment extends DialogFragment {
 
                     Activity activity = getActivity();
 
-                    GameData.getGameData().getGameId().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                    GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                         @Override
                         public void onPropertyChanged(Observable sender, int propertyId) {
-                            // Received data from the server
-                            ObservableInt gameId = (ObservableInt) sender;
-                            if (gameId.get() == -1) {
-                                // Error popup
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(activity, R.string.newGame_fail, Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            } else {
-                                // Created game -> Start lobby activity
-                                Intent intent = new Intent(activity, LobbyActivity.class);
-                                activity.startActivity(intent);
+                            if (propertyId == BR.game) {
+
+                                // Game was changed
+                                if (GameData.getGameData().getGame() == null) {
+                                    // Error popup
+                                    activity.runOnUiThread(() -> Toast.makeText(activity, R.string.newGame_fail, Toast.LENGTH_LONG).show());
+                                } else {
+                                    // Created game -> Start lobby activity
+                                    // Save gameId (used for re-joining)
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                                    SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                                    preferenceEditor.putInt("gameId", GameData.getGameData().getGame().getGameId());
+                                    preferenceEditor.apply();
+
+                                    Intent intent = new Intent(activity, LobbyActivity.class);
+                                    activity.startActivity(intent);
+                                }
+
+                                GameData.getGameData().removeOnPropertyChangedCallback(this);
                             }
-                            gameId.removeOnPropertyChangedCallback(this);
                         }
                     });
                 })

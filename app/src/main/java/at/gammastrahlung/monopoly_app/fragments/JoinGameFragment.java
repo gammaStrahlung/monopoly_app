@@ -3,7 +3,9 @@ package at.gammastrahlung.monopoly_app.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.Observable;
 import androidx.databinding.library.baseAdapters.BR;
@@ -30,6 +33,7 @@ public class JoinGameFragment extends DialogFragment {
     EditText playerNameEditText;
     EditText gameIdEditText;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -60,14 +64,16 @@ public class JoinGameFragment extends DialogFragment {
                                 // Game was changed
                                 if (GameData.getGameData().getGame() == null) {
                                     // Error popup
-                                    activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show();
-                                        }
-                                    });
+                                    activity.runOnUiThread(() -> Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show());
                                 } else {
                                     // Joined game
+
+                                    // Save gameId (used for re-joining)
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                                    SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                                    preferenceEditor.putInt("gameId", GameData.getGameData().getGame().getGameId());
+                                    preferenceEditor.apply();
+
                                     Intent intent = GameData.getGameData().getGame().getState() == Game.GameState.PLAYING ?
                                             new Intent(activity, BoardActivity.class) : // Playing -> game board
                                             new Intent(activity, LobbyActivity.class); // Not already playing -> game lobby

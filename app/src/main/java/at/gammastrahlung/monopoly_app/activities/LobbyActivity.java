@@ -1,7 +1,9 @@
 package at.gammastrahlung.monopoly_app.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -98,6 +100,13 @@ public class LobbyActivity extends AppCompatActivity {
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
                     GameData.reset();
+
+                    // Remove gameId (used for re-joining)
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                    SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                    preferenceEditor.remove("gameId");
+                    preferenceEditor.apply();
+
                     activity.runOnUiThread(() -> {
                         finish(); // Return to MainActivity
                     });
