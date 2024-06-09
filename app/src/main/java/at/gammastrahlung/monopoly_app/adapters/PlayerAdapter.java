@@ -78,7 +78,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
         }
 
         if (showMoney)
-            holder.playerMoney.setText(context.getString(R.string.currencyDisplay, thisPlayer.getBalance()));
+            holder.playerMoney.setText(context.getString(R.string.currencyDisplay, player.getBalance()));
 
         if (enablePlayerInfo)
             holder.itemView.setOnClickListener(v -> new PlayerInfoFragment(player).show(context.getSupportFragmentManager(), "PlayerInfo"));
