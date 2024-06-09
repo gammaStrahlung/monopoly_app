@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Initialize Player UUID and WebSocket URI
-        updatePlayerUUID();
+        updatePlayer();
         WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
 
         // Check last game and show dialog when it has not ended
@@ -80,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets the player UUID for the Player in GameData.
-     * The UUID is only generated once and then saved, this allows re-joining of
+     * Sets the player UUID and the name for the Player in GameData.
+     * The UUID is only generated once and then saved, this allows re-joining of the game
      */
-    private void updatePlayerUUID() {
+    private void updatePlayer() {
         UUID playerUUID;
 
         // Get UUID from SharedPreferences
@@ -104,5 +104,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         GameData.getGameData().getPlayer().setId(playerUUID);
+
+        // Set player name
+        GameData.getGameData().getPlayer().setName(sharedPreferences.getString("playerName", ""));
     }
 }

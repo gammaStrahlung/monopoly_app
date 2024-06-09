@@ -40,6 +40,9 @@ public class NewGameFragment extends DialogFragment {
 
         playerNameEditText = inflated.findViewById(R.id.playerName);
 
+        // Set player name to the one that has been saved
+        playerNameEditText.setText(GameData.getGameData().getPlayer().getName());
+
         builder.setView(inflated)
                 // Add action buttons
                 .setPositiveButton(R.string.main_startGame, (dialog, id) -> {
@@ -63,6 +66,7 @@ public class NewGameFragment extends DialogFragment {
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
                                     SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
                                     preferenceEditor.putInt("gameId", GameData.getGameData().getGame().getGameId());
+                                    preferenceEditor.putString("playerName", GameData.getGameData().getPlayer().getName());
                                     preferenceEditor.apply();
 
                                     Intent intent = new Intent(activity, LobbyActivity.class);
@@ -92,7 +96,7 @@ public class NewGameFragment extends DialogFragment {
         Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         // Disable positive button until input is valid
-        positiveButton.setEnabled(false);
+        positiveButton.setEnabled(DialogDataValidation.validatePlayerName(playerNameEditText.getText().toString()));
 
         // Add TextChangeListener to EditTexts
         TextWatcher textWatcher = new TextWatcher() {
