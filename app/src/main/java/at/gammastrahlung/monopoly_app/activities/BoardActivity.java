@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.UncoverPlayerListFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
@@ -137,6 +138,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
+    }
+
+    public void uncoverCheatButtonClick(View v){
+        new UncoverPlayerListFragment().show(getSupportFragmentManager(), "uncoverCheat");
     }
 
     private void updateLogMessages() {
