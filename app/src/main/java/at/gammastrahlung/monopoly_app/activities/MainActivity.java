@@ -11,13 +11,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.Observable;
+import androidx.databinding.library.baseAdapters.BR;
 
 import java.util.UUID;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.JoinGameFragment;
 import at.gammastrahlung.monopoly_app.fragments.NewGameFragment;
+import at.gammastrahlung.monopoly_app.fragments.ReJoinGameFragment;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.WebSocketClient;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,15 +41,34 @@ public class MainActivity extends AppCompatActivity {
         });
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-    }
 
-    @Override
-    protected void onResume() {
         // Initialize Player UUID and WebSocket URI
         updatePlayerUUID();
         WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
 
-        super.onResume();
+        // Check last game and show dialog when it has not ended
+        int lastGameId = sharedPreferences.getInt("gameId", 0);
+        if (lastGameId != 0) {
+            GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    if (propertyId == BR.gameState) {
+                        Game.GameState state = GameData.getGameData().getGameState();
+                        if (state == Game.GameState.PLAYING || state == Game.GameState.STARTED) {
+                            new ReJoinGameFragment(lastGameId).show(getSupportFragmentManager(), "REJOIN_DIALOG");
+                        } else {
+                            // Game does not exit or it has ended -> remove gameId
+                            SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                            preferenceEditor.remove("gameId");
+                            preferenceEditor.apply();
+                        }
+                    }
+                }
+            });
+
+            MonopolyClient.getMonopolyClient().getGameState(lastGameId);
+        }
     }
 
     public void startButtonClick(View view) {
