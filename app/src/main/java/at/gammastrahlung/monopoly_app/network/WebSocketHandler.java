@@ -134,7 +134,8 @@ public class WebSocketHandler {
     private void updatePlayer(String json) {
         Player p = gson.fromJson(json, Player.class);
         GameData gameData = GameData.getGameData();
-        gameData.getPlayers().add(p);
+
+        gameData.getPlayers().set(gameData.getPlayers().indexOf(p), p);
 
         if (gameData.getPlayer().equals(p))
             gameData.setPlayer(p);
@@ -172,6 +173,9 @@ public class WebSocketHandler {
         players.clear();
         players.addAll(game.getPlayers());
         game.setPlayers(players);
+
+        // Update player with player from game
+        gameData.setPlayer(game.getPlayers().stream().filter( player -> player.equals(gameData.getPlayer())).findFirst().get());
     }
 
     private void handleLogMessage(String jsonData){
