@@ -159,4 +159,16 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+
+    /**
+     * Sends a game_state message to the server.
+     * @param gameId The ID of the game
+     */
+    public void getGameState(int gameId) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("game_state")
+                .message(String.valueOf(gameId))
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
 }
