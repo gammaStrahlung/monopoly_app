@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,11 +37,39 @@ public class UncoverPlayerListFragment extends DialogFragment {
         RecyclerView playersList = inflatedView.findViewById(R.id.cheaterPlayerList);
         playersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         ObservableArrayList<Player> players = GameData.getGameData().getPlayers();
+
         RecyclerView.Adapter<PlayerAdapter.PlayerViewHolder> adapter = new PlayerAdapter(players, getActivity(), false, false, false, false);
         playersList.setAdapter(adapter);
+
+        playersList.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                view.setOnClickListener(v -> {
+                    int position = playersList.getChildAdapterPosition(view);
+                    Player player = players.get(position);
+                    showCheaterDialog(player);
+                });
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                view.setOnClickListener(null);
+            }
+        });
 
         builder.setView(inflatedView).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
 
         return builder.create();
+    }
+
+    private void showCheaterDialog(Player player) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage("Are you sure player " + player.getName() + " is a cheater?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Toast.makeText(getActivity(), player.getName() + " test ", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
     }
 }
