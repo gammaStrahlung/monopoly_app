@@ -14,11 +14,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.Observable;
-import androidx.databinding.ObservableInt;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.activities.BoardActivity;
 import at.gammastrahlung.monopoly_app.activities.LobbyActivity;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.helpers.DialogDataValidation;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
@@ -50,25 +52,31 @@ public class JoinGameFragment extends DialogFragment {
 
                     Activity activity = getActivity();
 
-                    GameData.getGameData().getGameId().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                    GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                         @Override
                         public void onPropertyChanged(Observable sender, int propertyId) {
-                            // Received data from the server
-                            ObservableInt gameId = (ObservableInt) sender;
-                            if (gameId.get() == -1) {
-                                // Error popup
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            } else {
-                                // Created game -> Start lobby activity
-                                Intent intent = new Intent(activity, LobbyActivity.class);
-                                activity.startActivity(intent);
+                            if (propertyId == BR.game) {
+
+                                // Game was changed
+                                if (GameData.getGameData().getGame() == null) {
+                                    // Error popup
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else {
+                                    // Joined game
+                                    Intent intent = GameData.getGameData().getGame().getState() == Game.GameState.PLAYING ?
+                                            new Intent(activity, BoardActivity.class) : // Playing -> game board
+                                            new Intent(activity, LobbyActivity.class); // Not already playing -> game lobby
+
+                                    activity.startActivity(intent);
+                                }
+
+                                GameData.getGameData().removeOnPropertyChangedCallback(this);
                             }
-                            gameId.removeOnPropertyChangedCallback(this);
                         }
                     });
                 })
