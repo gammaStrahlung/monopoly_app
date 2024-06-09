@@ -1,7 +1,9 @@
 package at.gammastrahlung.monopoly_app.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -76,6 +78,14 @@ public class LobbyActivity extends AppCompatActivity {
         gameData.addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
+                if (!GameData.getGameData().isWebSocketConnected()) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(getApplicationContext(), R.string.disconnected, Toast.LENGTH_LONG).show();
+                        GameData.getGameData().removeOnPropertyChangedCallback(this);
+                        finish();
+                    });
+                }
+
                 if (propertyId != BR.game)
                     return; // Something other then game has changed -> Ignore
 
@@ -98,12 +108,31 @@ public class LobbyActivity extends AppCompatActivity {
                     GameData.getGameData().removeOnPropertyChangedCallback(this);
 
                     GameData.reset();
+
+                    // Remove gameId (used for re-joining)
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                    SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                    preferenceEditor.remove("gameId");
+                    preferenceEditor.apply();
+
                     activity.runOnUiThread(() -> {
                         finish(); // Return to MainActivity
                     });
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        GameData gameData = GameData.getGameData();
+        if (!gameData.isWebSocketConnected() || gameData.getGame() == null ||
+                gameData.getGame().getState() == Game.GameState.ENDED) {
+            // WebSocket disconnected or Game has ended
+            finish();
+        }
     }
 
     // Cancel button ends the game and returns to main menu
