@@ -29,4 +29,7 @@
     <string name="cheat">Cheat</string>
     <string name="forward">Forward</string>
     <string name="the_selected_value_needs_to_be_greater_than_1">The selected value needs to be greater than 1.</string>
+    <string name="rejoin_dialog_text">The last game you were playing was not ended, do you want to re-join?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

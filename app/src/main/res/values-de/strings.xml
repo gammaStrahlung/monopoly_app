@@ -30,4 +30,7 @@
     <string name="cheat">Schummeln</string>
     <string name="forward">Weiterfahren</string>
     <string name="the_selected_value_needs_to_be_greater_than_1">Der eingegebene Wert muss größer als 1 sein.</string>
+    <string name="rejoin_dialog_text">Das letzte Spiel wurde nicht beendet, möchtest du versuchen wieder beizutreten?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>
