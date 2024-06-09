@@ -100,7 +100,23 @@ class GameDataTest {
         assertTrue(gameData.getLogMessages().contains(logMessage2));
     }
 
+    @Test
+    void gameState() {
+        GameData gameData = GameData.getGameData();
 
+        assertNull(gameData.getGameState());
+        gameData.setGameState(Game.GameState.STARTED);
+        assertEquals(Game.GameState.STARTED, gameData.getGameState());
+    }
+
+    @Test
+    void webSocketConnected() {
+        GameData gameData = GameData.getGameData();
+
+        assertFalse(gameData.isWebSocketConnected());
+        gameData.setWebSocketConnected(true);
+        assertTrue(gameData.isWebSocketConnected());
+    }
 
     @AfterEach
     void cleanup() {
