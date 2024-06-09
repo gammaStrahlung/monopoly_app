@@ -30,4 +30,5 @@
     <string name="forward">Forward</string>
     <string name="the_selected_value_needs_to_be_greater_than_1">The selected value needs to be greater than 1.</string>
     <string name="uncover_cheat">Uncover Cheat</string>
+    <string name="who_is_the_cheater">Who is the cheater?</string>
 </resources>

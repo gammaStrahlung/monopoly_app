@@ -31,4 +31,5 @@
     <string name="forward">Weiterfahren</string>
     <string name="the_selected_value_needs_to_be_greater_than_1">Der eingegebene Wert muss größer als 1 sein.</string>
     <string name="uncover_cheat">Aufdecken</string>
+    <string name="who_is_the_cheater">Wer ist der Schummler?</string>
 </resources>
