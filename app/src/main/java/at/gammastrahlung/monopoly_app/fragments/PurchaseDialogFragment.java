@@ -57,7 +57,7 @@ public Dialog onCreateDialog(Bundle savedInstanceState) {
     });
 
     noButton.setOnClickListener(v -> {
-        DialogFragment auctionDialog = AuctionDialogFragment.newInstance(propertyName, propertyId, "Auction initiated.");
+        DialogFragment auctionDialog = AuctionDialogFragment.;
         auctionDialog.show(getActivity().getSupportFragmentManager(), "auctionDialog");
         dismiss();
     });
