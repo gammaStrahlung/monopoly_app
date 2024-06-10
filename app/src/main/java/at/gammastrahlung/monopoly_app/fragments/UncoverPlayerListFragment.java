@@ -47,7 +47,11 @@ public class UncoverPlayerListFragment extends DialogFragment {
                 view.setOnClickListener(v -> {
                     int position = playersList.getChildAdapterPosition(view);
                     Player player = players.get(position);
-                    showCheaterDialog(player);
+                    if (player.equals(GameData.getGameData().getPlayer())) {
+                        showSelfSelectDialog();
+                    } else {
+                        showCheaterDialog(player);
+                    }
                 });
             }
 
@@ -69,6 +73,14 @@ public class UncoverPlayerListFragment extends DialogFragment {
                     Toast.makeText(getActivity(), player.getName() + " test ", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+    }
+
+    private void showSelfSelectDialog() {
+        new AlertDialog.Builder(getActivity())
+                .setMessage("You are not allowed to select yourself")
+                .setPositiveButton("Ok", (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
