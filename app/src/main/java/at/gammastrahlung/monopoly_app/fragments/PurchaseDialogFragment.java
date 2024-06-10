@@ -22,7 +22,9 @@ public class PurchaseDialogFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+public void setPurchaseDialogListener(PurchaseDialogListener listener) {
+    this.listener = listener;
+}
 
 
 
