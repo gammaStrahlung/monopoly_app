@@ -128,6 +128,25 @@ public class FieldInfoFragment extends DialogFragment {
         fourHouseRent.setText(getString(R.id.four_house_rent, rentPrices.get(4)));
         price.setText(getString(R.id.price, property.getPrice()));
 
+        if(property.getHouseCount()>0){
+            buildingSlotOne.setImageResource(R.drawable);
+            if(property.getHouseCount()>4){
+                buildingSlotOne.setImageResource(R.drawable);
+                buildingSlotTwo.setImageResource(R.drawable);
+                buildingSlotThree.setImageResource(R.drawable);
+                buildingSlotFour.setImageResource(R.drawable);
+            } else if(property.getHouseCount()>1){
+                    buildingSlotTwo.setImageResource(R.drawable);
+                    if(property.getHouseCount()>2){
+                        buildingSlotThree.setImageResource(R.drawable);
+                            if(property.getHouseCount()>3){
+                                buildingSlotFour.setImageResource(R.drawable);
+
+                        }
+                    }
+                }
+            }
+
 
 
 

@@ -33,8 +33,8 @@
     <string name="hotel_rent">Rent with a hotel: %1$d €</string>
     <string name="base_rent">Base rent: %1$d €</string>
     <string name="one_house_rent">Rent with one house: %1$d €</string>
-    <string name="two_houses_rent">Miete zwei Häuser: %1$d €</string>
-    <string name="three_house_rent">Miete drei Häuser: %1$d €</string>
-    <string name="four_houses_rent">Miete vier Häuser: %1$d €</string>
-    <string name="price">Preis: %1$d €</string>
+    <string name="two_houses_rent">Rent with two houses: %1$d €</string>
+    <string name="three_house_rent">Rent with three houses: %1$d €</string>
+    <string name="four_houses_rent">Rent with four houses: %1$d €</string>
+    <string name="price">Price: %1$d €</string>
 </resources>
