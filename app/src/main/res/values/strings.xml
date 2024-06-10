@@ -39,5 +39,7 @@
     <string name="back">Back</string>
     <string name="Submit_bid">Submit Bid</string>
     <string name="purchase_prompt">Your Purchase Prompt</string>
-
+   <string name="error_positive_number_required">Error: Positive number required</string>
+    <string name="error_invalid_bid">Error: Invalid bid</string>
+    <string name="bid_submitted">Bid submitted</string>
 </resources>

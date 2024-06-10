@@ -45,6 +45,25 @@ public Dialog onCreateDialog(Bundle savedInstanceState) {
     return builder.create();
 }
 
+private void submitBid() {
+    try {
+        int bid = Integer.parseInt(bidInput.getText().toString());
+        // Validates that the bid is a positive integer
+        if (bid > 0) {
+            // TODO: Implement bid storage logic. Store the bid value along with the player's identifier.
+            resultTextView.setText(getString(R.string.bid_submitted));
+            resultTextView.setVisibility(View.VISIBLE);
+            bidButton.setEnabled(false); // Disable the bid button after successful submission
+        } else {
+            resultTextView.setText(R.string.error_positive_number_required);
+            resultTextView.setVisibility(View.VISIBLE);
+        }
+    } catch (NumberFormatException e) {
+        resultTextView.setText(R.string.error_invalid_bid);
+        resultTextView.setVisibility(View.VISIBLE);
+    }
+}
+
 
 
 

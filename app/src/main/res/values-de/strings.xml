@@ -40,4 +40,8 @@
     <string name="back">Zurück</string>
     <string name="Submit_bid">Gebot abgeben</string>
     <string name="purchase_prompt">Dein Kaufhinweis</string>
+    <string name="error_positive_number_required">Fehler: Positive Zahl benötigt</string>
+    <string name="error_invalid_bid">Fehler: Ungültiges Gebot</string>
+    <string name="bid_submitted">Gebot abgegeben</string>
+
 </resources>
