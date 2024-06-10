@@ -56,6 +56,10 @@ public class WebSocketHandler {
                 break;
             case "cheating":
                 cheat(message);
+                break;
+            case "game_state":
+                gameState(message.getJsonData());
+                break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -130,7 +134,8 @@ public class WebSocketHandler {
     private void updatePlayer(String json) {
         Player p = gson.fromJson(json, Player.class);
         GameData gameData = GameData.getGameData();
-        gameData.getPlayers().add(p);
+
+        gameData.getPlayers().set(gameData.getPlayers().indexOf(p), p);
 
         if (gameData.getPlayer().equals(p))
             gameData.setPlayer(p);
@@ -168,6 +173,9 @@ public class WebSocketHandler {
         players.clear();
         players.addAll(game.getPlayers());
         game.setPlayers(players);
+
+        // Update player with player from game
+        gameData.setPlayer(game.getPlayers().stream().filter( player -> player.equals(gameData.getPlayer())).findFirst().get());
     }
 
     private void handleLogMessage(String jsonData){
@@ -201,6 +209,10 @@ public class WebSocketHandler {
 
     private void cheat(ServerMessage message){
 
+    }
+
+    private void gameState(String json) {
+        GameData.getGameData().setGameState(gson.fromJson(json, Game.GameState.class));
     }
 }
 

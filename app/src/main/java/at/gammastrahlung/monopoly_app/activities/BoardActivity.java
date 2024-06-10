@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -137,6 +138,14 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         }
                         enableUserActions();
                     });
+                } else if (propertyId == BR.webSocketConnected) {
+                    if (!GameData.getGameData().isWebSocketConnected()) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(getApplicationContext(), R.string.disconnected, Toast.LENGTH_LONG).show();
+                            GameData.getGameData().removeOnPropertyChangedCallback(this);
+                            finish();
+                        });
+                    }
                 }
             }
         });

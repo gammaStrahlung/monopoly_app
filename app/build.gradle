@@ -7,9 +7,6 @@ android {
     namespace 'at.gammastrahlung.monopoly_app'
     compileSdk 34
 
-    jacoco {
-        version = "0.8.12"
-    }
 
     defaultConfig {
         applicationId "at.gammastrahlung.monopoly_app"
@@ -54,6 +51,9 @@ android {
             // WebSocket connection URI
             resValue "string", "websocket_uri", "ws://se2-demo.aau.at:53211/monopoly"
         }
+    }
+    testCoverage {
+        jacocoVersion '0.8.12'
     }
 }
 

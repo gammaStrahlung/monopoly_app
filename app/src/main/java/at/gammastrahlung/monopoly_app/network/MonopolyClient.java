@@ -10,13 +10,17 @@ import lombok.Getter;
 public class MonopolyClient {
 
     @Getter
-    private static final MonopolyClient monopolyClient = new MonopolyClient();
+    private static MonopolyClient monopolyClient = new MonopolyClient();
 
     private final WebSocketClient webSocketClient;
 
     private MonopolyClient() {
         webSocketClient = WebSocketClient.getWebSocketClient();
         webSocketClient.connect(new WebSocketHandler());
+    }
+
+    public static void reset() {
+        monopolyClient = new MonopolyClient();
     }
 
     /**
@@ -157,6 +161,18 @@ public class MonopolyClient {
                 .messagePath("cheating")
                 .message(String.valueOf(value1 + value2))
                 .player(gameData.getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a game_state message to the server.
+     * @param gameId The ID of the game
+     */
+    public void getGameState(int gameId) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("game_state")
+                .message(String.valueOf(gameId))
+                .player(GameData.getGameData().getPlayer())
                 .build());
     }
 }
