@@ -102,7 +102,6 @@ public class FieldInfoFragment extends DialogFragment {
         ImageView buildingSlotTwo = view.findViewById(R.id.buildingSlot2);
         ImageView buildingSlotThree = view.findViewById(R.id.buildingSlot3);
         ImageView buildingSlotFour = view.findViewById(R.id.buildingSlot4);
-
         int currentRentString;
         Map<Object, Integer> rentPrices;
         rentPrices = property.getRentPrices();
@@ -146,7 +145,7 @@ public class FieldInfoFragment extends DialogFragment {
                     }
                 }
             }
-
+*/
 
 
 
