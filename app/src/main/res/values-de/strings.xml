@@ -39,5 +39,5 @@
     <string name="result">Ergebnis</string>
     <string name="back">Zurück</string>
     <string name="Submit_bid">Gebot abgeben</string>
-
+    <string name="purchase_prompt">Dein Kaufhinweis</string>
 </resources>

@@ -38,5 +38,6 @@
     <string name="result">Result</string>
     <string name="back">Back</string>
     <string name="Submit_bid">Submit Bid</string>
+    <string name="purchase_prompt">Your Purchase Prompt</string>
 
 </resources>
