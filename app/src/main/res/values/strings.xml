@@ -33,4 +33,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="disconnected">The connection to the server disconnected.</string>
+    <string name="Property_Name">Your Property Name</string>
+    <string name="enter_bid">Enter your bid</string>
+    <string name="result">Result</string>
+    <string name="back">Back</string>
+    <string name="Submit_bid">Submit Bid</string>
+
 </resources>
