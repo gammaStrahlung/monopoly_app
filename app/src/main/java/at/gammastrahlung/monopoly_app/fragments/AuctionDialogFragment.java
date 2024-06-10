@@ -50,7 +50,16 @@ private void submitBid() {
         int bid = Integer.parseInt(bidInput.getText().toString());
         // Validates that the bid is a positive integer
         if (bid > 0) {
-            // TODO: Implement bid storage logic. Store the bid value along with the player's identifier.
+            //  TODO: mIplement bid storage logic. Store the bid value along with the player's identifier.
+                /*
+                // It will store the bid aswell as from which player it is coming from
+                // This will be used to determine the winner of the auction
+                //
+                 */
+
+
+
+
             resultTextView.setText(getString(R.string.bid_submitted));
             resultTextView.setVisibility(View.VISIBLE);
             bidButton.setEnabled(false); // Disable the bid button after successful submission

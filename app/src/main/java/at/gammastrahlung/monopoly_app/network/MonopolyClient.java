@@ -1,5 +1,8 @@
 package at.gammastrahlung.monopoly_app.network;
 
+import com.google.gson.Gson;
+
+import at.gammastrahlung.monopoly_app.game.Bid;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
@@ -175,4 +178,22 @@ public class MonopolyClient {
                 .player(GameData.getGameData().getPlayer())
                 .build());
     }
+
+    /**
+     * Sends a bid message to the server.
+     * @param bid The bid object to send
+     */
+    public void sendBid(Bid bid) {
+    // Convert the Bid object into a JSON string
+    String bidJson = new Gson().toJson(bid);
+
+    // Create the message for the server
+    ClientMessage message = ClientMessage.builder()
+            .messagePath("bid")
+            .message(bidJson)
+            .build();
+
+    // Send the message to the server
+    webSocketClient.sendMessage(message);
+}
 }

@@ -57,14 +57,22 @@ public Dialog onCreateDialog(Bundle savedInstanceState) {
     });
 
     noButton.setOnClickListener(v -> {
-        DialogFragment auctionDialog = AuctionDialogFragment.;
+        DialogFragment auctionDialog = AuctionDialogFragment.newInstance();
         auctionDialog.show(getActivity().getSupportFragmentManager(), "auctionDialog");
         dismiss();
     });
 
     builder.setView(view);
     return builder.create();
+
+
 }
+
+
+
+
+
+
 
 
 
