@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
+import at.gammastrahlung.monopoly_app.fragments.PurchaseDialogFragment;
 import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
@@ -54,6 +55,7 @@ public class WebSocketHandler {
                 break;
             case "roll_dice":
                 rollDice(message);
+                // todo
                 break;
             case "move_player":
                 movePlayer(message);
@@ -72,6 +74,8 @@ public class WebSocketHandler {
                 break;
             case "checkCurrentField":
                 checkCurrentField(message.getJsonData());
+                break;
+
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
@@ -83,8 +87,18 @@ public class WebSocketHandler {
      * @param jsonData Message from the Server
      */
     private void checkCurrentField(String jsonData) {
-        //Todo: Implement
-        //Welche empfangenen Daten werden benötigt?
+        boolean shouldShowDialog = Boolean.parseBoolean(jsonData);
+        if (shouldShowDialog) {
+            Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+            if (currentPlayer.equals(GameData.getGameData().getPlayer())) {
+                if (context != null) {
+                    context.runOnUiThread(() -> {
+                        PurchaseDialogFragment purchaseDialog = PurchaseDialogFragment.newInstance("Property Name", 1); // replace with actual property name and id
+                        purchaseDialog.show(context.getSupportFragmentManager(), "purchaseDialog");
+                    });
+                }
+            }
+        }
     }
 
     /**
@@ -130,6 +144,7 @@ public class WebSocketHandler {
                 break;
             case "player":
                 updatePlayer(message.getJsonData());
+
                 break;
             case "gameboard":
                 updateGameBoard(message.getJsonData());
@@ -207,7 +222,9 @@ public class WebSocketHandler {
     }
 
     private void rollDice(ServerMessage message) {
+
         GameData gameData = GameData.getGameData();
+
         if (gameData.getGame() == null) {
             return;
         }
@@ -217,17 +234,20 @@ public class WebSocketHandler {
             for (Player player : message.getGame().getPlayers()) {
                 updatePlayer(gson.toJson(player));
             }
+
         }
+
     }
 
     private void movePlayer(ServerMessage message) {
         if (message.getGame().getPlayers() != null) {
             for (Player player : message.getGame().getPlayers()) {
                 updatePlayer(gson.toJson(player));
+
             }
         }
 
-        MonopolyClient.getMonopolyClient().sendCurrentFieldInfo();
+
     }
 
     private void cheat(ServerMessage message) {
@@ -249,6 +269,8 @@ public class WebSocketHandler {
         AuctionDialogFragment auctionDialog = AuctionDialogFragment.newInstance();
         auctionDialog.show(context.getSupportFragmentManager(), "auction");
     }
+
+
 }
 
 
