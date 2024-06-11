@@ -47,6 +47,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
+    private int currentIndex = 0;
 
     private ImageView dice1;
     private ImageView dice2;
@@ -485,6 +486,9 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public void onForward(int value) {
         moveAvatar();
+        int moveValue = value;
+        currentIndex = (currentIndex + moveValue) % 40;
+        MonopolyClient.getMonopolyClient().sendCurrentFieldInfo(currentIndex);
     }
 
     // Player does want to cheat and moves a selected value forward
