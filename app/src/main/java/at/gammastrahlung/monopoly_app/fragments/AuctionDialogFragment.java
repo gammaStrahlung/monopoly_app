@@ -58,6 +58,7 @@ public class AuctionDialogFragment extends DialogFragment {
                 Bid bidInstance = new Bid();
                 bidInstance.setPlayerId(GameData.getGameData().getPlayer().getId());
                 bidInstance.setAmount(bid);
+                bidInstance.setFieldindex(GameData.getGameData().getCurrentPlayer().getCurrentFieldIndex());
 
                 // Send the bid using the sendBid method
                 MonopolyClient.getMonopolyClient().sendBid(bidInstance);
