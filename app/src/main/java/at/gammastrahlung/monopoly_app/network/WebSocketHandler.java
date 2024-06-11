@@ -3,27 +3,34 @@ package at.gammastrahlung.monopoly_app.network;
 import android.util.Log;
 
 import androidx.databinding.ObservableArrayList;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
 import at.gammastrahlung.monopoly_app.game.Game;
-
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
+import lombok.Setter;
 
 /**
  * Handles messages coming from the server
  */
 public class WebSocketHandler {
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Field.class, new FieldDeserializer())
-            .create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
+    @Setter
+    private FragmentActivity context;
+
 
     /**
      * Main message handler that depending on message.messagePath calls the correct handler.
@@ -60,9 +67,24 @@ public class WebSocketHandler {
             case "game_state":
                 gameState(message.getJsonData());
                 break;
+            case "auction":
+                showAuctionDialog(message.getJsonData());
+                break;
+            case "checkCurrentField":
+                checkCurrentField(message.getJsonData());
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
+    }
+
+    /**
+     * Handles "checkCurrentField" ServerMessages
+     *
+     * @param jsonData Message from the Server
+     */
+    private void checkCurrentField(String jsonData) {
+        //Todo: Implement
+        //Welche empfangenen Daten werden benötigt?
     }
 
     /**
@@ -100,8 +122,7 @@ public class WebSocketHandler {
      */
     private void update(ServerMessage message) {
         // Can't update game if game does not exist
-        if (GameData.getGameData().getGame() == null)
-            return;
+        if (GameData.getGameData().getGame() == null) return;
 
         switch (message.getUpdateType()) {
             case "field":
@@ -118,6 +139,7 @@ public class WebSocketHandler {
                 break;
             case "game":
                 updateGame(message.getJsonData());
+
         }
     }
 
@@ -137,14 +159,13 @@ public class WebSocketHandler {
 
         gameData.getPlayers().set(gameData.getPlayers().indexOf(p), p);
 
-        if (gameData.getPlayer().equals(p))
-            gameData.setPlayer(p);
+        if (gameData.getPlayer().equals(p)) gameData.setPlayer(p);
 
-        if (gameData.getGame().getGameOwner().equals(p))
-            gameData.getGame().setGameOwner(p);
+        if (gameData.getGame().getGameOwner().equals(p)) gameData.getGame().setGameOwner(p);
 
         // Make sure GameData.players and Game.players are the same
         gameData.getGame().setPlayers(gameData.getPlayers());
+
     }
 
     private void updateGameBoard(String json) {
@@ -175,10 +196,10 @@ public class WebSocketHandler {
         game.setPlayers(players);
 
         // Update player with player from game
-        gameData.setPlayer(game.getPlayers().stream().filter( player -> player.equals(gameData.getPlayer())).findFirst().get());
+        gameData.setPlayer(game.getPlayers().stream().filter(player -> player.equals(gameData.getPlayer())).findFirst().get());
     }
 
-    private void handleLogMessage(String jsonData){
+    private void handleLogMessage(String jsonData) {
         // Deserialize jsonData to get the log message
         String logMessage = new Gson().fromJson(jsonData, JsonObject.class).get("log").getAsString();
 
@@ -199,20 +220,35 @@ public class WebSocketHandler {
         }
     }
 
-    private void movePlayer(ServerMessage message){
+    private void movePlayer(ServerMessage message) {
         if (message.getGame().getPlayers() != null) {
             for (Player player : message.getGame().getPlayers()) {
                 updatePlayer(gson.toJson(player));
             }
         }
+
+        MonopolyClient.getMonopolyClient().sendCurrentFieldInfo();
     }
 
-    private void cheat(ServerMessage message){
+    private void cheat(ServerMessage message) {
 
     }
 
     private void gameState(String json) {
         GameData.getGameData().setGameState(gson.fromJson(json, Game.GameState.class));
     }
+
+    /**
+     * Shows the auction dialog
+     */
+    private void showAuctionDialog(String jsonData) {
+        ServerMessage serverMessage = gson.fromJson(jsonData, ServerMessage.class);
+        Type playerListType = new TypeToken<ArrayList<Player>>() {
+        }.getType();
+        ArrayList<Player> currentPlayerList = gson.fromJson(serverMessage.getJsonData(), playerListType);
+        AuctionDialogFragment auctionDialog = AuctionDialogFragment.newInstance();
+        auctionDialog.show(context.getSupportFragmentManager(), "auction");
+    }
 }
+
 
