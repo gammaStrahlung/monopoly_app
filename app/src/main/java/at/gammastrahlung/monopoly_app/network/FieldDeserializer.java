@@ -14,7 +14,8 @@ import at.gammastrahlung.monopoly_app.game.gameboard.Railroad;
 import at.gammastrahlung.monopoly_app.game.gameboard.TaxField;
 import at.gammastrahlung.monopoly_app.game.gameboard.Utility;
 
-public class FieldDeserializer implements JsonDeserializer<Field> {
+public class
+FieldDeserializer implements JsonDeserializer<Field> {
     private final Gson gson = new Gson();
 
     @Override
