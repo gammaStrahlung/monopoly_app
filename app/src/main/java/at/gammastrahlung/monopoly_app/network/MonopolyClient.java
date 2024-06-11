@@ -2,14 +2,21 @@ package at.gammastrahlung.monopoly_app.network;
 
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import at.gammastrahlung.monopoly_app.game.Bid;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
+
 
 /**
  * Singleton used to send messages to server
  */
+
+
 public class MonopolyClient {
 
     @Getter
@@ -28,32 +35,27 @@ public class MonopolyClient {
 
     /**
      * Sends a new game message to the server.
+     *
      * @param playerName Name of the player that will be shown to other players.
      */
     public void newGame(String playerName) {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("create")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("create").player(gameData.getPlayer()).build());
     }
 
     /**
      * Sends a join game message to the server.
-     * @param gameId The ID of the game you want to join.
+     *
+     * @param gameId     The ID of the game you want to join.
      * @param playerName Name of the player that will be shown to other players.
      */
     public void joinGame(int gameId, String playerName) {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("join")
-                .player(gameData.getPlayer())
-                .message(String.valueOf(gameId))
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("join").player(gameData.getPlayer()).message(String.valueOf(gameId)).build());
 
     }
 
@@ -64,11 +66,7 @@ public class MonopolyClient {
     public void getPlayers() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("players")
-                .player(gameData.getPlayer())
-                .message(null)
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("players").player(gameData.getPlayer()).message(null).build());
     }
 
     /**
@@ -78,10 +76,7 @@ public class MonopolyClient {
     public void startGame() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("start")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("start").player(gameData.getPlayer()).build());
     }
 
     /**
@@ -91,10 +86,7 @@ public class MonopolyClient {
     public void endGame() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("end")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("end").player(gameData.getPlayer()).build());
     }
 
     /**
@@ -104,10 +96,7 @@ public class MonopolyClient {
     public void rollDice() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("roll_dice")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("roll_dice").player(gameData.getPlayer()).build());
     }
 
     /**
@@ -116,41 +105,30 @@ public class MonopolyClient {
     public void initiateRound() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("initiate_round")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("initiate_round").player(gameData.getPlayer()).build());
     }
 
-    public void endCurrentPlayerTurn(){
+    public void endCurrentPlayerTurn() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("end_current_player_turn")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("end_current_player_turn").player(gameData.getPlayer()).build());
     }
 
     public void moveAvatar() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("move_avatar")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("move_avatar").player(gameData.getPlayer()).build());
     }
 
     public void moveAvatarAfterCheating() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("move_avatar_cheating")
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("move_avatar_cheating").player(gameData.getPlayer()).build());
     }
 
     /**
      * Sends the new selected values
+     *
      * @param value1
      * @param value2
      */
@@ -160,40 +138,65 @@ public class MonopolyClient {
         gameData.getDice().setValue1(value1);
         gameData.getDice().setValue2(value2);
 
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("cheating")
-                .message(String.valueOf(value1 + value2))
-                .player(gameData.getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("cheating").message(String.valueOf(value1 + value2)).player(gameData.getPlayer()).build());
     }
 
     /**
      * Sends a game_state message to the server.
+     *
      * @param gameId The ID of the game
      */
     public void getGameState(int gameId) {
-        webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("game_state")
-                .message(String.valueOf(gameId))
-                .player(GameData.getGameData().getPlayer())
-                .build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("game_state").message(String.valueOf(gameId)).player(GameData.getGameData().getPlayer()).build());
     }
 
     /**
      * Sends a bid message to the server.
+     *
      * @param bid The bid object to send
      */
     public void sendBid(Bid bid) {
-    // Convert the Bid object into a JSON string
-    String bidJson = new Gson().toJson(bid);
 
-    // Create the message for the server
-    ClientMessage message = ClientMessage.builder()
-            .messagePath("bid")
-            .message(bidJson)
-            .build();
 
-    // Send the message to the server
-    webSocketClient.sendMessage(message);
+        // Convert the Bid object into a JSON string
+        String bidJson = new Gson().toJson(bid);
+
+        // Create the message for the server
+        ClientMessage message = ClientMessage.builder().messagePath("bid").message(bidJson).build();
+
+        // Send the message to the server
+        webSocketClient.sendMessage(message);
+    }
+
+    /**
+     * Sends an auction message to the server.
+     */
+
+    public void sendAuctionMessage() {
+        GameData gameData = GameData.getGameData();
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("auction").player(gameData.getPlayer()).build());
+    }
+
+
+    public void sendCurrentFieldInfo() {
+        GameData gameData = GameData.getGameData();
+        Player currentPlayer = gameData.getCurrentPlayer();
+        int currentFieldIndex = currentPlayer.getCurrentFieldIndex();
+        Map<String, Object> data = new HashMap<>();
+        data.put("currentPlayer", currentPlayer);
+        data.put("currentFieldIndex", currentFieldIndex);
+
+        //
+        Gson gson = new Gson();
+        String jsonData = gson.toJson(data);
+
+        //
+        ClientMessage message = new ClientMessage("checkCurrentField", jsonData, currentPlayer);
+
+        // send message to server
+        WebSocketClient.getWebSocketClient().sendMessage(message);
+    }
+
 }
-}
+
+
