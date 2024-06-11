@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class PurchaseDialogFragment extends DialogFragment {
 
@@ -57,8 +58,12 @@ public Dialog onCreateDialog(Bundle savedInstanceState) {
     });
 
     noButton.setOnClickListener(v -> {
-        DialogFragment auctionDialog = AuctionDialogFragment.newInstance();
-        auctionDialog.show(getActivity().getSupportFragmentManager(), "auctionDialog");
+        //DialogFragment auctionDialog = AuctionDialogFragment.newInstance();
+        //auctionDialog.show(getActivity().getSupportFragmentManager(), "auctionDialog");
+
+        MonopolyClient monopolyClient = MonopolyClient.getMonopolyClient();
+        monopolyClient.sendAuctionMessage();
+
         dismiss();
     });
 
