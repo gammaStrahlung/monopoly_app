@@ -2,9 +2,6 @@ package at.gammastrahlung.monopoly_app.network;
 
 import com.google.gson.Gson;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import at.gammastrahlung.monopoly_app.game.Bid;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
@@ -177,25 +174,21 @@ public class MonopolyClient {
         webSocketClient.sendMessage(ClientMessage.builder().messagePath("auction").player(gameData.getPlayer()).build());
     }
 
+    /**
+     * Sends a message to the server to check the current field
+     */
 
-    public void sendCurrentFieldInfo() {
+    public void sendCurrentFieldInfo(int currentFieldIndex) {
         GameData gameData = GameData.getGameData();
         Player currentPlayer = gameData.getCurrentPlayer();
-        int currentFieldIndex = currentPlayer.getCurrentFieldIndex();
-        Map<String, Object> data = new HashMap<>();
-        data.put("currentPlayer", currentPlayer);
-        data.put("currentFieldIndex", currentFieldIndex);
 
-        //
-        Gson gson = new Gson();
-        String jsonData = gson.toJson(data);
 
-        //
-        ClientMessage message = new ClientMessage("checkCurrentField", jsonData, currentPlayer);
+        ClientMessage message = new ClientMessage("checkCurrentField", String.valueOf(currentFieldIndex), currentPlayer);
 
         // send message to server
         WebSocketClient.getWebSocketClient().sendMessage(message);
     }
+
 
 }
 
