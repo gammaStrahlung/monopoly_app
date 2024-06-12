@@ -28,6 +28,7 @@ import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
+import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
@@ -523,6 +524,13 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
             purchaseDialogFragment.show(getSupportFragmentManager(), "PurchaseDialogFragment");
         }
+
+    public void activateAuctionDialog(View view) {
+        AuctionDialogFragment auctionDialogFragment = AuctionDialogFragment.newInstance();
+        auctionDialogFragment.show(getSupportFragmentManager(), "auctionDialog");
+    }
+
+
 
 
     }

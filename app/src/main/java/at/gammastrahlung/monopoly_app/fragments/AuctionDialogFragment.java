@@ -38,8 +38,13 @@ public class AuctionDialogFragment extends DialogFragment {
         resultTextView = view.findViewById(R.id.result);
         bidButton = view.findViewById(R.id.bid_button);
 
-        // Sets up the action for the bid button click
-        bidButton.setOnClickListener(v -> submitBid());
+        // Set the OnClickListener for the bid button
+        bidButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                submitBid();  // Call submitBid when the bid button is clicked
+            }
+        });
 
         // Sets up the action for the back button to dismiss the dialog
         Button backButton = view.findViewById(R.id.back_button);
@@ -49,26 +54,28 @@ public class AuctionDialogFragment extends DialogFragment {
         return builder.create();
     }
 
+
     private void submitBid() {
         try {
             int bid = Integer.parseInt(bidInput.getText().toString());
             // Validates that the bid is a positive integer
             if (bid > 0) {
-                // Create an instance of the Bid class
-                Bid bidInstance = new Bid();
-                bidInstance.setPlayerId(GameData.getGameData().getPlayer().getId());
-                bidInstance.setAmount(bid);
-                bidInstance.setFieldindex(GameData.getGameData().getCurrentPlayer().getCurrentFieldIndex());
+    // Create an instance of the Bid class
+    Bid bidInstance = new Bid();
+    bidInstance.setPlayerId(GameData.getGameData().getPlayer().getId());
+    bidInstance.setAmount(bid);
+    bidInstance.setFieldindex(GameData.getGameData().getCurrentPlayer().getCurrentFieldIndex());
 
-                // Send the bid using the sendBid method
-                MonopolyClient.getMonopolyClient().sendBid(bidInstance);
-                /**
-                 * Deine Aufgabe ist es hier Todo
-                 */
-                resultTextView.setText( R.string.bid_submitted);
-                resultTextView.setVisibility(View.VISIBLE);
-                bidButton.setEnabled(false); // Disable the bid button after successful submission
-            } else {
+    // Send the bid using the sendBid method
+    MonopolyClient.getMonopolyClient().sendBid(bidInstance);
+
+    // Display the bid amount in resultTextView
+    String bidSubmittedText = getString(R.string.bid_submitted) + " " + bidInstance.toStringAmount();
+    resultTextView.setText(bidSubmittedText);
+    resultTextView.setVisibility(View.VISIBLE);
+    bidButton.setEnabled(false); // Disable the bid button after successful submission
+}
+else {
                 resultTextView.setText(R.string.error_positive_number_required);
                 resultTextView.setVisibility(View.VISIBLE);
             }

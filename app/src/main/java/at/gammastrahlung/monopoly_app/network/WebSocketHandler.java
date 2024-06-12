@@ -14,6 +14,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
+import at.gammastrahlung.monopoly_app.game.Bid;
 import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
@@ -76,6 +77,9 @@ public class WebSocketHandler extends FragmentActivity{
                 startAuction();
                 break;
             case "endAuction":
+                break;
+            case "bid":
+                sendBid(message.getJsonData());
 
                 break;
 
@@ -83,6 +87,19 @@ public class WebSocketHandler extends FragmentActivity{
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
     }
+
+
+
+private void sendBid(String jsonData) {
+    Gson gson = new Gson();
+    Bid bid = gson.fromJson(jsonData, Bid.class);
+
+
+     bid.setPlayerId(bid.getPlayerId());
+     bid.setAmount(bid.getAmount());
+     bid.setFieldindex(bid.getFieldindex());
+
+}
 
     /**
      * Handles "checkCurrentField" ServerMessages
