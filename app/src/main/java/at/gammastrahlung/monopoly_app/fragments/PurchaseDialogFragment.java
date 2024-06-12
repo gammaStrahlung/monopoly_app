@@ -16,72 +16,61 @@ import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class PurchaseDialogFragment extends DialogFragment {
 
+    private PurchaseDialogListener listener;
+
+    public static PurchaseDialogFragment newInstance() {
+        PurchaseDialogFragment fragment = new PurchaseDialogFragment();
+        Bundle args = new Bundle();
+
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public void setPurchaseDialogListener(PurchaseDialogListener listener) {
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_property_purchase_dialog, null);
+
+        TextView promptText = view.findViewById(R.id.purchase_prompt_text);
+        Button yesButton = view.findViewById(R.id.yes_button);
+        Button noButton = view.findViewById(R.id.no_button);
+
+
+        String propertyName = getArguments().getString("property_name");
+        promptText.setText("Do you want to buy " + propertyName + "?");
+
+        yesButton.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onYesButtonClicked();
+            }
+            dismiss();
+        });
+
+        noButton.setOnClickListener(v -> {
+
+//            AuctionDialogFragment auctionDialogFragment = new AuctionDialogFragment();
+//
+//            auctionDialogFragment.show(getParentFragmentManager(), "auctionDialog");
+
+            MonopolyClient.getMonopolyClient().sendstartAuctionMessage();
+            dismiss();
+        });
+
+        builder.setView(view);
+        return builder.create();
+    }
+
     public interface PurchaseDialogListener {
         void onNoButtonClicked();
 
         void onYesButtonClicked();
     }
-
-    private PurchaseDialogListener listener;
-
-    public static PurchaseDialogFragment newInstance(String propertyName, int propertyId) {
-        PurchaseDialogFragment fragment = new PurchaseDialogFragment();
-        Bundle args = new Bundle();
-        args.putString("property_name", propertyName);
-        args.putInt("property_id", propertyId);
-        fragment.setArguments(args);
-        return fragment;
-    }
-public void setPurchaseDialogListener(PurchaseDialogListener listener) {
-    this.listener = listener;
-}
-@NonNull
-@Override
-public Dialog onCreateDialog(Bundle savedInstanceState) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    LayoutInflater inflater = getActivity().getLayoutInflater();
-    View view = inflater.inflate(R.layout.fragment_property_purchase_dialog, null);
-    TextView promptText = view.findViewById(R.id.purchase_prompt_text);
-    Button yesButton = view.findViewById(R.id.yes_button);
-    Button noButton = view.findViewById(R.id.no_button);
-
-    String propertyName = getArguments().getString("property_name");
-    int propertyId = getArguments().getInt("property_id");
-
-    promptText.setText("Do you want to buy " + propertyName + "?");
-
-    yesButton.setOnClickListener(v -> {
-        if (listener != null) {
-            listener.onYesButtonClicked();
-        }
-        dismiss();
-    });
-
-    noButton.setOnClickListener(v -> {
-        //DialogFragment auctionDialog = AuctionDialogFragment.newInstance();
-        //auctionDialog.show(getActivity().getSupportFragmentManager(), "auctionDialog");
-
-        MonopolyClient monopolyClient = MonopolyClient.getMonopolyClient();
-        monopolyClient.sendAuctionMessage();
-
-        dismiss();
-    });
-
-    builder.setView(view);
-    return builder.create();
-
-
-}
-
-
-
-
-
-
-
-
-
-
 
 
 }

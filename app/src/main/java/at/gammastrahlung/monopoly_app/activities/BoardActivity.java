@@ -31,6 +31,7 @@ import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
+import at.gammastrahlung.monopoly_app.fragments.PurchaseDialogFragment;
 import at.gammastrahlung.monopoly_app.fragments.SelectValueFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
@@ -38,6 +39,7 @@ import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
+
 
 public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
 
@@ -100,10 +102,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false, false, true);
 
         playersRecyclerView.setAdapter(playerAdapter);
-
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
+
 
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
@@ -149,6 +151,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+
     }
 
     private void updatePlayerList() {
@@ -487,7 +490,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     public void onForward(int value) {
         moveAvatar();
         int moveValue = value;
-        currentIndex = (currentIndex + moveValue) % 40;
+        currentIndex = (currentIndex + moveValue) % 39;
         MonopolyClient.getMonopolyClient().sendCurrentFieldInfo(currentIndex);
     }
 
@@ -496,4 +499,32 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     public void onSelectedValue(int value){
         moveAvatarAfterCheating();
     }
-}
+
+
+
+
+        public void activatePurchaseDialog(View view) {
+
+            PurchaseDialogFragment purchaseDialogFragment = PurchaseDialogFragment.newInstance();
+
+
+            purchaseDialogFragment.setPurchaseDialogListener(new PurchaseDialogFragment.PurchaseDialogListener() {
+                @Override
+                public void onNoButtonClicked() {
+
+                    }
+
+                @Override
+                public void onYesButtonClicked() {
+
+                                    }
+            });
+
+
+            purchaseDialogFragment.show(getSupportFragmentManager(), "PurchaseDialogFragment");
+        }
+
+
+    }
+
+

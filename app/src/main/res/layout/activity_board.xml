@@ -200,4 +200,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/boardLayout" />
 
+
+    <Button
+        android:id="@+id/activatePurchaseDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="true"
+        android:onClick="activatePurchaseDialog"
+        android:text="activating_purchase_dialog"
+        tools:layout_editor_absoluteX="188dp"
+        tools:layout_editor_absoluteY="635dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

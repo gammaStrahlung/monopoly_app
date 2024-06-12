@@ -14,23 +14,21 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
-import at.gammastrahlung.monopoly_app.fragments.PurchaseDialogFragment;
 import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
-import lombok.Setter;
 
 /**
  * Handles messages coming from the server
  */
-public class WebSocketHandler {
+public class WebSocketHandler extends FragmentActivity{
 
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
-    @Setter
-    private FragmentActivity context;
+    private final FragmentActivity context = this;
+
 
 
     /**
@@ -74,6 +72,11 @@ public class WebSocketHandler {
                 break;
             case "checkCurrentField":
                 checkCurrentField(message.getJsonData());
+            case "startAuction":
+                startAuction();
+                break;
+            case "endAuction":
+
                 break;
 
             default:
@@ -91,15 +94,11 @@ public class WebSocketHandler {
         if (shouldShowDialog) {
             Player currentPlayer = GameData.getGameData().getCurrentPlayer();
             if (currentPlayer.equals(GameData.getGameData().getPlayer())) {
-                if (context != null) {
-                    context.runOnUiThread(() -> {
-                        PurchaseDialogFragment purchaseDialog = PurchaseDialogFragment.newInstance("Property Name", 1); // replace with actual property name and id
-                        purchaseDialog.show(context.getSupportFragmentManager(), "purchaseDialog");
-                    });
-                }
+            //Todo: Show dialog PurchaseDialogFragment
             }
         }
     }
+
 
     /**
      * Handles "create" and "join" ServerMessages
@@ -269,6 +268,13 @@ public class WebSocketHandler {
         AuctionDialogFragment auctionDialog = AuctionDialogFragment.newInstance();
         auctionDialog.show(context.getSupportFragmentManager(), "auction");
     }
+
+    private void startAuction() {
+        // Todo: Here should the AuctionDialogFragment be shown
+    }
+
+
+
 
 
 }

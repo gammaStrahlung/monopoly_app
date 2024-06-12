@@ -62,7 +62,10 @@ public class AuctionDialogFragment extends DialogFragment {
 
                 // Send the bid using the sendBid method
                 MonopolyClient.getMonopolyClient().sendBid(bidInstance);
-                resultTextView.setText(getString(R.string.bid_submitted));
+                /**
+                 * Deine Aufgabe ist es hier Todo
+                 */
+                resultTextView.setText( R.string.bid_submitted);
                 resultTextView.setVisibility(View.VISIBLE);
                 bidButton.setEnabled(false); // Disable the bid button after successful submission
             } else {
@@ -74,6 +77,8 @@ public class AuctionDialogFragment extends DialogFragment {
             resultTextView.setVisibility(View.VISIBLE);
         }
     }
+
+
 
 
 }

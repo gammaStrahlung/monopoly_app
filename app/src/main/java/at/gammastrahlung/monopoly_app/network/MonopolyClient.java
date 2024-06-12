@@ -22,8 +22,10 @@ public class MonopolyClient {
     private final WebSocketClient webSocketClient;
 
     private MonopolyClient() {
+
         webSocketClient = WebSocketClient.getWebSocketClient();
         webSocketClient.connect(new WebSocketHandler());
+
     }
 
     public static void reset() {
@@ -169,9 +171,18 @@ public class MonopolyClient {
      * Sends an auction message to the server.
      */
 
-    public void sendAuctionMessage() {
+    public void sendstartAuctionMessage() {
         GameData gameData = GameData.getGameData();
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("auction").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("startAuction").player(gameData.getPlayer()).build());
+    }
+
+    /**
+     * Sends a stop auction message to the server.
+     */
+
+    public void sendstopAuctionMessage() {
+        GameData gameData = GameData.getGameData();
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("endAuction").player(gameData.getPlayer()).build());
     }
 
     /**
@@ -183,10 +194,11 @@ public class MonopolyClient {
         Player currentPlayer = gameData.getCurrentPlayer();
 
 
-        ClientMessage message = new ClientMessage("checkCurrentField", String.valueOf(currentFieldIndex), currentPlayer);
-
-        // send message to server
-        WebSocketClient.getWebSocketClient().sendMessage(message);
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("checkCurrentField")
+                .message(String.valueOf(currentFieldIndex))
+                .player(currentPlayer)
+                .build());
     }
 
 
