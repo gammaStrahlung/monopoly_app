@@ -91,7 +91,7 @@ public class FieldFragment extends Fragment {
             int iconId = getResources().getIdentifier("playericon_" + playerId, "drawable", getActivity().getPackageName());
 
             iv.setImageDrawable(AppCompatResources.getDrawable(getActivity(), iconId));
-            iv.setLayoutParams(new LinearLayout.LayoutParams(22, 22));
+            iv.setLayoutParams(new LinearLayout.LayoutParams(30, 30));
 
             playerIcons.addView(iv);
         }
