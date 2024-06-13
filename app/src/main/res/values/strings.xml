@@ -42,4 +42,5 @@
    <string name="error_positive_number_required">Error: Positive number required</string>
     <string name="error_invalid_bid">Error: Invalid bid</string>
     <string name="bid_submitted">Bid submitted</string>
+    <string name="Show_result">Show Result</string>
 </resources>

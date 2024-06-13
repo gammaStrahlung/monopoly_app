@@ -40,9 +40,10 @@ import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
+import at.gammastrahlung.monopoly_app.network.WebSocketHandler;
 
 
-public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
+public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener, WebSocketHandler.DialogTrigger {
 
     private ConstraintLayout fieldRowTop; // Includes top corners
     private ConstraintLayout fieldRowBottom; // Includes bottom corners
@@ -62,7 +63,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
-
+    private WebSocketHandler  webSocketHandlerforDialogTrigger;
     private RecyclerView playersRecyclerView;
     private PlayerAdapter playerAdapter;
 
@@ -74,6 +75,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Calls the superclass's onCreate method with the saved instance state
+       ///
+        webSocketHandlerforDialogTrigger = new WebSocketHandler();
+        webSocketHandlerforDialogTrigger.setDialogTrigger(this);
+        /////
         setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -530,7 +535,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         auctionDialogFragment.show(getSupportFragmentManager(), "auctionDialog");
     }
 
-
+    @Override
+    public void showDialog() {
+        AuctionDialogFragment dialog = new AuctionDialogFragment();
+        dialog.show(getSupportFragmentManager(), "auctionDialog");
+    }
 
 
     }

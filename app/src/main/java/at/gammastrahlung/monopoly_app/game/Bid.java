@@ -15,24 +15,24 @@ public class Bid {
     @Getter
     @Setter
 
-    private static UUID playerId;
+    private  UUID playerId;
 
     @Getter
     @Setter
 
-    private static int amount;
+    private int amount;
 
     @Getter
     @Setter
 
-    private static int fieldIndex;
+    private  int fieldIndex;
 
     @Getter
     @Setter
-    private static int wait = 0;
+    private  int wait = 0;
 
     @NonNull
-    public static String toStringAmount() {
+    public  String toStringAmount() {
         return String.valueOf(amount);
     }
 }

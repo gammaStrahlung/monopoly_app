@@ -3,17 +3,11 @@ package at.gammastrahlung.monopoly_app.network;
 import android.util.Log;
 
 import androidx.databinding.ObservableArrayList;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-
-import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
 import at.gammastrahlung.monopoly_app.game.Bid;
 import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
@@ -21,7 +15,6 @@ import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.helpers.BidHelper;
-import at.gammastrahlung.monopoly_app.helpers.BidUpdateListener;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,13 +24,20 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class WebSocketHandler extends FragmentActivity{
-    @Setter
-    private BidUpdateListener bidUpdateListener;
-
+public class WebSocketHandler  {
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
-    private final FragmentActivity context = this;
+////
+    private static DialogTrigger dialogTrigger;
 
+    private static ResultBidTrigger resultBidTrigger;
+
+    public void setDialogTrigger(DialogTrigger dialogTrigger) {
+        this.dialogTrigger = dialogTrigger;
+    }
+    public void setResultBidTrigger(ResultBidTrigger resultBidTrigger) {
+        this.resultBidTrigger = resultBidTrigger;
+    }
+/////
     /**
      * Main message handler that depending on message.messagePath calls the correct handler.
      *
@@ -74,18 +74,14 @@ public class WebSocketHandler extends FragmentActivity{
             case "game_state":
                 gameState(message.getJsonData());
                 break;
-            case "auction":
-                showAuctionDialog(message.getJsonData());
-                break;
             case "checkCurrentField":
                 checkCurrentField(message.getJsonData());
-            case "startAuction":
-                startAuction();
-                break;
-            case "endAuction":
                 break;
             case "bid":
                 sendBid(message.getJsonData());
+                break;
+                case "bidResult"    :
+                sendBidResult(message.getJsonData());
 
                 break;
 
@@ -94,16 +90,27 @@ public class WebSocketHandler extends FragmentActivity{
         }
     }
 
+    private void sendBidResult(String jsonData) {
+        Gson gson = new Gson();
+
+        Bid result = gson.fromJson(jsonData, Bid.class);
+        String displayMessage = " Amount: " + result.getAmount() +
+                ", Field Index: " + result.getFieldIndex();
+        resultBidTrigger.showResultBid(displayMessage);
+    }
+
 
 
     private void sendBid(String jsonData) {
         Gson gson = new Gson();
 
-        BidHelper bidHelper = gson.fromJson(jsonData, BidHelper.class);
+//     BidHelper bidHelper = gson.fromJson(jsonData, BidHelper.class);
+//
+//     Bid.setPlayerId(bidHelper.getPlayerId());
+//       Bid.setAmount(bidHelper.getAmount());
+//        Bid.setFieldIndex(bidHelper.getFieldIndex());
 
-        Bid.setPlayerId(bidHelper.getPlayerId());
-        Bid.setAmount(bidHelper.getAmount());
-        Bid.setFieldIndex(bidHelper.getFieldIndex());
+
 
     }
 
@@ -114,11 +121,8 @@ public class WebSocketHandler extends FragmentActivity{
      */
     private void checkCurrentField(String jsonData) {
         boolean shouldShowDialog = Boolean.parseBoolean(jsonData);
-        if (shouldShowDialog) {
-            Player currentPlayer = GameData.getGameData().getCurrentPlayer();
-            if (currentPlayer.equals(GameData.getGameData().getPlayer())) {
-            //Todo: Show dialog PurchaseDialogFragment
-            }
+        if (shouldShowDialog && dialogTrigger != null) {
+            dialogTrigger.showDialog();
         }
     }
 
@@ -280,26 +284,14 @@ public class WebSocketHandler extends FragmentActivity{
         GameData.getGameData().setGameState(gson.fromJson(json, Game.GameState.class));
     }
 
-    /**
-     * Shows the auction dialog
-     */
-    private void showAuctionDialog(String jsonData) {
-        ServerMessage serverMessage = gson.fromJson(jsonData, ServerMessage.class);
-        Type playerListType = new TypeToken<ArrayList<Player>>() {
-        }.getType();
-        ArrayList<Player> currentPlayerList = gson.fromJson(serverMessage.getJsonData(), playerListType);
-        AuctionDialogFragment auctionDialog = AuctionDialogFragment.newInstance();
-        auctionDialog.show(context.getSupportFragmentManager(), "auction");
+
+    public interface DialogTrigger {
+        void showDialog();
     }
 
-    private void startAuction() {
-        // Todo: Here should the AuctionDialogFragment be shown
+    public interface ResultBidTrigger {
+        void showResultBid(String resultBid);
     }
-
-
-
-
-
 }
 
 

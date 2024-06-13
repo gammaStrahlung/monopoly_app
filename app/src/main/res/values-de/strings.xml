@@ -43,5 +43,6 @@
     <string name="error_positive_number_required">Fehler: Positive Zahl benötigt</string>
     <string name="error_invalid_bid">Fehler: Ungültiges Gebot</string>
     <string name="bid_submitted">Gebot abgegeben</string>
+    <string name="Show_result">Ergebnis anzeigen</string>
 
 </resources>

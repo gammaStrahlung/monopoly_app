@@ -202,6 +202,10 @@ public class MonopolyClient {
     }
 
 
+    public void sendBidResult() {
+        GameData gameData = GameData.getGameData();
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("bidResult").player(gameData.getPlayer()).build());
+    }
 }
 
 

@@ -17,6 +17,9 @@ import lombok.Setter;
 public class GameData extends BaseObservable {
     @Getter
     private static GameData gameData = new GameData();
+    @Getter
+    @Setter
+    private String updateBidResult;
 
     private GameData() {
     }
@@ -148,4 +151,6 @@ public class GameData extends BaseObservable {
         this.webSocketConnected = webSocketConnected;
         notifyPropertyChanged(BR.webSocketConnected);
     }
+
+
 }
