@@ -2,22 +2,37 @@ package at.gammastrahlung.monopoly_app.game;
 
 import androidx.annotation.NonNull;
 
-import at.gammastrahlung.monopoly_app.game.gameboard.Field;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.UUID;
 
-@Data
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @NoArgsConstructor
 public class Bid {
-    private UUID playerId; // The ID of the player who made the bid
-    private int amount; // The amount of the bid
-    private int fieldindex; // The field the bid is made on
+    @Getter
+    @Setter
+
+    private static UUID playerId;
+
+    @Getter
+    @Setter
+
+    private static int amount;
+
+    @Getter
+    @Setter
+
+    private static int fieldIndex;
+
+    @Getter
+    @Setter
+    private static int wait = 0;
 
     @NonNull
-
-    public String toStringAmount() {
+    public static String toStringAmount() {
         return String.valueOf(amount);
     }
 }

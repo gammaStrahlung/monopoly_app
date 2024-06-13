@@ -20,17 +20,23 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
+import at.gammastrahlung.monopoly_app.helpers.BidHelper;
+import at.gammastrahlung.monopoly_app.helpers.BidUpdateListener;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Handles messages coming from the server
  */
+@Getter
+@Setter
 public class WebSocketHandler extends FragmentActivity{
+    @Setter
+    private BidUpdateListener bidUpdateListener;
 
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
     private final FragmentActivity context = this;
-
-
 
     /**
      * Main message handler that depending on message.messagePath calls the correct handler.
@@ -90,16 +96,16 @@ public class WebSocketHandler extends FragmentActivity{
 
 
 
-private void sendBid(String jsonData) {
-    Gson gson = new Gson();
-    Bid bid = gson.fromJson(jsonData, Bid.class);
+    private void sendBid(String jsonData) {
+        Gson gson = new Gson();
 
+        BidHelper bidHelper = gson.fromJson(jsonData, BidHelper.class);
 
-     bid.setPlayerId(bid.getPlayerId());
-     bid.setAmount(bid.getAmount());
-     bid.setFieldindex(bid.getFieldindex());
+        Bid.setPlayerId(bidHelper.getPlayerId());
+        Bid.setAmount(bidHelper.getAmount());
+        Bid.setFieldIndex(bidHelper.getFieldIndex());
 
-}
+    }
 
     /**
      * Handles "checkCurrentField" ServerMessages

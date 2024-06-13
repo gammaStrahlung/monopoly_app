@@ -2,6 +2,7 @@ package at.gammastrahlung.monopoly_app.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,12 +34,9 @@ public class AuctionDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_auction, null);
 
-        // Initializes UI components from the layout
         bidInput = view.findViewById(R.id.bid_input);
         resultTextView = view.findViewById(R.id.result);
         bidButton = view.findViewById(R.id.bid_button);
-
-        // Set the OnClickListener for the bid button
         bidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,9 +44,6 @@ public class AuctionDialogFragment extends DialogFragment {
             }
         });
 
-        // Sets up the action for the back button to dismiss the dialog
-        Button backButton = view.findViewById(R.id.back_button);
-        backButton.setOnClickListener(v -> dismiss());
 
         builder.setView(view);
         return builder.create();
@@ -60,22 +55,33 @@ public class AuctionDialogFragment extends DialogFragment {
             int bid = Integer.parseInt(bidInput.getText().toString());
             // Validates that the bid is a positive integer
             if (bid > 0) {
-    // Create an instance of the Bid class
-    Bid bidInstance = new Bid();
-    bidInstance.setPlayerId(GameData.getGameData().getPlayer().getId());
-    bidInstance.setAmount(bid);
-    bidInstance.setFieldindex(GameData.getGameData().getCurrentPlayer().getCurrentFieldIndex());
+                // Create an instance of the Bid class
+                Bid bidInstance = new Bid();
+                Bid.setPlayerId(GameData.getGameData().getPlayer().getId());
+                Bid.setAmount(bid);
+                Bid.setFieldIndex(GameData.getGameData().getCurrentPlayer().getCurrentFieldIndex());
 
-    // Send the bid using the sendBid method
-    MonopolyClient.getMonopolyClient().sendBid(bidInstance);
+                // Send the bid using the sendBid method
+                MonopolyClient.getMonopolyClient().sendBid(bidInstance);
+                // Create a Handler to delay the execution of the following code
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Display the bid amount in resultTextView
+                        String bidSubmittedText = getString(R.string.bid_submitted) + " " + Bid.toStringAmount();
+                        resultTextView.setText(bidSubmittedText);
+                        resultTextView.setVisibility(View.VISIBLE);
+                        bidButton.setEnabled(false); // Disable the bid button after successful submission
+                    }
+                }, 2000); // Delay of 2 seconds
 
-    // Display the bid amount in resultTextView
-    String bidSubmittedText = getString(R.string.bid_submitted) + " " + bidInstance.toStringAmount();
-    resultTextView.setText(bidSubmittedText);
-    resultTextView.setVisibility(View.VISIBLE);
-    bidButton.setEnabled(false); // Disable the bid button after successful submission
-}
-else {
+
+//                // Display the bid amount in resultTextView
+//                String bidSubmittedText = getString(R.string.bid_submitted) + " " + Bid.toStringAmount();
+//                resultTextView.setText(bidSubmittedText);
+//                resultTextView.setVisibility(View.VISIBLE);
+//                bidButton.setEnabled(false); // Disable the bid button after successful submission
+            } else {
                 resultTextView.setText(R.string.error_positive_number_required);
                 resultTextView.setVisibility(View.VISIBLE);
             }
@@ -84,8 +90,6 @@ else {
             resultTextView.setVisibility(View.VISIBLE);
         }
     }
-
-
 
 
 }

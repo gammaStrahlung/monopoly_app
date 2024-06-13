@@ -160,11 +160,11 @@ public class MonopolyClient {
         // Convert the Bid object into a JSON string
         String bidJson = new Gson().toJson(bid);
 
-        // Create the message for the server
-        ClientMessage message = ClientMessage.builder().messagePath("bid").message(bidJson).build();
+        GameData gameData = GameData.getGameData();
+
 
         // Send the message to the server
-        webSocketClient.sendMessage(message);
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("bid").message(bidJson).player(gameData.getPlayer()).build());
     }
 
     /**
