@@ -21,6 +21,7 @@ import com.google.android.material.textview.MaterialTextView;
 import java.util.Map;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.FieldType;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
@@ -85,6 +86,11 @@ public class FieldInfoFragment extends DialogFragment {
         property = (Property) field;
 
         View view = inflater.inflate(R.layout.fragment_propertyinfo, container, false);
+
+        ImageView propertyPicture = view.findViewById(R.id.propertyPicture);
+        int propertyPictureValue = getResources().getIdentifier("property_" + field.getFieldId(), "drawable", "at.gammastrahlung.monopoly_app");
+        propertyPicture.setImageResource(propertyPictureValue);
+
         TextView propertyName = view.findViewById(R.id.property_name);
         TextView currentRent = view.findViewById(R.id.current_rent);
         TextView fullSetRent = view.findViewById(R.id.full_set_rent);
@@ -128,24 +134,24 @@ public class FieldInfoFragment extends DialogFragment {
         price.setText(getString(R.id.price, property.getPrice()));
 
         if(property.getHouseCount()>0){
-            buildingSlotOne.setImageResource(R.drawable);
+            buildingSlotOne.setImageResource(R.drawable.house);
             if(property.getHouseCount()>4){
-                buildingSlotOne.setImageResource(R.drawable);
-                buildingSlotTwo.setImageResource(R.drawable);
-                buildingSlotThree.setImageResource(R.drawable);
-                buildingSlotFour.setImageResource(R.drawable);
+                buildingSlotOne.setImageResource(0);
+                buildingSlotTwo.setImageResource(0);
+                buildingSlotThree.setImageResource(0);
+                buildingSlotFour.setImageResource(R.drawable.hotel);
             } else if(property.getHouseCount()>1){
-                    buildingSlotTwo.setImageResource(R.drawable);
+                    buildingSlotTwo.setImageResource(R.drawable.house);
                     if(property.getHouseCount()>2){
-                        buildingSlotThree.setImageResource(R.drawable);
+                        buildingSlotThree.setImageResource(R.drawable.house);
                             if(property.getHouseCount()>3){
-                                buildingSlotFour.setImageResource(R.drawable);
+                                buildingSlotFour.setImageResource(R.drawable.house);
 
                         }
                     }
                 }
             }
-*/
+
 
 
 
