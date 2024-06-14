@@ -37,4 +37,10 @@ class FieldTest {
         f.setType(type);
         assertEquals(type, f.getType());
     }
+
+    @Test
+    void boardName() {
+        f.setBoardName("boardName");
+        assertEquals("boardName", f.getBoardName());
+    }
 }
