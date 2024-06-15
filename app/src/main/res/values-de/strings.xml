@@ -34,6 +34,7 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="disconnected">Die Vervindung zum Server wurde unterbrochen.</string>
-    <string name="uncover_cheat">Aufdecken</string>
     <string name="who_is_the_cheater">Wer ist der Schummler?</string>
+    <string name="report_cheat">Betrug melden</string>
+
 </resources>

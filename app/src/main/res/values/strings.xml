@@ -33,6 +33,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="disconnected">The connection to the server disconnected.</string>
-    <string name="uncover_cheat">Uncover Cheat</string>
     <string name="who_is_the_cheater">Who is the cheater?</string>
+    <string name="report_cheat">Report Cheat</string>
 </resources>
