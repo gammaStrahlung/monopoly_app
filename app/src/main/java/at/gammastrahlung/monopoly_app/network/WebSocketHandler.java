@@ -28,11 +28,15 @@ public class WebSocketHandler  {
     private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
 ////
     private static DialogTrigger dialogTrigger;
+    private static DialogTrigger2 dialogTrigger2;
 
     private static ResultBidTrigger resultBidTrigger;
 
     public void setDialogTrigger(DialogTrigger dialogTrigger) {
         this.dialogTrigger = dialogTrigger;
+    }
+    public void setDialogTrigger2(DialogTrigger2 dialogTrigger2) {
+        this.dialogTrigger2 = dialogTrigger2;
     }
     public void setResultBidTrigger(ResultBidTrigger resultBidTrigger) {
         this.resultBidTrigger = resultBidTrigger;
@@ -82,12 +86,20 @@ public class WebSocketHandler  {
                 break;
                 case "bidResult"    :
                 sendBidResult(message.getJsonData());
+                break;
+                case "startAuction":
+                startAuction();
 
                 break;
 
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
+    }
+
+    private void startAuction() {
+        dialogTrigger2.showDialogforAuction();
+
     }
 
     private void sendBidResult(String jsonData) {
@@ -291,6 +303,10 @@ public class WebSocketHandler  {
 
     public interface ResultBidTrigger {
         void showResultBid(String resultBid);
+    }
+
+    public interface DialogTrigger2 {
+        void showDialogforAuction();
     }
 }
 

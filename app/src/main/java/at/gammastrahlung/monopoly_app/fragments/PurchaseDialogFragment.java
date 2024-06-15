@@ -19,11 +19,7 @@ public class PurchaseDialogFragment extends DialogFragment {
     private PurchaseDialogListener listener;
 
     public static PurchaseDialogFragment newInstance() {
-        PurchaseDialogFragment fragment = new PurchaseDialogFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
+      return new PurchaseDialogFragment();
     }
 
     public void setPurchaseDialogListener(PurchaseDialogListener listener) {
@@ -42,8 +38,7 @@ public class PurchaseDialogFragment extends DialogFragment {
         Button noButton = view.findViewById(R.id.no_button);
 
 
-        String propertyName = getArguments().getString("property_name");
-        promptText.setText("Do you want to buy " + propertyName + "?");
+        promptText.setText("Do you want to buy the Property ?");
 
         yesButton.setOnClickListener(v -> {
             if (listener != null) {
@@ -52,15 +47,13 @@ public class PurchaseDialogFragment extends DialogFragment {
             dismiss();
         });
 
-        noButton.setOnClickListener(v -> {
+ noButton.setOnClickListener(v -> {
 
-//            AuctionDialogFragment auctionDialogFragment = new AuctionDialogFragment();
-//
-//            auctionDialogFragment.show(getParentFragmentManager(), "auctionDialog");
+  MonopolyClient.getMonopolyClient().sendstartAuctionMessage();
 
-            MonopolyClient.getMonopolyClient().sendstartAuctionMessage();
-            dismiss();
-        });
+
+    dismiss();
+});
 
         builder.setView(view);
         return builder.create();

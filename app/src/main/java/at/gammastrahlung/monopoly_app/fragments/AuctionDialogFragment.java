@@ -2,7 +2,6 @@ package at.gammastrahlung.monopoly_app.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.activities.BoardActivity;
 import at.gammastrahlung.monopoly_app.game.Bid;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
@@ -21,10 +21,11 @@ import at.gammastrahlung.monopoly_app.network.WebSocketHandler;
 
 public class AuctionDialogFragment extends DialogFragment implements WebSocketHandler.ResultBidTrigger {
     private EditText bidInput;
-    private  TextView resultTextView;
+    private TextView resultTextView;
     private WebSocketHandler webSocketHandlerforResultBidTrigger;
     private Button bidButton;
-    private Button bidResultButton;
+    private Button noButton;
+
 
     public static AuctionDialogFragment newInstance() {
         return new AuctionDialogFragment();
@@ -42,7 +43,7 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
         bidInput = view.findViewById(R.id.bid_input);
         resultTextView = view.findViewById(R.id.result);
         bidButton = view.findViewById(R.id.bid_button);
-
+        noButton = view.findViewById(R.id.back_button);
 
 
         bidButton.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +52,16 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
                 submitBid();  // Call submitBid when the bid button is clicked
             }
         });
+
+
+        noButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+
 
 
 
@@ -66,12 +77,13 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
         try {
             int bid = Integer.parseInt(bidInput.getText().toString());
             // Validates that the bid is a positive integer
-            if (bid > 0) {
+            if (bid >= 0) {
                 // Create an instance of the Bid class
                 Bid bidInstance = new Bid();
                 bidInstance.setPlayerId(GameData.getGameData().getCurrentPlayer().getId());
                 bidInstance.setAmount(bid);
-                bidInstance.setFieldIndex(GameData.getGameData().getCurrentPlayer().getCurrentFieldIndex());
+
+                bidInstance.setFieldIndex(BoardActivity.getFollowingIndex());
 
                 // Send the bid using the sendBid method
                 MonopolyClient.getMonopolyClient().sendBid(bidInstance);

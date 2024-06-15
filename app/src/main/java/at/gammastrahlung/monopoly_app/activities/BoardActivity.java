@@ -43,7 +43,7 @@ import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.WebSocketHandler;
 
 
-public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener, WebSocketHandler.DialogTrigger {
+public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener, WebSocketHandler.DialogTrigger, WebSocketHandler.DialogTrigger2 {
 
     private ConstraintLayout fieldRowTop; // Includes top corners
     private ConstraintLayout fieldRowBottom; // Includes bottom corners
@@ -51,7 +51,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
-    private int currentIndex = 0;
+    private static int followingIndex = 0;
 
     private ImageView dice1;
     private ImageView dice2;
@@ -78,6 +78,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
        ///
         webSocketHandlerforDialogTrigger = new WebSocketHandler();
         webSocketHandlerforDialogTrigger.setDialogTrigger(this);
+        webSocketHandlerforDialogTrigger.setDialogTrigger2(this);
         /////
         setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
 
@@ -495,15 +496,23 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public void onForward(int value) {
         moveAvatar();
-        int moveValue = value;
-        currentIndex = (currentIndex + moveValue) % 39;
-        MonopolyClient.getMonopolyClient().sendCurrentFieldInfo(currentIndex);
+
+        Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+       int currentFieldIndex = currentPlayer.getCurrentFieldIndex();
+        int moveValue = value+currentFieldIndex;
+        followingIndex = (moveValue) % 40;
+        MonopolyClient.getMonopolyClient().sendCurrentFieldInfo(followingIndex);
     }
 
     // Player does want to cheat and moves a selected value forward
     @Override
     public void onSelectedValue(int value){
         moveAvatarAfterCheating();
+        Player currentPlayer = GameData.getGameData().getCurrentPlayer();
+        int currentFieldIndex = currentPlayer.getCurrentFieldIndex();
+        int moveValue = value+currentFieldIndex;
+        followingIndex = (moveValue) % 40;
+        MonopolyClient.getMonopolyClient().sendCurrentFieldInfo(followingIndex);
     }
 
 
@@ -535,13 +544,24 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         auctionDialogFragment.show(getSupportFragmentManager(), "auctionDialog");
     }
 
+  @Override
+public void showDialog() {
+    PurchaseDialogFragment dialog = PurchaseDialogFragment.newInstance();
+    dialog.show(getSupportFragmentManager(), "purchaseDialog");
+}
+
+
     @Override
-    public void showDialog() {
-        AuctionDialogFragment dialog = new AuctionDialogFragment();
+    public void showDialogforAuction() {
+        AuctionDialogFragment dialog = AuctionDialogFragment.newInstance();
         dialog.show(getSupportFragmentManager(), "auctionDialog");
     }
 
+    public static int getFollowingIndex() {
+    return followingIndex;
+}
 
-    }
+
+}
 
 
