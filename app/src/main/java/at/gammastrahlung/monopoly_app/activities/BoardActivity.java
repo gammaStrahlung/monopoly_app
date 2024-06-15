@@ -314,10 +314,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
-            addFieldToBoard(fieldRow, p.getName(), players, true, p.getColor().getColorString(), isEdge, fieldId);
+            addFieldToBoard(fieldRow, p.getBoardName(), players, true, p.getColor().getColorString(), isEdge, fieldId);
 
         } else {
-            addFieldToBoard(fieldRow, field.getName(), players, false, null, isEdge, fieldId);
+            addFieldToBoard(fieldRow, field.getBoardName(), players, false, null, isEdge, fieldId);
         }
     }
 
