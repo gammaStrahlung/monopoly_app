@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.activities.BoardActivity;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class PurchaseDialogFragment extends DialogFragment {
@@ -44,6 +45,8 @@ public class PurchaseDialogFragment extends DialogFragment {
             if (listener != null) {
                 listener.onYesButtonClicked();
             }
+
+            MonopolyClient.getMonopolyClient().buyPropertythroughPurchaseDialog(BoardActivity.getFollowingIndex());
             dismiss();
         });
 

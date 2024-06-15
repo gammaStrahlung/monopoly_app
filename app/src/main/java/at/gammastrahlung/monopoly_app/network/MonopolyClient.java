@@ -206,6 +206,12 @@ public class MonopolyClient {
         GameData gameData = GameData.getGameData();
         webSocketClient.sendMessage(ClientMessage.builder().messagePath("bidResult").player(gameData.getPlayer()).build());
     }
+
+    public void buyPropertythroughPurchaseDialog(int currentFieldIndex) {
+        GameData gameData = GameData.getGameData();
+        webSocketClient.sendMessage(ClientMessage.builder().messagePath("buyPropertythroughDialog").player(gameData.getPlayer()).message(String.valueOf(currentFieldIndex)).build());
+
+    }
 }
 
 

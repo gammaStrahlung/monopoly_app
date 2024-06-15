@@ -14,7 +14,6 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
-import at.gammastrahlung.monopoly_app.helpers.BidHelper;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,24 +23,26 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class WebSocketHandler  {
-    private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
-////
+public class WebSocketHandler {
+    ////
     private static DialogTrigger dialogTrigger;
     private static DialogTrigger2 dialogTrigger2;
-
     private static ResultBidTrigger resultBidTrigger;
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Field.class, new FieldDeserializer()).create();
 
     public void setDialogTrigger(DialogTrigger dialogTrigger) {
-        this.dialogTrigger = dialogTrigger;
+        WebSocketHandler.dialogTrigger = dialogTrigger;
     }
+
     public void setDialogTrigger2(DialogTrigger2 dialogTrigger2) {
-        this.dialogTrigger2 = dialogTrigger2;
+        WebSocketHandler.dialogTrigger2 = dialogTrigger2;
     }
+
     public void setResultBidTrigger(ResultBidTrigger resultBidTrigger) {
-        this.resultBidTrigger = resultBidTrigger;
+        WebSocketHandler.resultBidTrigger = resultBidTrigger;
     }
 /////
+
     /**
      * Main message handler that depending on message.messagePath calls the correct handler.
      *
@@ -81,21 +82,19 @@ public class WebSocketHandler  {
             case "checkCurrentField":
                 checkCurrentField(message.getJsonData());
                 break;
-            case "bid":
-                sendBid(message.getJsonData());
-                break;
-                case "bidResult"    :
+
+            case "bidResult":
                 sendBidResult(message.getJsonData());
                 break;
-                case "startAuction":
+            case "startAuction":
                 startAuction();
-
                 break;
 
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
         }
     }
+
 
     private void startAuction() {
         dialogTrigger2.showDialogforAuction();
@@ -106,25 +105,10 @@ public class WebSocketHandler  {
         Gson gson = new Gson();
 
         Bid result = gson.fromJson(jsonData, Bid.class);
-        String displayMessage = " Amount: " + result.getAmount() +
-                ", Field Index: " + result.getFieldIndex();
+        String displayMessage = " Amount: " + result.getAmount() + ", Field Index: " + result.getFieldIndex();
         resultBidTrigger.showResultBid(displayMessage);
     }
 
-
-
-    private void sendBid(String jsonData) {
-        Gson gson = new Gson();
-
-//     BidHelper bidHelper = gson.fromJson(jsonData, BidHelper.class);
-//
-//     Bid.setPlayerId(bidHelper.getPlayerId());
-//       Bid.setAmount(bidHelper.getAmount());
-//        Bid.setFieldIndex(bidHelper.getFieldIndex());
-
-
-
-    }
 
     /**
      * Handles "checkCurrentField" ServerMessages
