@@ -33,4 +33,11 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="disconnected">The connection to the server disconnected.</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="winningPlayer">Player %s has won!</string>
+    <string name="winningBalance">Balance: %1$d $</string>
+    <string name="winningProperties">Properties: %1$d</string>
+    <string name="winningRailroads">Railroads: %1$d</string>
+    <string name="winningUtilities">Utilities: %1$d</string>
+    <string name="winningEmoji" translatable="false">🏆</string>
 </resources>

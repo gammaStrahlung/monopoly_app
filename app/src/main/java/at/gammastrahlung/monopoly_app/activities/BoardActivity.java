@@ -160,6 +160,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void gameEnd() {
         if (GameData.getGameData().getGame().getWinningPlayer() != null) {
             // Somebody has won -> Open WinActivity
+
+            Intent intent = new Intent(this, WinActivity.class);
+            // Clear previous activities
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
         } else {
             // Game was only ended and nobody has won -> Return to MainActivity
 

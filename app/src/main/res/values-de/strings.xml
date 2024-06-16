@@ -34,4 +34,10 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="disconnected">Die Vervindung zum Server wurde unterbrochen.</string>
+    <string name="congratulations">Gratulation!</string>
+    <string name="winningPlayer">%s hat gewonnen!</string>
+    <string name="winningBalance">Kontostand: %1$d $</string>
+    <string name="winningProperties">Immobilien: %1$d</string>
+    <string name="winningRailroads">Bahngesellschaften: %1$d</string>
+    <string name="winningUtilities">Versorgungswerke: %1$d</string>
 </resources>
