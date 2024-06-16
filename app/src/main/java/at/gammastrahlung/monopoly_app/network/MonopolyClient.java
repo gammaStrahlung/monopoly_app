@@ -41,7 +41,10 @@ public class MonopolyClient {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("create").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("create")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -54,7 +57,11 @@ public class MonopolyClient {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("join").player(gameData.getPlayer()).message(String.valueOf(gameId)).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("join")
+                .player(gameData.getPlayer())
+                .message(String.valueOf(gameId))
+                .build());
 
     }
 
@@ -65,7 +72,11 @@ public class MonopolyClient {
     public void getPlayers() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("players").player(gameData.getPlayer()).message(null).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("players")
+                .player(gameData.getPlayer())
+                .message(null)
+                .build());
     }
 
     /**
@@ -85,7 +96,10 @@ public class MonopolyClient {
     public void endGame() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("end").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("end")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -95,7 +109,10 @@ public class MonopolyClient {
     public void rollDice() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("roll_dice").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("roll_dice")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -104,25 +121,37 @@ public class MonopolyClient {
     public void initiateRound() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("initiate_round").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("initiate_round")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     public void endCurrentPlayerTurn() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("end_current_player_turn").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("end_current_player_turn")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     public void moveAvatar() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("move_avatar").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("move_avatar")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     public void moveAvatarAfterCheating() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("move_avatar_cheating").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("move_avatar_cheating")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -137,7 +166,11 @@ public class MonopolyClient {
         gameData.getDice().setValue1(value1);
         gameData.getDice().setValue2(value2);
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("cheating").message(String.valueOf(value1 + value2)).player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("cheating")
+                .message(String.valueOf(value1 + value2))
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -146,7 +179,11 @@ public class MonopolyClient {
      * @param gameId The ID of the game
      */
     public void getGameState(int gameId) {
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("game_state").message(String.valueOf(gameId)).player(GameData.getGameData().getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("game_state")
+                .message(String.valueOf(gameId))
+                .player(GameData.getGameData().getPlayer())
+                .build());
     }
 
     /**
@@ -164,7 +201,11 @@ public class MonopolyClient {
 
 
         // Send the message to the server
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("bid").message(bidJson).player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("bid")
+                .message(bidJson)
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -173,7 +214,10 @@ public class MonopolyClient {
 
     public void sendstartAuctionMessage() {
         GameData gameData = GameData.getGameData();
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("startAuction").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("startAuction")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -182,7 +226,10 @@ public class MonopolyClient {
 
     public void sendstopAuctionMessage() {
         GameData gameData = GameData.getGameData();
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("endAuction").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("endAuction")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -209,7 +256,11 @@ public class MonopolyClient {
 
     public void buyPropertythroughPurchaseDialog(int currentFieldIndex) {
         GameData gameData = GameData.getGameData();
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("buyPropertythroughDialog").player(gameData.getPlayer()).message(String.valueOf(currentFieldIndex)).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("buyPropertythroughDialog")
+                .player(gameData.getPlayer())
+                .message(String.valueOf(currentFieldIndex))
+                .build());
 
     }
 }

@@ -186,26 +186,6 @@
         app:layout_constraintTop_toBottomOf="@+id/boardLayout" />
 
 
-   <Button
-    android:id="@+id/activatePurchaseDialog"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:enabled="true"
-    android:onClick="activatePurchaseDialog"
-    android:text="activating_purchase_dialog"
-    app:layout_constraintTop_toBottomOf="@id/endTurn"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
 
-<Button
-    android:id="@+id/activateAuction"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:enabled="true"
-    android:onClick="activateAuctionDialog"
-    android:text="activating_auction_dialog"
-    app:layout_constraintTop_toBottomOf="@id/activatePurchaseDialog"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
