@@ -17,6 +17,7 @@ import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class UncoverPlayerListFragment extends DialogFragment {
 
@@ -66,7 +67,7 @@ public class UncoverPlayerListFragment extends DialogFragment {
                 .setPositiveButton("Yes", (dialog, which) -> {
 
                     if (player.isCheating()) {
-
+                        MonopolyClient.getMonopolyClient().reportCheat(player);
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("This player was a cheater, you collect 200!")
                                 .setPositiveButton("Ok", (dialog2, which2) -> dialog2.dismiss())
@@ -74,7 +75,7 @@ public class UncoverPlayerListFragment extends DialogFragment {
                                 .show();
 
                     } else {
-
+                        MonopolyClient.getMonopolyClient().reportCheat(player);
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("This player was not a cheater, you loose 200!")
                                 .setPositiveButton("Ok", (dialog3, which3) -> dialog3.dismiss())
