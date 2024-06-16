@@ -15,11 +15,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Map;
+import java.util.Observable;
+
+import javax.security.auth.callback.Callback;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.GameData;
@@ -47,14 +51,12 @@ public class FieldInfoFragment extends DialogFragment {
             inflatedView = inflater.inflate(R.layout.fragment_propertyinfo, null);
         }else{
             inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, null);
+            MaterialTextView title = inflatedView.findViewById(R.id.fieldName);
+            title.setText(field.getName());
         }
 
         // Add close button
         builder.setView(inflatedView).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
-
-        // Add actual field display code here
-        MaterialTextView title = inflatedView.findViewById(R.id.fieldName);
-        title.setText(field.getName());
 
         return builder.create();
 
@@ -115,10 +117,10 @@ public class FieldInfoFragment extends DialogFragment {
         rentPrices = property.getRentPrices();
 
         if (property.getHouseCount() < 4) {
-            currentRentString = rentPrices.get(property.getHouseCount());
+            currentRentString = rentPrices.get(String.valueOf(property.getHouseCount()));
             houseCount.setText(getString(R.string.house_count, property.getHouseCount()));
         }else {
-            currentRentString = rentPrices.get("HOTEL");
+            currentRentString = rentPrices.get("hotel");
             houseCount.setText(getString(R.string.house_count, 0));
             hotelCount.setText(getString(R.string.hotel_count, 1));
         }
@@ -126,7 +128,7 @@ public class FieldInfoFragment extends DialogFragment {
         propertyName.setText(property.getName());
         owner.setText(getString(R.string.owner, property.getOwner().getName()));
         currentRent.setText(getString(R.string.current_rent,currentRentString));
-        fullSetRent.setText(getString(R.string.rent_full_set, rentPrices.get("FULL_SET")));
+        fullSetRent.setText(getString(R.string.rent_full_set, rentPrices.get("full_set")));
         hotelRent.setText(getString(R.string.hotel_rent, rentPrices.get("HOTEL")));
         baseRent.setText(getString(R.id.base_rent, rentPrices.get(0)));
         oneHouseRent.setText(getString(R.id.one_house_rent, rentPrices.get(1)));
@@ -163,11 +165,44 @@ public class FieldInfoFragment extends DialogFragment {
             }else{
                 buildMessage.setText(R.string.failed_build);
             }
+            //GameData.getGameData().addOnPropertyChangedCallback(callback);
         });
 
 
         return view;
 
     }
+
+   /* @Override
+    public void onDestroyView(){
+        GameData.getGameData().removeOnPropertyChangedCallback(callback);
+        super.onDestroyView();
+    }
+
+    Observable.OnPropertyChangedCallback callback = new androidx.databinding.Observable.OnPropertyChangedCallback() {
+        @Override
+        public void onPropertyChanged(androidx.databinding.Observable sender, int propertyId) {
+
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId){
+                if (propertyId == BR.game) {
+                    Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
+
+                    if(field instanceof Property){
+                        if (newField instanceof Property) {
+                            Property property = (Property) newField;
+                            Property oldProperty = (Property) field;
+
+                            getActivity().runOnUiThread(() -> {
+                                MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
+                                TextView buildMessage = view.findViewById(R.id.build_message);
+                            });
+                        }
+                    }
+                }
+
+            }
+        }
+    }*/
 }
 
