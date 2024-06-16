@@ -1,6 +1,7 @@
 package at.gammastrahlung.monopoly_app.network;
 
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
 
@@ -173,6 +174,17 @@ public class MonopolyClient {
                 .messagePath("game_state")
                 .message(String.valueOf(gameId))
                 .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a game_state message to the server.
+     * @param player The player who is accused of cheating
+     */
+    public void reportCheat(Player player) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_cheat")
+                .player(player)
                 .build());
     }
 }
