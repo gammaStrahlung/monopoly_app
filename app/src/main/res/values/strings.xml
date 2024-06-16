@@ -18,7 +18,7 @@
     <string name="playerList_gameOwner">(Owner)</string>
     <string name="playerList_IsYou">(You)</string>
     <string name="field_title">Field Title</string>
-    <string name="money">Money: %1$d $</string>
+    <string name="money">Current Balance: %1$d $</string>
     <string name="otherPlayers">Other Players</string>
     <string name="currencyDisplay">%1$d $</string>
     <string name="close">Close</string>
@@ -40,4 +40,20 @@
     <string name="successful_build">Building successfully built!</string>
     <string name="failed_build">Building on this property is not possible!</string>
     <string name="two_houses_rent">Rent with two houses: %1$d €</string>
+    <string name="do_you_want_to_forward_the_diced_value_or_select_a_different_one">Do you want to forward the diced value or select a different one?</string>
+    <string name="cheat">Cheat</string>
+    <string name="forward">Forward</string>
+    <string name="the_selected_value_needs_to_be_greater_than_1">The selected value needs to be greater than 1.</string>
+    <string name="rejoin_dialog_text">The last game you were playing was not ended, do you want to re-join?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="disconnected">The connection to the server disconnected.</string>
+    <string name="who_is_the_cheater">Who is the cheater?</string>
+    <string name="report_cheat">Report Cheat</string>
+    <string name="are_you_sure_player">"Are you sure player "</string>
+    <string name="is_a_cheater">" is a cheater?"</string>
+    <string name="this_player_was_a_cheater_you_collect_200">This player was a cheater, you collect 200$!</string>
+    <string name="this_player_was_not_a_cheater_you_loose_200">This player was not a cheater, you loose 200$!</string>
+    <string name="ok">Ok</string>
+    <string name="you_are_not_allowed_to_select_yourself">You are not allowed to select yourself!</string>
 </resources>

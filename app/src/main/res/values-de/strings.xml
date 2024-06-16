@@ -19,7 +19,7 @@
     <string name="playerList_gameOwner">(Spielersteller)</string>
     <string name="playerList_IsYou">(Du)</string>
     <string name="field_title">Feld Titel</string>
-    <string name="money">Geld: %1$d €</string>
+    <string name="money">Aktueller Kontostand: %1$d €</string>
     <string name="otherPlayers">Mitspieler</string>
     <string name="currencyDisplay">%1$d €</string>
     <string name="close">Schließen</string>
@@ -41,4 +41,21 @@
     <string name="build">Bauen</string>
     <string name="successful_build">Gebäude wurde gebaut!</string>
     <string name="failed_build">Bauen auf dieser Immobilie nicht möglich!</string>
+    <string name="do_you_want_to_forward_the_diced_value_or_select_a_different_one">Willst du den gewürfelten Wert fahren, oder einen anderen?</string>
+    <string name="cheat">Schummeln</string>
+    <string name="forward">Weiterfahren</string>
+    <string name="the_selected_value_needs_to_be_greater_than_1">Der eingegebene Wert muss größer als 1 sein.</string>
+    <string name="rejoin_dialog_text">Das letzte Spiel wurde nicht beendet, möchtest du versuchen wieder beizutreten?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="disconnected">Die Vervindung zum Server wurde unterbrochen.</string>
+    <string name="who_is_the_cheater">Wer ist der Schummler?</string>
+    <string name="report_cheat">Betrug melden</string>
+    <string name="are_you_sure_player">"Bist du sicher, dass Spieler "</string>
+    <string name="is_a_cheater">" ein Schummler ist?"</string>
+    <string name="this_player_was_a_cheater_you_collect_200">Dieser Spieler war ein Schummler, du erhältst 200€!</string>
+    <string name="this_player_was_not_a_cheater_you_loose_200">Dieser Spieler war kein Schummler, du verlierst 200€!</string>
+    <string name="ok">Ok</string>
+    <string name="you_are_not_allowed_to_select_yourself">Du kannst dich nicht selbst wählen.</string>
+
 </resources>

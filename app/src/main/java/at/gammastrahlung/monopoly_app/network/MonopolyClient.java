@@ -35,7 +35,8 @@ public class MonopolyClient {
 
     /**
      * Sends a join game message to the server.
-     * @param gameId The ID of the game you want to join.
+     *
+     * @param gameId     The ID of the game you want to join.
      * @param playerName Name of the player that will be shown to other players.
      */
     public void joinGame(int gameId, String playerName) {
@@ -133,12 +134,82 @@ public class MonopolyClient {
                 .build());
     }
 
+    public void moveAvatarAfterCheating() {
+        GameData gameData = GameData.getGameData();
 
-    public void buildHouse(int fieldIndex) {
         webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("build_property")
-                .player(GameData.getGameData().getPlayer())
-                .message(String.valueOf(fieldIndex))
+                .messagePath("move_avatar_cheating")
+                .player(gameData.getPlayer())
                 .build());
     }
+
+    /**
+     * Sends the new selected values
+     *
+     * @param value1
+     * @param value2
+     */
+    public void cheating(int value1, int value2) {
+        GameData gameData = GameData.getGameData();
+
+        gameData.getDice().setValue1(value1);
+        gameData.getDice().setValue2(value2);
+
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("cheating")
+                .message(String.valueOf(value1 + value2))
+                .player(gameData.getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a game_state message to the server.
+     *
+     * @param gameId The ID of the game
+     */
+    public void getGameState(int gameId) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("game_state")
+                .message(String.valueOf(gameId))
+
+    /**
+     * Sends a report_cheat message to the server.
+     *
+     * @param index The index of the accused Player
+     */
+    public void reportCheat(int index) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_cheat")
+                .player(GameData.getGameData().getPlayer())
+                .message(String.valueOf(index))
+                .build());
+    }
+
+    /**
+     * Sends a report_wrong_cheat message to the server
+     */
+    public void reportPenalty() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_penalty")
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a award_report message to the server
+     */
+    public void reportAward() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_award")
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+        public void buildHouse(int fieldIndex) {
+            webSocketClient.sendMessage(ClientMessage.builder()
+                    .messagePath("build_property")
+                    .player(GameData.getGameData().getPlayer())
+                    .message(String.valueOf(fieldIndex))
+                    .build());
+        }
 }
