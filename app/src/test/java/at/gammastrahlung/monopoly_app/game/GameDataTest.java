@@ -8,6 +8,8 @@ import org.mockito.Mockito;
 
 import java.util.UUID;
 
+import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
+
 class GameDataTest {
     @Test
     void getGameData() {
@@ -117,6 +119,24 @@ class GameDataTest {
         gameData.setWebSocketConnected(true);
         assertTrue(gameData.isWebSocketConnected());
     }
+
+    @Test
+    public void testLastMessageTypeGetterAndSetter() {
+        GameData gameData = GameData.getGameData();
+
+        // Test setting and getting lastMessageType
+        ServerMessage.MessageType testLastMessageType = ServerMessage.MessageType.SUCCESS;
+        gameData.setLastMessageType(testLastMessageType);
+        assertEquals(testLastMessageType, gameData.getLastMessageType(), "lastMessageType should match the one set.");
+    }
+
+    @Test
+    public void testNullLastMessageType() {
+        GameData gameData = GameData.getGameData();
+        gameData.setLastMessageType(null);
+        assertNull(gameData.getLastMessageType(), "lastMessageType should be null when set to null.");
+    }
+
 
     @AfterEach
     void cleanup() {

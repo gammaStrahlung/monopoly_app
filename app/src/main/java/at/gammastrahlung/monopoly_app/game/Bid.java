@@ -27,9 +27,6 @@ public class Bid {
 
     private  int fieldIndex;
 
-    @Getter
-    @Setter
-    private  int wait = 0;
 
     @NonNull
     public  String toStringAmount() {
