@@ -1,10 +1,13 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -33,6 +36,7 @@ import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
 import at.gammastrahlung.monopoly_app.fragments.SelectValueFragment;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -48,7 +52,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
-
+    private TextView roundText;
     private ImageView dice1;
     private ImageView dice2;
 
@@ -83,6 +87,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         boardLayout = findViewById(R.id.boardLayout);
 
         moneyText = findViewById(R.id.moneyText);
+        roundText = findViewById(R.id.roundText);
 
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
@@ -111,7 +116,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when game data changes
                 if (propertyId == BR.game) {
                     runOnUiThread(() -> {
-                        if (fieldFragments.isEmpty()) {
+                        if (GameData.getGameData().getGame().getState() == Game.GameState.ENDED) {
+                            GameData.getGameData().removeOnPropertyChangedCallback(this);
+                            gameEnd();
+                        } else if (fieldFragments.isEmpty()) {
                             buildGameBoard();
                         } else {
                             updateGameBoard();
@@ -149,6 +157,33 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+    }
+
+    private void gameEnd() {
+        if (GameData.getGameData().getGame().getWinningPlayer() != null) {
+            // Somebody has won -> Open WinActivity
+
+            Intent intent = new Intent(this, WinActivity.class);
+            // Clear previous activities
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+        } else {
+            // Game was only ended and nobody has won -> Return to MainActivity
+
+            GameData.reset();
+
+            // Remove gameId (used for re-joining)
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+            preferenceEditor.remove("gameId");
+            preferenceEditor.apply();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            // Clear previous activities
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     private void updatePlayerList() {
@@ -197,6 +232,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         } else {
             rollDiceButton.setEnabled(false);
         }
+
+        // Update current round
+        Game game = GameData.getGameData().getGame();
+        roundText.setText(getString(R.string.currentRound, game.getCurrentRound(), game.getRoundAmount()));
     }
 
     private void updateGameBoard() {

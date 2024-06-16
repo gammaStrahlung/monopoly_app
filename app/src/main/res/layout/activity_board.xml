@@ -115,6 +115,19 @@
         app:layout_constraintEnd_toStartOf="@id/otherPlayers"/>
 
     <TextView
+        android:id="@+id/roundText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/currentRound"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/moneyText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playerOnTurn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/moneyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -124,7 +137,7 @@
         app:layout_constraintBottom_toTopOf="@+id/logScrollView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/playerOnTurn"
+        app:layout_constraintTop_toBottomOf="@+id/roundText"
         app:layout_constraintVertical_bias="0.0" />
 
     <ScrollView
