@@ -10,7 +10,7 @@ import lombok.Getter;
 public class MonopolyClient {
 
     @Getter
-    private static final MonopolyClient monopolyClient = new MonopolyClient();
+    private static MonopolyClient monopolyClient = new MonopolyClient();
 
     private final WebSocketClient webSocketClient;
 
@@ -19,8 +19,13 @@ public class MonopolyClient {
         webSocketClient.connect(new WebSocketHandler());
     }
 
+    public static void reset() {
+        monopolyClient = new MonopolyClient();
+    }
+
     /**
      * Sends a new game message to the server.
+     *
      * @param playerName Name of the player that will be shown to other players.
      */
     public void newGame(String playerName) {
@@ -116,7 +121,7 @@ public class MonopolyClient {
                 .build());
     }
 
-    public void endCurrentPlayerTurn(){
+    public void endCurrentPlayerTurn() {
         GameData gameData = GameData.getGameData();
 
         webSocketClient.sendMessage(ClientMessage.builder()
@@ -125,7 +130,7 @@ public class MonopolyClient {
                 .build());
     }
 
-    public void moveAvatar(){
+    public void moveAvatar() {
         GameData gameData = GameData.getGameData();
 
         webSocketClient.sendMessage(ClientMessage.builder()
@@ -171,6 +176,9 @@ public class MonopolyClient {
         webSocketClient.sendMessage(ClientMessage.builder()
                 .messagePath("game_state")
                 .message(String.valueOf(gameId))
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
 
     /**
      * Sends a report_cheat message to the server.
@@ -205,12 +213,11 @@ public class MonopolyClient {
                 .build());
     }
 
-        public void buildHouse(int fieldIndex) {
-            webSocketClient.sendMessage(ClientMessage.builder()
-                    .messagePath("build_property")
-                    .player(GameData.getGameData().getPlayer())
-                    .message(String.valueOf(fieldIndex))
-                    .build());
-        }
+    public void buildHouse(int fieldIndex) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("build_property")
+                .player(GameData.getGameData().getPlayer())
+                .message(String.valueOf(fieldIndex))
+                .build());
+    }
 }
-
