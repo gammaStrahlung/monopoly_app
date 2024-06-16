@@ -132,4 +132,13 @@ public class MonopolyClient {
                 .player(gameData.getPlayer())
                 .build());
     }
+
+
+    public void buildHouse(int fieldIndex) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("build_property")
+                .player(GameData.getGameData().getPlayer())
+                .message(String.valueOf(fieldIndex))
+                .build());
+    }
 }

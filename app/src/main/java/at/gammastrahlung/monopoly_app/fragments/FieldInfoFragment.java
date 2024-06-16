@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.FieldType;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class FieldInfoFragment extends DialogFragment {
     private Field field;
@@ -152,7 +154,15 @@ public class FieldInfoFragment extends DialogFragment {
                 }
             }
 
+        //Button build = view.findViewById(R.id.build_button);
+        //MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
+        //TODO: Implement button which triggers building on Property via Monopoly client buildHouse method here
 
+        Button buildButton = view.findViewById(R.id.build_button);
+        // Set click listener for build button
+        buildButton.setOnClickListener(v -> {
+            MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
+        });
 
 
         return view;

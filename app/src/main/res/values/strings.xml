@@ -37,4 +37,5 @@
     <string name="three_house_rent">Rent with three houses: %1$d €</string>
     <string name="four_houses_rent">Rent with four houses: %1$d €</string>
     <string name="price">Price: %1$d €</string>
+    <string name="build">Build on property</string>
 </resources>

@@ -9,92 +9,102 @@
         android:id="@+id/current_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/current_rent"
         app:layout_constraintBottom_toTopOf="@+id/base_rent"
-        app:layout_constraintTop_toBottomOf="@+id/price"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price" />
 
     <TextView
         android:id="@+id/four_house_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/four_houses_rent"
         app:layout_constraintBottom_toTopOf="@+id/hotel_rent"
-        app:layout_constraintTop_toBottomOf="@+id/three_house_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/three_house_rent" />
 
     <TextView
         android:id="@+id/three_house_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/three_house_rent"
         app:layout_constraintBottom_toTopOf="@+id/four_house_rent"
-        app:layout_constraintTop_toBottomOf="@+id/two_house_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/two_house_rent" />
 
     <TextView
         android:id="@+id/two_house_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/two_houses_rent"
         app:layout_constraintBottom_toTopOf="@+id/three_house_rent"
-        app:layout_constraintTop_toBottomOf="@+id/one_house_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/one_house_rent" />
 
     <TextView
         android:id="@+id/price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/price"
         app:layout_constraintBottom_toTopOf="@+id/current_rent"
-        app:layout_constraintTop_toBottomOf="@+id/owner"
-        tools:layout_editor_absoluteX="24dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/owner" />
 
     <TextView
         android:id="@+id/house_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/house_count"
         app:layout_constraintBottom_toTopOf="@+id/hotel_count"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hotel_rent"
-        tools:ignore="UnknownIdInLayout"
-        tools:layout_editor_absoluteX="26dp" />
+        tools:ignore="UnknownIdInLayout" />
 
     <TextView
         android:id="@+id/base_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/base_rent"
         app:layout_constraintBottom_toTopOf="@+id/full_set_rent"
-        app:layout_constraintTop_toBottomOf="@+id/current_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_rent" />
 
     <TextView
         android:id="@+id/hotel_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/hotel_rent"
         app:layout_constraintBottom_toTopOf="@+id/house_count"
-        app:layout_constraintTop_toBottomOf="@+id/four_house_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/four_house_rent" />
 
     <TextView
         android:id="@+id/full_set_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/rent_full_set"
         app:layout_constraintBottom_toTopOf="@+id/one_house_rent"
-        app:layout_constraintTop_toBottomOf="@+id/base_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/base_rent" />
 
     <TextView
         android:id="@+id/one_house_rent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/one_house_rent"
         app:layout_constraintBottom_toTopOf="@+id/two_house_rent"
-        app:layout_constraintTop_toBottomOf="@+id/full_set_rent"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/full_set_rent" />
 
     <ImageView
         android:id="@+id/propertyPicture"
@@ -107,14 +117,14 @@
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/build_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="200dp"
         android:layout_marginBottom="86dp"
-        android:text="@string/app_name"
+        android:text="@string/build"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -139,10 +149,11 @@
         android:id="@+id/owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:text="@string/owner"
         app:layout_constraintBottom_toTopOf="@+id/price"
-        app:layout_constraintTop_toBottomOf="@+id/property_name"
-        tools:layout_editor_absoluteX="24dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/property_name" />
 
     <ImageView
         android:id="@+id/buildingSlot1"
@@ -189,9 +200,10 @@
         android:id="@+id/hotel_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:text="@string/hotel_count"
         app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/house_count"
-        tools:layout_editor_absoluteX="26dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/house_count" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
