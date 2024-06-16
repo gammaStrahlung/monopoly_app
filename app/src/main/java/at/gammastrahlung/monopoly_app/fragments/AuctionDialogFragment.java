@@ -22,9 +22,8 @@ import at.gammastrahlung.monopoly_app.network.WebSocketHandler;
 public class AuctionDialogFragment extends DialogFragment implements WebSocketHandler.ResultBidTrigger {
     private EditText bidInput;
     private TextView resultTextView;
-    private WebSocketHandler webSocketHandlerforResultBidTrigger;
+
     private Button bidButton;
-    private Button noButton;
 
 
     public static AuctionDialogFragment newInstance() {
@@ -34,6 +33,8 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Button noButton;
+        WebSocketHandler webSocketHandlerforResultBidTrigger;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_auction, null);
@@ -69,9 +70,7 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
         return builder.create();
     }
 
-    private void sendBidResult() {
-        MonopolyClient.getMonopolyClient().sendBidResult();  // Call the sendBidResult method from MonopolyClient
-    }
+
 
     private void submitBid() {
         try {

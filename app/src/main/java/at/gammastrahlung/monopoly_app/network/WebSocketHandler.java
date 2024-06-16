@@ -105,7 +105,7 @@ public class WebSocketHandler {
         Gson gson = new Gson();
 
         Bid result = gson.fromJson(jsonData, Bid.class);
-        String displayMessage = " Amount: " + result.getAmount() + ", Field Index: " + result.getFieldIndex();
+        String displayMessage = " Amount: " + result.getAmount();
         resultBidTrigger.showResultBid(displayMessage);
     }
 
