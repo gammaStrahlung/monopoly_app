@@ -20,6 +20,7 @@ class PlayerTest {
         Player p2 = new Player(uuid, "NAME", 0,0, false);
         assertEquals(uuid, p2.getId());
         assertEquals("NAME", p2.getName());
+        assertFalse(p2.isCheating());
     }
 
     @Test
@@ -75,5 +76,14 @@ class PlayerTest {
         p2.setId(UUID.randomUUID());
 
         assertNotEquals(p1.hashCode(), p2.hashCode());
+    }
+
+    @Test
+    void isCheating() {
+        Player p1 = new Player();
+
+        assertFalse(p1.isCheating());
+        p1.setCheating(true);
+        assertTrue(p1.isCheating());
     }
 }
