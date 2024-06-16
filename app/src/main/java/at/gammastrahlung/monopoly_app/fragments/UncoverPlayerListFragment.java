@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -65,7 +64,23 @@ public class UncoverPlayerListFragment extends DialogFragment {
         new AlertDialog.Builder(getActivity())
                 .setMessage("Are you sure player " + player.getName() + " is a cheater?")
                 .setPositiveButton("Yes", (dialog, which) -> {
-                    Toast.makeText(getActivity(), player.getName() + " test ", Toast.LENGTH_SHORT).show();
+
+                    if (player.isCheating()) {
+
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage("This player was a cheater, you collect 200!")
+                                .setPositiveButton("Ok", (dialog2, which2) -> dialog2.dismiss())
+                                .create()
+                                .show();
+
+                    } else {
+
+                        new AlertDialog.Builder(getActivity())
+                                .setMessage("This player was not a cheater, you loose 200!")
+                                .setPositiveButton("Ok", (dialog3, which3) -> dialog3.dismiss())
+                                .create()
+                                .show();
+                    }
                 })
                 .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
                 .create()
