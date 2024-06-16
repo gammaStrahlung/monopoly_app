@@ -33,6 +33,14 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="disconnected">The connection to the server disconnected.</string>
+    <string name="who_is_the_cheater">Who is the cheater?</string>
+    <string name="report_cheat">Report Cheat</string>
+    <string name="are_you_sure_player">"Are you sure player "</string>
+    <string name="is_a_cheater">" is a cheater?"</string>
+    <string name="this_player_was_a_cheater_you_collect_200">This player was a cheater, you collect 200$!</string>
+    <string name="this_player_was_not_a_cheater_you_loose_200">This player was not a cheater, you loose 200$!</string>
+    <string name="ok">Ok</string>
+    <string name="you_are_not_allowed_to_select_yourself">You are not allowed to select yourself!</string>
     <string name="congratulations">Congratulations!</string>
     <string name="winningPlayer">Player %s has won!</string>
     <string name="winningBalance">Balance: %1$d $</string>

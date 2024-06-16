@@ -106,7 +106,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/players_recycler_view"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="0dp"
         android:layout_margin="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -130,8 +130,10 @@
     <ScrollView
         android:id="@+id/logScrollView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="15dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toTopOf="@id/players_recycler_view"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +144,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:minHeight="100dp"
+            android:minHeight="80dp"
             android:padding="8dp"
             android:text=""
             android:textAppearance="?attr/textAppearanceBody1" />
@@ -154,8 +156,8 @@
         android:layout_height="wrap_content"
         android:onClick="otherPlayersClick"
         android:text="@string/otherPlayers"
-        android:layout_margin="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/endTurn"
+        android:layout_margin="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/uncoverCheatButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/players_recycler_view"
         app:layout_constraintTop_toBottomOf="@+id/logScrollView" />
@@ -166,9 +168,9 @@
         android:layout_height="wrap_content"
         android:enabled="false"
         android:onClick="onEndTurnButtonClicked"
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:text="@string/end_turn"
-        app:layout_constraintTop_toBottomOf="@id/otherPlayers"
+        app:layout_constraintTop_toBottomOf="@id/uncoverCheatButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/players_recycler_view" />
@@ -177,12 +179,26 @@
         android:id="@+id/playerOnTurn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/player_on_turn"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/boardLayout" />
+
+    <Button
+        android:id="@+id/uncoverCheatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:onClick="uncoverCheatButtonClick"
+        android:text="@string/report_cheat"
+        app:layout_constraintBottom_toTopOf="@+id/endTurn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/otherPlayers"
+
+        app:layout_constraintTop_toBottomOf="@+id/otherPlayers" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,14 @@
 package at.gammastrahlung.monopoly_app.game;
 
 import com.google.gson.annotations.Expose;
+
+import java.util.Objects;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +30,9 @@ public class Player {
     private int currentFieldIndex;
 
     private int balance;
+
+    @Expose
+    private boolean isCheating;
 
     @Override
     public boolean equals(Object obj) {
