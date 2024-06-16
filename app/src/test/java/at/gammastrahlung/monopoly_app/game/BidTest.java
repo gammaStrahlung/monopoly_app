@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class BidTest {
+ class BidTest {
     private Bid bid;
 
     @BeforeEach
@@ -15,7 +15,7 @@ public class BidTest {
         bid = new Bid();
     }
     @Test
-    public void testGettersAndSetters() {
+     void testGettersAndSetters() {
 
 
         // Test playerId setter and getter
@@ -37,21 +37,21 @@ public class BidTest {
     }
 
     @Test
-    public void testToStringAmount() {
+     void testToStringAmount() {
 
         bid.setAmount(2000);
         assertEquals("2000", bid.toStringAmount(), "toStringAmount should return a string representation of amount.");
     }
 
     @Test
-    public void testToStringAmountWithNegativeValue() {
+     void testToStringAmountWithNegativeValue() {
 
         bid.setAmount(-100);
         assertEquals("-100", bid.toStringAmount(), "toStringAmount should handle negative values correctly.");
     }
 
     @Test
-    public void noArgsConstructor_initialState() {
+     void noArgsConstructor_initialState() {
         assertNotNull(bid, "Bid instance should not be null after construction.");
         assertNull(bid.getPlayerId(), "Player ID should be null by default.");
         assertEquals(0, bid.getAmount(), "Amount should be 0 by default.");

@@ -2,8 +2,6 @@ package at.gammastrahlung.monopoly_app.game;
 
 import androidx.annotation.NonNull;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.UUID;
 
 import lombok.Getter;
@@ -15,7 +13,7 @@ public class Bid {
     @Getter
     @Setter
 
-    private  UUID playerId;
+    private UUID playerId;
 
     @Getter
     @Setter
@@ -25,11 +23,11 @@ public class Bid {
     @Getter
     @Setter
 
-    private  int fieldIndex;
+    private int fieldIndex;
 
 
     @NonNull
-    public  String toStringAmount() {
+    public String toStringAmount() {
         return String.valueOf(amount);
     }
 }

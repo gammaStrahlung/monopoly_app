@@ -121,7 +121,7 @@ class GameDataTest {
     }
 
     @Test
-    public void testLastMessageTypeGetterAndSetter() {
+     void testLastMessageTypeGetterAndSetter() {
         GameData gameData = GameData.getGameData();
 
         // Test setting and getting lastMessageType
@@ -131,7 +131,7 @@ class GameDataTest {
     }
 
     @Test
-    public void testNullLastMessageType() {
+     void testNullLastMessageType() {
         GameData gameData = GameData.getGameData();
         gameData.setLastMessageType(null);
         assertNull(gameData.getLastMessageType(), "lastMessageType should be null when set to null.");
