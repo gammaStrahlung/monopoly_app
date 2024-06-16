@@ -32,6 +32,15 @@ public class Game {
     // The dice
     private Dice dice;
 
+    // The winning player
+    private Player winningPlayer;
+
+    // The amount of rounds in the game
+    private int roundAmount;
+
+    // The current round out of the rounds set by roundAmount
+    private int currentRound;
+
     public enum GameState {
         /**
          * Game was started but playing has not yet begun.
