@@ -48,4 +48,5 @@
     <string name="winningRailroads">Railroads: %1$d</string>
     <string name="winningUtilities">Utilities: %1$d</string>
     <string name="winningEmoji" translatable="false">🏆</string>
+    <string name="currentRound">Round %1$d / %2$d</string>
 </resources>

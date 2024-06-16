@@ -48,4 +48,5 @@
     <string name="winningProperties">Immobilien: %1$d</string>
     <string name="winningRailroads">Bahngesellschaften: %1$d</string>
     <string name="winningUtilities">Versorgungswerke: %1$d</string>
+    <string name="currentRound">Runde %1$d / %2$d</string>
 </resources>

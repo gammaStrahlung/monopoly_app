@@ -52,7 +52,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
-
+    private TextView roundText;
     private ImageView dice1;
     private ImageView dice2;
 
@@ -87,6 +87,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         boardLayout = findViewById(R.id.boardLayout);
 
         moneyText = findViewById(R.id.moneyText);
+        roundText = findViewById(R.id.roundText);
 
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
@@ -231,6 +232,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         } else {
             rollDiceButton.setEnabled(false);
         }
+
+        // Update current round
+        Game game = GameData.getGameData().getGame();
+        roundText.setText(getString(R.string.currentRound, game.getCurrentRound(), game.getRoundAmount()));
     }
 
     private void updateGameBoard() {
