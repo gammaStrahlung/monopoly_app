@@ -24,9 +24,9 @@ import java.util.Map;
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
-import at.gammastrahlung.monopoly_app.game.gameboard.FieldType;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
+import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
 public class FieldInfoFragment extends DialogFragment {
     private Field field;
@@ -126,7 +126,7 @@ public class FieldInfoFragment extends DialogFragment {
         propertyName.setText(property.getName());
         owner.setText(getString(R.string.owner, property.getOwner().getName()));
         currentRent.setText(getString(R.string.current_rent,currentRentString));
-        fullSetRent.setText(getString(R.string.rent_full_set, property.getRentPrices().get(GameData.getGame().getGameBoard().getFullSet())));
+        fullSetRent.setText(getString(R.string.rent_full_set, rentPrices.get("FULL_SET")));
         hotelRent.setText(getString(R.string.hotel_rent, rentPrices.get("HOTEL")));
         baseRent.setText(getString(R.id.base_rent, rentPrices.get(0)));
         oneHouseRent.setText(getString(R.id.one_house_rent, rentPrices.get(1)));
@@ -154,14 +154,15 @@ public class FieldInfoFragment extends DialogFragment {
                 }
             }
 
-        //Button build = view.findViewById(R.id.build_button);
-        //MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
-        //TODO: Implement button which triggers building on Property via Monopoly client buildHouse method here
-
         Button buildButton = view.findViewById(R.id.build_button);
-        // Set click listener for build button
         buildButton.setOnClickListener(v -> {
             MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
+            TextView buildMessage = view.findViewById(R.id.build_message);
+            if(GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.SUCCESS){
+                buildMessage.setText(R.string.successful_build);
+            }else{
+                buildMessage.setText(R.string.failed_build);
+            }
         });
 
 

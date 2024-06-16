@@ -39,4 +39,6 @@
     <string name="four_houses_rent">Miete vier Häuser: %1$d €</string>
     <string name="price">Preis: %1$d €</string>
     <string name="build">Bauen</string>
+    <string name="successful_build">Gebäude wurde gebaut!</string>
+    <string name="failed_build">Bauen auf dieser Immobilie nicht möglich!</string>
 </resources>

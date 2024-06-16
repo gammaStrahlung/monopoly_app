@@ -33,9 +33,11 @@
     <string name="hotel_rent">Rent with a hotel: %1$d €</string>
     <string name="base_rent">Base rent: %1$d €</string>
     <string name="one_house_rent">Rent with one house: %1$d €</string>
-    <string name="two_houses_rent">Rent with two houses: %1$d €</string>
     <string name="three_house_rent">Rent with three houses: %1$d €</string>
     <string name="four_houses_rent">Rent with four houses: %1$d €</string>
     <string name="price">Price: %1$d €</string>
     <string name="build">Build on property</string>
+    <string name="successful_build">Building successfully built!</string>
+    <string name="failed_build">Building on this property is not possible!</string>
+    <string name="two_houses_rent">Rent with two houses: %1$d €</string>
 </resources>
