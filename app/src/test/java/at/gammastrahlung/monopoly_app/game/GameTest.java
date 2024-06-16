@@ -30,12 +30,15 @@ class GameTest {
         ObservableArrayList<Player> players = new ObservableArrayList<>();
         players.add(mockPlayer);
 
-        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, mockBoard, players, mockDice);
+        Game g2 = new Game(1, Game.GameState.STARTED, mockPlayer, mockBoard, players, mockDice, null, 10, 1);
 
         assertEquals(1, g2.getGameId());
         assertEquals(Game.GameState.STARTED, g2.getState());
         assertEquals(mockPlayer, g2.getGameOwner());
         assertEquals(mockDice, g2.getDice());
+        assertNull(g2.getWinningPlayer());
+        assertEquals(10, g2.getRoundAmount());
+        assertEquals(1, g2.getCurrentRound());
     }
 
     @Test
@@ -79,5 +82,31 @@ class GameTest {
 
         g.setGameBoard(mockBoard);
         assertEquals(mockBoard, g.getGameBoard());
+    }
+
+    @Test
+    void winningPlayer() {
+        Player mockPlayer = Mockito.mock(Player.class);
+
+        Game g = new Game();
+
+        g.setWinningPlayer(mockPlayer);
+        assertEquals(mockPlayer, g.getWinningPlayer());
+    }
+
+    @Test
+    void roundAmount() {
+        Game g = new Game();
+
+        g.setRoundAmount(5);
+        assertEquals(5, g.getRoundAmount());
+    }
+
+    @Test
+    void currentRound() {
+        Game g = new Game();
+
+        g.setCurrentRound(5);
+        assertEquals(5, g.getCurrentRound());
     }
 }
