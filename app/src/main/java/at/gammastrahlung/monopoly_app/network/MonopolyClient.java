@@ -1,7 +1,6 @@
 package at.gammastrahlung.monopoly_app.network;
 
 import at.gammastrahlung.monopoly_app.game.GameData;
-import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
 
@@ -26,6 +25,7 @@ public class MonopolyClient {
 
     /**
      * Sends a new game message to the server.
+     *
      * @param playerName Name of the player that will be shown to other players.
      */
     public void newGame(String playerName) {
@@ -40,7 +40,8 @@ public class MonopolyClient {
 
     /**
      * Sends a join game message to the server.
-     * @param gameId The ID of the game you want to join.
+     *
+     * @param gameId     The ID of the game you want to join.
      * @param playerName Name of the player that will be shown to other players.
      */
     public void joinGame(int gameId, String playerName) {
@@ -120,7 +121,7 @@ public class MonopolyClient {
                 .build());
     }
 
-    public void endCurrentPlayerTurn(){
+    public void endCurrentPlayerTurn() {
         GameData gameData = GameData.getGameData();
 
         webSocketClient.sendMessage(ClientMessage.builder()
@@ -149,6 +150,7 @@ public class MonopolyClient {
 
     /**
      * Sends the new selected values
+     *
      * @param value1
      * @param value2
      */
@@ -167,6 +169,7 @@ public class MonopolyClient {
 
     /**
      * Sends a game_state message to the server.
+     *
      * @param gameId The ID of the game
      */
     public void getGameState(int gameId) {
@@ -178,13 +181,35 @@ public class MonopolyClient {
     }
 
     /**
-     * Sends a game_state message to the server.
-     * @param player The player who is accused of cheating
+     * Sends a report_cheat message to the server.
+     *
+     * @param index The index of the accused Player
      */
-    public void reportCheat(Player player) {
+    public void reportCheat(int index) {
         webSocketClient.sendMessage(ClientMessage.builder()
                 .messagePath("report_cheat")
-                .player(player)
+                .player(GameData.getGameData().getPlayer())
+                .message(String.valueOf(index))
+                .build());
+    }
+
+    /**
+     * Sends a report_wrong_cheat message to the server
+     */
+    public void reportWrongCheat() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_wrong_cheat")
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a award_report message to the server
+     */
+    public void awardReport() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("award_report")
+                .player(GameData.getGameData().getPlayer())
                 .build());
     }
 }
