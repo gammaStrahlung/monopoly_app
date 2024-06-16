@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,8 +21,6 @@ import at.gammastrahlung.monopoly_app.game.Player;
 
 public class UncoverPlayerListFragment extends DialogFragment {
 
-    private TextView uncoverCheaterTextview;
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -31,8 +28,6 @@ public class UncoverPlayerListFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View inflatedView = inflater.inflate(R.layout.fragment_playerlist_cheater, null);
-
-        uncoverCheaterTextview = inflatedView.findViewById(R.id.selectCheaterTextview);
 
         RecyclerView playersList = inflatedView.findViewById(R.id.cheaterPlayerList);
         playersList.setLayoutManager(new LinearLayoutManager(getActivity()));
