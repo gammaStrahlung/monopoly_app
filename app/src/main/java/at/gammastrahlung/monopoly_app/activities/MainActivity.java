@@ -1,28 +1,33 @@
 package at.gammastrahlung.monopoly_app.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.databinding.Observable;
+import androidx.databinding.library.baseAdapters.BR;
 
 import java.util.UUID;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.fragments.JoinGameFragment;
 import at.gammastrahlung.monopoly_app.fragments.NewGameFragment;
+import at.gammastrahlung.monopoly_app.fragments.ReJoinGameFragment;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
+import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.WebSocketClient;
 
 public class MainActivity extends AppCompatActivity {
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,35 +39,76 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Initialize Player UUID and WebSocket URI
+        updatePlayer();
+        WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
+    }
+
+    private void tryReconnect() {
+
+        if (!GameData.getGameData().isWebSocketConnected()) {
+            MonopolyClient.reset();
+        }
+
+        // Check last game and show dialog when it has not ended
+        int lastGameId = sharedPreferences.getInt("gameId", 0);
+        if (lastGameId != 0) {
+            GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+
+                @Override
+                public void onPropertyChanged(Observable sender, int propertyId) {
+                    if (propertyId == BR.gameState) {
+                        Game.GameState state = GameData.getGameData().getGameState();
+                        if (state == Game.GameState.PLAYING || state == Game.GameState.STARTED) {
+                            new ReJoinGameFragment(lastGameId).show(getSupportFragmentManager(), "REJOIN_DIALOG");
+                        } else {
+                            // Game does not exit or it has ended -> remove gameId
+                            SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                            preferenceEditor.remove("gameId");
+                            preferenceEditor.apply();
+                        }
+                        GameData.getGameData().removeOnPropertyChangedCallback(this);
+                    }
+                }
+            });
+
+            MonopolyClient.getMonopolyClient().getGameState(lastGameId);
+        }
     }
 
     @Override
     protected void onResume() {
-        // Initialize Player UUID and WebSocket URI
-        updatePlayerUUID();
-        WebSocketClient.getWebSocketClient().setWebSocketURI(getString(R.string.websocket_uri));
-        int width = 0;
         super.onResume();
+        tryReconnect();
     }
 
     public void startButtonClick(View view) {
+        if (!GameData.getGameData().isWebSocketConnected()) {
+            MonopolyClient.reset();
+        }
+
         new NewGameFragment().show(getSupportFragmentManager(), "NEW_DIALOG");
     }
 
     public void joinButtonClick(View view) {
+        if (!GameData.getGameData().isWebSocketConnected()) {
+            MonopolyClient.reset();
+        }
+
         new JoinGameFragment().show(getSupportFragmentManager(), "JOIN_DIALOG");
     }
 
     /**
-     * Sets the player UUID for the Player in GameData.
-     * The UUID is only generated once and then saved, this allows re-joining of
+     * Sets the player UUID and the name for the Player in GameData.
+     * The UUID is only generated once and then saved, this allows re-joining of the game
      */
-    private void updatePlayerUUID() {
+    private void updatePlayer() {
         UUID playerUUID;
 
         // Get UUID from SharedPreferences
-        SharedPreferences sharedPreferences =
-                PreferenceManager.getDefaultSharedPreferences(this);
         String uuid = sharedPreferences.getString("playerUUID", null);
 
         if (uuid == null) {
@@ -80,5 +126,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         GameData.getGameData().getPlayer().setId(playerUUID);
+
+        // Set player name
+        GameData.getGameData().getPlayer().setName(sharedPreferences.getString("playerName", ""));
     }
 }
