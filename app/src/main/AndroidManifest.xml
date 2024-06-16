@@ -17,6 +17,7 @@
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
             android:name=".activities.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,35 +27,11 @@
         </activity>
         <activity
             android:name=".activities.LobbyActivity"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.LOBBY" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.DiceRollingActivity"
-            android:exported="false">
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activities.BoardActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.PropertyMenuActivity"
-            tools:ignore="ExtraText"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.PopertyActionsMenu" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".activities.PropertyActionsMenu">
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

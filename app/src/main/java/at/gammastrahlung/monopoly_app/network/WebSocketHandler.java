@@ -6,6 +6,7 @@ import androidx.databinding.ObservableArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import at.gammastrahlung.monopoly_app.game.Game;
 
@@ -46,6 +47,18 @@ public class WebSocketHandler {
                 break;
             case "roll_dice":
                 rollDice(message);
+                break;
+            case "move_player":
+                movePlayer(message);
+                break;
+            case "log":
+                handleLogMessage(message.getJsonData());
+                break;
+            case "cheating":
+                cheat(message);
+                break;
+            case "game_state":
+                gameState(message.getJsonData());
                 break;
             default:
                 Log.w("WebSocket", "Received unknown messagePath from server");
@@ -121,12 +134,13 @@ public class WebSocketHandler {
     private void updatePlayer(String json) {
         Player p = gson.fromJson(json, Player.class);
         GameData gameData = GameData.getGameData();
-        gameData.getPlayers().add(p);
 
-        if (gameData.getPlayer().getId() == p.getId())
+        gameData.getPlayers().set(gameData.getPlayers().indexOf(p), p);
+
+        if (gameData.getPlayer().equals(p))
             gameData.setPlayer(p);
 
-        if (gameData.getGame().getGameOwner().getId() == p.getId())
+        if (gameData.getGame().getGameOwner().equals(p))
             gameData.getGame().setGameOwner(p);
 
         // Make sure GameData.players and Game.players are the same
@@ -159,6 +173,16 @@ public class WebSocketHandler {
         players.clear();
         players.addAll(game.getPlayers());
         game.setPlayers(players);
+
+        // Update player with player from game
+        gameData.setPlayer(game.getPlayers().stream().filter( player -> player.equals(gameData.getPlayer())).findFirst().get());
+    }
+
+    private void handleLogMessage(String jsonData){
+        // Deserialize jsonData to get the log message
+        String logMessage = new Gson().fromJson(jsonData, JsonObject.class).get("log").getAsString();
+
+        GameData.getGameData().addLogMessage(logMessage);
     }
 
     private void rollDice(ServerMessage message) {
@@ -167,6 +191,28 @@ public class WebSocketHandler {
             return;
         }
         gameData.setDice(message.getGame().getDice());
+
+        if (message.getGame().getPlayers() != null) {
+            for (Player player : message.getGame().getPlayers()) {
+                updatePlayer(gson.toJson(player));
+            }
+        }
+    }
+
+    private void movePlayer(ServerMessage message){
+        if (message.getGame().getPlayers() != null) {
+            for (Player player : message.getGame().getPlayers()) {
+                updatePlayer(gson.toJson(player));
+            }
+        }
+    }
+
+    private void cheat(ServerMessage message){
+
+    }
+
+    private void gameState(String json) {
+        GameData.getGameData().setGameState(gson.fromJson(json, Game.GameState.class));
     }
 }
 

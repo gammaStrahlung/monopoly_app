@@ -78,6 +78,46 @@ class GameDataTest {
         assertEquals(mockPlayer, gd.getCurrentPlayer());
     }
 
+    @Test
+    void addLogMessage(){
+        GameData gameData = GameData.getGameData();
+
+        String logMessage = "Test log message";
+        gameData.addLogMessage(logMessage);
+        assertTrue(gameData.getLogMessages().contains(logMessage));
+    }
+
+    @Test
+    void testMultipleLogMessages() {
+        GameData gameData = GameData.getGameData();
+
+        String logMessage1 = "Test log message 1";
+        String logMessage2 = "Test log message 2";
+        gameData.addLogMessage(logMessage1);
+        gameData.addLogMessage(logMessage2);
+
+        assertTrue(gameData.getLogMessages().contains(logMessage1));
+        assertTrue(gameData.getLogMessages().contains(logMessage2));
+    }
+
+    @Test
+    void gameState() {
+        GameData gameData = GameData.getGameData();
+
+        assertNull(gameData.getGameState());
+        gameData.setGameState(Game.GameState.STARTED);
+        assertEquals(Game.GameState.STARTED, gameData.getGameState());
+    }
+
+    @Test
+    void webSocketConnected() {
+        GameData gameData = GameData.getGameData();
+
+        assertFalse(gameData.isWebSocketConnected());
+        gameData.setWebSocketConnected(true);
+        assertTrue(gameData.isWebSocketConnected());
+    }
+
     @AfterEach
     void cleanup() {
         GameData.reset();

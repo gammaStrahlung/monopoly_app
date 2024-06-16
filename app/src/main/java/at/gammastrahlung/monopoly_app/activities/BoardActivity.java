@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,13 +20,18 @@ import androidx.databinding.Observable;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
+import at.gammastrahlung.monopoly_app.fragments.SelectValueFragment;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -32,7 +39,7 @@ import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
-public class BoardActivity extends AppCompatActivity implements SensorEventListener {
+public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
 
     private ConstraintLayout fieldRowTop; // Includes top corners
     private ConstraintLayout fieldRowBottom; // Includes bottom corners
@@ -46,10 +53,14 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private Button rollDiceButton;
     private Button endTurnButton;
-
+    private TextView logTextView;
+    private ScrollView logScrollView;
     private static final int THRESHOLD = 1000;
     private long lastTime;
     private float lastX, lastY, lastZ;
+
+    private RecyclerView playersRecyclerView;
+    private PlayerAdapter playerAdapter;
 
     private TextView playerOnTurn;
 
@@ -79,6 +90,16 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         endTurnButton = findViewById(R.id.endTurn);
         playerOnTurn = findViewById(R.id.playerOnTurn);
 
+        logTextView = findViewById(R.id.logTextView);
+        logScrollView = findViewById(R.id.logScrollView);
+
+        playersRecyclerView = findViewById(R.id.players_recycler_view);
+        playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false, false, true);
+
+        playersRecyclerView.setAdapter(playerAdapter);
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
@@ -96,21 +117,43 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                         }
                         updatePlayerInfo();
                     });
+                } else if (propertyId == BR.player) {
+                    runOnUiThread(() -> updatePlayerInfo());
                 }
                 // Update when player on turn changes
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
+                    runOnUiThread(() -> updatePlayerList());
+                }
+                else if (propertyId == BR.logMessages){
+                    runOnUiThread(() -> updateLogMessages());
                 }
                 // Update when dice value is changed
                 else if (propertyId == BR.dice) {
                     runOnUiThread(() -> {
                         updateDices();      // updating the view of each die
-                        moveAvatar();       // after the dice are changed, the avatar will be moved accordingly
+                        if (isMyTurn()) {
+                            new SelectValueFragment().show(getSupportFragmentManager(), "selectedValue");
+                        }
                         enableUserActions();
                     });
+                } else if (propertyId == BR.webSocketConnected) {
+                    if (!GameData.getGameData().isWebSocketConnected()) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(getApplicationContext(), R.string.disconnected, Toast.LENGTH_LONG).show();
+                            GameData.getGameData().removeOnPropertyChangedCallback(this);
+                            finish();
+                        });
+                    }
                 }
             }
         });
+    }
+
+    private void updatePlayerList() {
+        List<Player> players = GameData.getGameData().getPlayers();
+
+        playerAdapter.updatePlayers(players);
     }
 
     private boolean isMyTurn() {
@@ -123,6 +166,17 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
+    }
+
+    private void updateLogMessages() {
+        List<String> logMessages = GameData.getGameData().getLogMessages();
+        StringBuilder logText = new StringBuilder();
+        for (String logMessage : logMessages) {
+            logText.append(logMessage).append("\n");
+        }
+        logTextView.setText(logText.toString());
+        // Scroll ScrollView to the bottom
+        logScrollView.post(() -> logScrollView.fullScroll(View.FOCUS_DOWN));
     }
 
     private void updatePlayerOnTurn() {
@@ -249,10 +303,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         if (field.getClass() == Property.class) {
             Property p = (Property) field;
-            addFieldToBoard(fieldRow, p.getName(), players, true, p.getColor().getColorString(), isEdge, fieldId);
+            addFieldToBoard(fieldRow, p.getBoardName(), players, true, p.getColor().getColorString(), isEdge, fieldId);
 
         } else {
-            addFieldToBoard(fieldRow, field.getName(), players, false, null, isEdge, fieldId);
+            addFieldToBoard(fieldRow, field.getBoardName(), players, false, null, isEdge, fieldId);
         }
     }
 
@@ -352,6 +406,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         dice1.setImageResource(value1);
         dice2.setImageResource(value2);
+
+        int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
     }
 
     public void enableUserActions() {
@@ -419,5 +475,21 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     // After dice roll, the avatar will be moved
     public void moveAvatar() {
         MonopolyClient.getMonopolyClient().moveAvatar();
+    }
+
+    public void moveAvatarAfterCheating() {
+        MonopolyClient.getMonopolyClient().moveAvatarAfterCheating();
+    }
+
+    // Player does not want to cheat and moves to diced value forward
+    @Override
+    public void onForward(int value) {
+        moveAvatar();
+    }
+
+    // Player does want to cheat and moves a selected value forward
+    @Override
+    public void onSelectedValue(int value){
+        moveAvatarAfterCheating();
     }
 }

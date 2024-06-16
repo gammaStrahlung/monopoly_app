@@ -86,10 +86,44 @@ public class GameData extends BaseObservable {
     }
 
     /**
+     * List of log messages
+     */
+    @Getter
+    @Bindable
+    private final ObservableArrayList<String> logMessages = new ObservableArrayList<>();
+
+    /**
+     * Add a log message to the list of log messages
+     *
+     * @param logMessage The log message to add
+     */
+    public void addLogMessage(String logMessage) {
+        logMessages.add(logMessage);
+        // Notify observers that log messages have changed
+        notifyPropertyChanged(BR.logMessages);
+    }
+
+    /**
      * List of players of the game
      */
     @Getter
     private final ObservableArrayList<Player> players = new ObservableArrayList<>();
+
+
+    /**
+     * Used for re-joining to check if a game exists
+     */
+    private Game.GameState gameState = null;
+
+    @Bindable
+    public Game.GameState getGameState() {
+        return gameState;
+    }
+
+    public void setGameState(Game.GameState gameState) {
+        this.gameState = gameState;
+        notifyPropertyChanged(BR.gameState);
+    }
 
     /**
      * Resets the gameData object. This is used when the game ended and the user returns to the
@@ -103,4 +137,15 @@ public class GameData extends BaseObservable {
     @Setter
     ServerMessage.MessageType lastMessageType;
 
+    private boolean webSocketConnected = false;
+
+    @Bindable
+    public boolean isWebSocketConnected() {
+        return webSocketConnected;
+    }
+
+    public void setWebSocketConnected(boolean webSocketConnected) {
+        this.webSocketConnected = webSocketConnected;
+        notifyPropertyChanged(BR.webSocketConnected);
+    }
 }

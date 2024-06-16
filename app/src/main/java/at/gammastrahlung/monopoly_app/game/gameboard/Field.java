@@ -8,5 +8,6 @@ import lombok.Setter;
 public class Field {
     private int fieldId;
     private String name;
+    private String boardName;
     private FieldType type;
 }

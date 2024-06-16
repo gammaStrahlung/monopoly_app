@@ -3,7 +3,9 @@ package at.gammastrahlung.monopoly_app.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -12,13 +14,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.Observable;
-import androidx.databinding.ObservableInt;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.activities.BoardActivity;
 import at.gammastrahlung.monopoly_app.activities.LobbyActivity;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.helpers.DialogDataValidation;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
@@ -28,6 +33,7 @@ public class JoinGameFragment extends DialogFragment {
     EditText playerNameEditText;
     EditText gameIdEditText;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -38,6 +44,9 @@ public class JoinGameFragment extends DialogFragment {
         // Set EditText views
         playerNameEditText = inflated.findViewById(R.id.playerName);
         gameIdEditText = inflated.findViewById(R.id.gameId);
+
+        // Set player name to the one that has been saved
+        playerNameEditText.setText(GameData.getGameData().getPlayer().getName());
 
         builder.setView(inflated)
                 // Add action buttons
@@ -50,25 +59,34 @@ public class JoinGameFragment extends DialogFragment {
 
                     Activity activity = getActivity();
 
-                    GameData.getGameData().getGameId().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+                    GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
                         @Override
                         public void onPropertyChanged(Observable sender, int propertyId) {
-                            // Received data from the server
-                            ObservableInt gameId = (ObservableInt) sender;
-                            if (gameId.get() == -1) {
-                                // Error popup
-                                activity.runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            } else {
-                                // Created game -> Start lobby activity
-                                Intent intent = new Intent(activity, LobbyActivity.class);
-                                activity.startActivity(intent);
+                            if (propertyId == BR.game) {
+
+                                // Game was changed
+                                if (GameData.getGameData().getGame() == null) {
+                                    // Error popup
+                                    activity.runOnUiThread(() -> Toast.makeText(activity, R.string.joinGame_fail, Toast.LENGTH_LONG).show());
+                                } else {
+                                    // Joined game
+
+                                    // Save gameId (used for re-joining)
+                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
+                                    SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+                                    preferenceEditor.putInt("gameId", GameData.getGameData().getGame().getGameId());
+                                    preferenceEditor.putString("playerName", GameData.getGameData().getPlayer().getName());
+                                    preferenceEditor.apply();
+
+                                    Intent intent = GameData.getGameData().getGame().getState() == Game.GameState.PLAYING ?
+                                            new Intent(activity, BoardActivity.class) : // Playing -> game board
+                                            new Intent(activity, LobbyActivity.class); // Not already playing -> game lobby
+
+                                    activity.startActivity(intent);
+                                }
+
+                                GameData.getGameData().removeOnPropertyChangedCallback(this);
                             }
-                            gameId.removeOnPropertyChangedCallback(this);
                         }
                     });
                 })
@@ -92,7 +110,7 @@ public class JoinGameFragment extends DialogFragment {
         Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         // Disable positive button until input is valid
-        positiveButton.setEnabled(false);
+        positiveButton.setEnabled(DialogDataValidation.validatePlayerName(playerNameEditText.getText().toString()));
 
         // Add TextChangeListener to EditTexts
         TextWatcher textWatcher = new TextWatcher() {

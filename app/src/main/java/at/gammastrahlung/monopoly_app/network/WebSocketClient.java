@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 
 public class WebSocketClient {
+    private static final int MAX_RECONNECT_COUNT = 5;
     private WebSocket webSocket;
 
     @Getter
@@ -28,6 +30,9 @@ public class WebSocketClient {
     @Setter
     @Getter
     private String webSocketURI;
+
+    private int reconnectCount = 0;
+
     public void connect(WebSocketHandler messageHandler) {
 
         if (messageHandler == null)
@@ -46,7 +51,35 @@ public class WebSocketClient {
             @Override
             public void onFailure(@NonNull WebSocket webSocket, @NonNull Throwable t,
                                   @Nullable Response response) {
-                Log.w("WebSocket", t.getMessage());
+                if (t.getMessage() != null)
+                    Log.w("WebSocket_failure", t.getMessage());
+
+                // Try to reconnect
+                if (reconnectCount < MAX_RECONNECT_COUNT) {
+                    reconnectCount++;
+
+                    // Wait for one second
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        if (e.getMessage() != null)
+                            Log.w("WebSocket_failure", e.getMessage());
+                        else
+                            Log.w("WebSocket_failure", "Sleeping for one second failed!");
+                    }
+
+                    // Reconnect
+                    connect(messageHandler);
+
+                    // Re-join game
+                    GameData gameData = GameData.getGameData();
+                    if (gameData.getGame() != null) {
+                        MonopolyClient.getMonopolyClient().joinGame(gameData.getGameId().get(), gameData.getPlayer().getName());
+                    }
+                } else {
+                    GameData.getGameData().setWebSocketConnected(false);
+                }
+
                 super.onFailure(webSocket, t, response);
             }
 
@@ -61,6 +94,9 @@ public class WebSocketClient {
             @Override
             public void onOpen(@NonNull WebSocket webSocket, @NonNull Response response) {
                 super.onOpen(webSocket, response);
+                // Reset reconnect count
+                reconnectCount = 0;
+                GameData.getGameData().setWebSocketConnected(true);
             }
         });
     }
