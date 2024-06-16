@@ -63,8 +63,8 @@ public class UncoverPlayerListFragment extends DialogFragment {
 
     private void showCheaterDialog(Player player) {
         new AlertDialog.Builder(getActivity())
-                .setMessage("Are you sure player " + player.getName() + " is a cheater?")
-                .setPositiveButton("Yes", (dialog, which) -> {
+                .setMessage(getString(R.string.are_you_sure_player) + player.getName() + getString(R.string.is_a_cheater))
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
 
                     if (player.isCheating()) {
                         int index = GameData.getGameData().getPlayers().indexOf(player);
@@ -72,29 +72,29 @@ public class UncoverPlayerListFragment extends DialogFragment {
                         MonopolyClient.getMonopolyClient().reportAward();
 
                         new AlertDialog.Builder(getActivity())
-                                .setMessage("This player was a cheater, you collect 200!")
-                                .setPositiveButton("Ok", (dialog2, which2) -> dialog2.dismiss())
+                                .setMessage(R.string.this_player_was_a_cheater_you_collect_200)
+                                .setPositiveButton(R.string.ok, (dialog2, which2) -> dialog2.dismiss())
                                 .create()
                                 .show();
 
                     } else {
                         MonopolyClient.getMonopolyClient().reportPenalty();
                         new AlertDialog.Builder(getActivity())
-                                .setMessage("This player was not a cheater, you loose 200!")
-                                .setPositiveButton("Ok", (dialog3, which3) -> dialog3.dismiss())
+                                .setMessage(R.string.this_player_was_not_a_cheater_you_loose_200)
+                                .setPositiveButton(R.string.ok, (dialog3, which3) -> dialog3.dismiss())
                                 .create()
                                 .show();
                     }
                 })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
 
     private void showSelfSelectDialog() {
         new AlertDialog.Builder(getActivity())
-                .setMessage("You are not allowed to select yourself")
-                .setPositiveButton("Ok", (dialog, which) -> dialog.dismiss())
+                .setMessage(R.string.you_are_not_allowed_to_select_yourself)
+                .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
                 .create()
                 .show();
     }
