@@ -5,6 +5,7 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=gammaStrahlung_monopoly_app&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=gammaStrahlung_monopoly_app)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=gammaStrahlung_monopoly_app&metric=coverage)](https://sonarcloud.io/summary/new_code?id=gammaStrahlung_monopoly_app)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=gammaStrahlung_monopoly_app&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=gammaStrahlung_monopoly_app)
+        // Set click listener for build button
 
 
 ## Description
