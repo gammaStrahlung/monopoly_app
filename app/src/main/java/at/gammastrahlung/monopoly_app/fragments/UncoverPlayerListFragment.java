@@ -69,7 +69,7 @@ public class UncoverPlayerListFragment extends DialogFragment {
                     if (player.isCheating()) {
                         int index = GameData.getGameData().getPlayers().indexOf(player);
                         MonopolyClient.getMonopolyClient().reportCheat(index);
-                        MonopolyClient.getMonopolyClient().awardReport();
+                        MonopolyClient.getMonopolyClient().reportAward();
 
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("This player was a cheater, you collect 200!")
@@ -78,7 +78,7 @@ public class UncoverPlayerListFragment extends DialogFragment {
                                 .show();
 
                     } else {
-                        MonopolyClient.getMonopolyClient().reportWrongCheat();
+                        MonopolyClient.getMonopolyClient().reportPenalty();
                         new AlertDialog.Builder(getActivity())
                                 .setMessage("This player was not a cheater, you loose 200!")
                                 .setPositiveButton("Ok", (dialog3, which3) -> dialog3.dismiss())

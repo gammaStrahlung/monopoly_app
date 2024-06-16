@@ -196,9 +196,9 @@ public class MonopolyClient {
     /**
      * Sends a report_wrong_cheat message to the server
      */
-    public void reportWrongCheat() {
+    public void reportPenalty() {
         webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("report_wrong_cheat")
+                .messagePath("report_penalty")
                 .player(GameData.getGameData().getPlayer())
                 .build());
     }
@@ -206,9 +206,9 @@ public class MonopolyClient {
     /**
      * Sends a award_report message to the server
      */
-    public void awardReport() {
+    public void reportAward() {
         webSocketClient.sendMessage(ClientMessage.builder()
-                .messagePath("award_report")
+                .messagePath("report_award")
                 .player(GameData.getGameData().getPlayer())
                 .build());
     }
