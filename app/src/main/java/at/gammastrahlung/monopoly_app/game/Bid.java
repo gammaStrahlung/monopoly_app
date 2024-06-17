@@ -13,7 +13,7 @@ public class Bid {
     @Getter
     @Setter
 
-    private UUID playerId;
+    private Player playerForBid;
 
     @Getter
     @Setter

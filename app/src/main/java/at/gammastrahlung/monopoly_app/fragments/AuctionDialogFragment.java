@@ -79,7 +79,7 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
             if (bid >= 0) {
                 // Create an instance of the Bid class
                 Bid bidInstance = new Bid();
-                bidInstance.setPlayerId(GameData.getGameData().getCurrentPlayer().getId());
+                bidInstance.setPlayerForBid(GameData.getGameData().getCurrentPlayer());
                 bidInstance.setAmount(bid);
 
                 bidInstance.setFieldIndex(BoardActivity.getFollowingIndex());

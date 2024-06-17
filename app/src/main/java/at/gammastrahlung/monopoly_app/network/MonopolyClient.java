@@ -238,7 +238,7 @@ public class MonopolyClient {
 
     public void sendCurrentFieldInfo(int currentFieldIndex) {
         GameData gameData = GameData.getGameData();
-        Player currentPlayer = gameData.getCurrentPlayer();
+        Player currentPlayer = gameData.getPlayer();
 
 
         webSocketClient.sendMessage(ClientMessage.builder()
