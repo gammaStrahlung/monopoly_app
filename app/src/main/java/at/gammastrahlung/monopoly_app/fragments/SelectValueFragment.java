@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,6 +58,19 @@ public class SelectValueFragment extends DialogFragment {
 
         buttonForward.setOnClickListener(v -> forwardButtonClick());
         buttonSelect.setOnClickListener(v -> selectValueClick());
+
+        diceValueEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                buttonSelect.setEnabled(s.length() > 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         Dialog dialog = builder.create();
         Window window = dialog.getWindow();
