@@ -74,6 +74,9 @@ public class SelectValueFragment extends DialogFragment {
             window.setAttributes(params);
         }
 
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+
         return dialog;
     }
 
