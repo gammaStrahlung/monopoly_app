@@ -1,17 +1,22 @@
 package at.gammastrahlung.monopoly_app.fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
 import at.gammastrahlung.monopoly_app.R;
@@ -52,7 +57,24 @@ public class SelectValueFragment extends DialogFragment {
         buttonForward.setOnClickListener(v -> forwardButtonClick());
         buttonSelect.setOnClickListener(v -> selectValueClick());
 
-        return builder.create();
+        Dialog dialog = builder.create();
+        Window window = dialog.getWindow();
+
+        if (window != null) {
+            WindowManager.LayoutParams params = window.getAttributes();
+
+            WindowManager windowManager = (WindowManager) requireContext().getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int screenHeight = size.y;
+
+            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+            params.y = screenHeight / 2;
+            window.setAttributes(params);
+        }
+
+        return dialog;
     }
 
     @Override
