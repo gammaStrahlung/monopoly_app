@@ -93,13 +93,13 @@ public class SelectValueFragment extends DialogFragment {
     }
 
     private void selectValueClick() {
-        if (buttonSelect.getText().equals("Cheat")) {
+        if (buttonSelect.getText().equals(R.string.cheat)) {
             diceValueEditText.setEnabled(true);
             diceValueEditText.setTextColor(getResources().getColor(android.R.color.black));
             diceValueEditText.requestFocus();
 
             buttonForward.setVisibility(View.GONE);
-            buttonSelect.setText("Submit");
+            buttonSelect.setText(R.string.submit);
 
         } else {
 
