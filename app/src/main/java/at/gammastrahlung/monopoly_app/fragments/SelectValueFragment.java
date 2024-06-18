@@ -122,7 +122,7 @@ public class SelectValueFragment extends DialogFragment {
             int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
 
             if (selectedValue == dicedValue) {
-                Toast.makeText(getContext(), "Test", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.selected_value_matches_diced_value, Toast.LENGTH_SHORT).show();
                 listener.onForward(selectedValue);
                 dismiss();
 
