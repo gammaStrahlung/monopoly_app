@@ -76,10 +76,11 @@ public class AuctionDialogFragment extends DialogFragment implements WebSocketHa
         try {
             int bid = Integer.parseInt(bidInput.getText().toString());
             // Validates that the bid is a positive integer
-            if (bid >= 0) {
+            if (bid >= 0 && bid <= GameData.getGameData().getPlayer().getBalance()) {
                 // Create an instance of the Bid class
                 Bid bidInstance = new Bid();
-                bidInstance.setPlayerForBid(GameData.getGameData().getCurrentPlayer());
+                bidInstance.setPlayerForBid(GameData.getGameData().getPlayer());
+                bidInstance.setPlayerId(GameData.getGameData().getPlayer().getId());
                 bidInstance.setAmount(bid);
 
                 bidInstance.setFieldIndex(BoardActivity.getFollowingIndex());

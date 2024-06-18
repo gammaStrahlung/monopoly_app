@@ -25,9 +25,11 @@ public class Player {
     private String name;
     @Getter
     @Setter
+    @Expose
     private int currentFieldIndex;
     @Getter
     @Setter
+    @Expose
     private int balance;
 
 
