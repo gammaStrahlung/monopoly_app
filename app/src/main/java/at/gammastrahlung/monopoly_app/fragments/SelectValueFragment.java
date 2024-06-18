@@ -93,8 +93,9 @@ public class SelectValueFragment extends DialogFragment {
     }
 
     private void selectValueClick() {
-        if (buttonSelect.getText().equals(R.string.cheat)) {
+        if (buttonSelect.getText().equals("Cheat")) {
             diceValueEditText.setEnabled(true);
+            diceValueEditText.setText("");
             diceValueEditText.setTextColor(getResources().getColor(android.R.color.black));
             diceValueEditText.requestFocus();
 
@@ -102,21 +103,30 @@ public class SelectValueFragment extends DialogFragment {
             buttonSelect.setText(R.string.submit);
 
         } else {
-
             int selectedValue = Integer.parseInt(diceValueEditText.getText().toString());
-            if (selectedValue <= 1) {
-                Toast.makeText(getContext(), R.string.the_selected_value_needs_to_be_greater_than_1, Toast.LENGTH_SHORT).show();
-                diceValueEditText.setText("");
-                diceValueEditText.requestFocus();
-                return;
+            int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
+
+            if (selectedValue == dicedValue) {
+                Toast.makeText(getContext(), "Test", Toast.LENGTH_SHORT).show();
+                listener.onForward(selectedValue);
+                dismiss();
+
+            } else {
+
+                if (selectedValue <= 1) {
+                    Toast.makeText(getContext(), R.string.the_selected_value_needs_to_be_greater_than_1, Toast.LENGTH_SHORT).show();
+                    diceValueEditText.setText("");
+                    diceValueEditText.requestFocus();
+                    return;
+                }
+                int value1 = selectedValue / 2;
+                int value2 = selectedValue - value1;
+
+                MonopolyClient.getMonopolyClient().cheating(value1, value2);
+
+                listener.onSelectedValue(selectedValue);
+                dismiss();
             }
-            int value1 = selectedValue/2;
-            int value2 = selectedValue - value1;
-
-            MonopolyClient.getMonopolyClient().cheating(value1, value2);
-
-            listener.onSelectedValue(selectedValue);
-            dismiss();
         }
     }
 }
