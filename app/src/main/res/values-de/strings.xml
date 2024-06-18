@@ -51,4 +51,5 @@
     <string name="currentRound">Runde %1$d / %2$d</string>
     <string name="submit">Weiter</string>
     <string name="selected_value_matches_diced_value">Der gewählte Wert gleicht dem gewürfelten Wert, du bist kein Schummler!</string>
+    <string name="enter_the_value_to_forward">Bitte gib den Wert ein, um welchen du weiterfahren möchtest.</string>
 </resources>

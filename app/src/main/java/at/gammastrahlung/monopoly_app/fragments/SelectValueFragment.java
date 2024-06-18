@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class SelectValueFragment extends DialogFragment {
 
     private OnValueSelectedListener listener;
     private EditText diceValueEditText;
+    private TextView enterValueTextView;
     private Button buttonForward;
     private Button buttonSelect;
 
@@ -47,6 +49,7 @@ public class SelectValueFragment extends DialogFragment {
         builder.setView(inflatedView);
 
         diceValueEditText = inflatedView.findViewById(R.id.diceValueEditText);
+        enterValueTextView = inflatedView.findViewById(R.id.textView);
         buttonForward = inflatedView.findViewById(R.id.buttonForward);
         buttonSelect = inflatedView.findViewById(R.id.buttonSelect);
 
@@ -109,6 +112,7 @@ public class SelectValueFragment extends DialogFragment {
 
     private void selectValueClick() {
         if (buttonSelect.getText().equals("Cheat")) {
+            enterValueTextView.setText(R.string.enter_the_value_to_forward);
             diceValueEditText.setEnabled(true);
             diceValueEditText.setText("");
             diceValueEditText.setTextColor(getResources().getColor(android.R.color.black));
