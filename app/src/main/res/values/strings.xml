@@ -49,4 +49,7 @@
     <string name="winningUtilities">Utilities: %1$d</string>
     <string name="winningEmoji" translatable="false">🏆</string>
     <string name="currentRound">Round %1$d / %2$d</string>
+    <string name="submit">Submit</string>
+    <string name="selected_value_matches_diced_value">Your selected value matches the diced value. You are not a cheater!</string>
+    <string name="enter_the_value_to_forward">Please enter the value you want to move forward.</string>
 </resources>
