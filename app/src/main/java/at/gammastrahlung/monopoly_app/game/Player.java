@@ -1,4 +1,3 @@
-// Player.java
 package at.gammastrahlung.monopoly_app.game;
 
 import com.google.gson.annotations.Expose;
@@ -11,31 +10,39 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+import java.util.UUID;
+
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Getter
+@Setter
 public class Player {
+    /**
+     * The unique ID of the player, this can be used by the player to allow for re-joining the game
+     */
     @Expose
-    @Getter
-    @Setter
     private UUID id;
+
+    /**
+     * The name of the player (this is shown to other players)
+     */
     @Expose
-    @Getter
-    @Setter
     private String name;
-    @Getter
-    @Setter
+
     @Expose
     private int currentFieldIndex;
-    @Getter
-    @Setter
+
     @Expose
     private int balance;
 
+    @Expose
+    private boolean isCheating;
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Player)) return false;
+        if (! (obj instanceof Player))
+            return false;
 
         return id.equals(((Player) obj).id);
     }
@@ -44,6 +51,4 @@ public class Player {
     public int hashCode() {
         return Objects.hash(id, name);
     }
-
-
 }

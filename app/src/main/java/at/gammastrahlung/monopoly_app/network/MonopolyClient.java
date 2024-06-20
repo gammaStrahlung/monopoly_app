@@ -8,12 +8,9 @@ import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.network.dtos.ClientMessage;
 import lombok.Getter;
 
-
 /**
  * Singleton used to send messages to server
  */
-
-
 public class MonopolyClient {
 
     @Getter
@@ -22,10 +19,8 @@ public class MonopolyClient {
     private final WebSocketClient webSocketClient;
 
     private MonopolyClient() {
-
         webSocketClient = WebSocketClient.getWebSocketClient();
         webSocketClient.connect(new WebSocketHandler());
-
     }
 
     public static void reset() {
@@ -86,7 +81,10 @@ public class MonopolyClient {
     public void startGame() {
         GameData gameData = GameData.getGameData();
 
-        webSocketClient.sendMessage(ClientMessage.builder().messagePath("start").player(gameData.getPlayer()).build());
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("start")
+                .player(gameData.getPlayer())
+                .build());
     }
 
     /**
@@ -263,6 +261,37 @@ public class MonopolyClient {
                 .build());
 
     }
+
+    /**
+     * Sends a report_cheat message to the server.
+     *
+     * @param index The index of the accused Player
+     */
+    public void reportCheat(int index) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_cheat")
+                .player(GameData.getGameData().getPlayer())
+                .message(String.valueOf(index))
+                .build());
+    }
+
+    /**
+     * Sends a report_wrong_cheat message to the server
+     */
+    public void reportPenalty() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_penalty")
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
+
+    /**
+     * Sends a award_report message to the server
+     */
+    public void reportAward() {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("report_award")
+                .player(GameData.getGameData().getPlayer())
+                .build());
+    }
 }
-
-

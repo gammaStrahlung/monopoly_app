@@ -1,10 +1,13 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.UncoverPlayerListFragment;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.AuctionDialogFragment;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -34,6 +38,7 @@ import at.gammastrahlung.monopoly_app.fragments.FieldInfoFragment;
 import at.gammastrahlung.monopoly_app.fragments.PlayerListFragment;
 import at.gammastrahlung.monopoly_app.fragments.PurchaseDialogFragment;
 import at.gammastrahlung.monopoly_app.fragments.SelectValueFragment;
+import at.gammastrahlung.monopoly_app.game.Game;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
@@ -41,6 +46,7 @@ import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.WebSocketHandler;
+import lombok.Getter;
 
 
 public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener, WebSocketHandler.DialogTrigger, WebSocketHandler.DialogTrigger2 {
@@ -51,6 +57,8 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private ConstraintLayout fieldRowRight;
     private ConstraintLayout boardLayout;
     private TextView moneyText;
+    private TextView roundText;
+    @Getter
     private static int followingIndex = 0;
 
     private ImageView dice1;
@@ -75,11 +83,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // Calls the superclass's onCreate method with the saved instance state
-       ///
+
         webSocketHandlerforDialogTrigger = new WebSocketHandler();
         webSocketHandlerforDialogTrigger.setDialogTrigger(this);
         webSocketHandlerforDialogTrigger.setDialogTrigger2(this);
-        /////
+
         setContentView(R.layout.activity_board); // Sets the content view of this activity to the activity_board_screen layout
 
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -92,6 +100,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         boardLayout = findViewById(R.id.boardLayout);
 
         moneyText = findViewById(R.id.moneyText);
+        roundText = findViewById(R.id.roundText);
 
         dice1 = findViewById(R.id.imageView1);
         dice2 = findViewById(R.id.imageView5);
@@ -109,10 +118,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         playerAdapter = new PlayerAdapter(GameData.getGameData().getPlayers(), this, false, false, false, true);
 
         playersRecyclerView.setAdapter(playerAdapter);
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
-
 
         GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
             @Override
@@ -120,7 +129,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 // Update when game data changes
                 if (propertyId == BR.game) {
                     runOnUiThread(() -> {
-                        if (fieldFragments.isEmpty()) {
+                        if (GameData.getGameData().getGame().getState() == Game.GameState.ENDED) {
+                            GameData.getGameData().removeOnPropertyChangedCallback(this);
+                            gameEnd();
+                        } else if (fieldFragments.isEmpty()) {
                             buildGameBoard();
                         } else {
                             updateGameBoard();
@@ -158,7 +170,33 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+    }
 
+    private void gameEnd() {
+        if (GameData.getGameData().getGame().getWinningPlayer() != null) {
+            // Somebody has won -> Open WinActivity
+
+            Intent intent = new Intent(this, WinActivity.class);
+            // Clear previous activities
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+        } else {
+            // Game was only ended and nobody has won -> Return to MainActivity
+
+            GameData.reset();
+
+            // Remove gameId (used for re-joining)
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+            preferenceEditor.remove("gameId");
+            preferenceEditor.apply();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            // Clear previous activities
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     private void updatePlayerList() {
@@ -177,6 +215,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     private void updatePlayerInfo() {
         moneyText.setText(getString(R.string.money, GameData.getGameData().getPlayer().getBalance()));
+    }
+
+    public void uncoverCheatButtonClick(View v){
+        new UncoverPlayerListFragment().show(getSupportFragmentManager(), "uncoverCheat");
     }
 
     private void updateLogMessages() {
@@ -203,6 +245,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         } else {
             rollDiceButton.setEnabled(false);
         }
+
+        // Update current round
+        Game game = GameData.getGameData().getGame();
+        roundText.setText(getString(R.string.currentRound, game.getCurrentRound(), game.getRoundAmount()));
     }
 
     private void updateGameBoard() {
@@ -556,10 +602,6 @@ public void showDialog() {
         AuctionDialogFragment dialog = AuctionDialogFragment.newInstance();
         dialog.show(getSupportFragmentManager(), "auctionDialog");
     }
-
-    public static int getFollowingIndex() {
-    return followingIndex;
-}
 
 
 }
