@@ -36,4 +36,19 @@ class DialogDataValidationTests {
         assertTrue(DialogDataValidation.validatePlayerName("John Doe"));
         assertTrue(DialogDataValidation.validatePlayerName("!@#$%^&*()_+-=<>,./"));
     }
+
+    @Test
+    void validateRoundAmount() {
+        // Round amount has to be greater than 2
+
+        assertFalse(DialogDataValidation.validateRoundAmount(""));
+        assertFalse(DialogDataValidation.validateRoundAmount("abcdefg"));
+        assertFalse(DialogDataValidation.validateRoundAmount("1"));
+        assertFalse(DialogDataValidation.validateRoundAmount("-100"));
+        assertFalse(DialogDataValidation.validateRoundAmount("2"));
+
+        assertTrue(DialogDataValidation.validateRoundAmount("3"));
+        assertTrue(DialogDataValidation.validateRoundAmount("10"));
+        assertTrue(DialogDataValidation.validateRoundAmount("30"));
+    }
 }
