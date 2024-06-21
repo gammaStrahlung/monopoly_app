@@ -65,9 +65,9 @@ public class BuyFieldFragment extends DialogFragment {
                                 Player thisPlayer = GameData.getGameData().getPlayer();
                                 Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
 
-                                if (newField instanceof Property && ((Property) field).getOwner().equals(thisPlayer) ||
-                                        newField instanceof Utility && ((Utility) field).getOwner().equals(thisPlayer) ||
-                                        newField instanceof Railroad && ((Railroad) field).getOwner().equals(thisPlayer)) {
+                                if (newField instanceof Property && ((Property) newField).getOwner().equals(thisPlayer) ||
+                                        newField instanceof Utility && ((Utility) newField).getOwner().equals(thisPlayer) ||
+                                        newField instanceof Railroad && ((Railroad) newField).getOwner().equals(thisPlayer)) {
                                     // Field has been bought successfully
 
                                     GameData.getGameData().removeOnPropertyChangedCallback(this);
