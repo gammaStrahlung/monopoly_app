@@ -39,7 +39,7 @@
     <string name="is_a_cheater">" is a cheater?"</string>
     <string name="this_player_was_a_cheater_you_collect_200">This player was a cheater, you collect 200$!</string>
     <string name="this_player_was_not_a_cheater_you_lose_200">This player was not a cheater, you lose 200$!</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="you_are_not_allowed_to_select_yourself">You are not allowed to select yourself!</string>
     <string name="congratulations">Congratulations!</string>
     <string name="winningPlayer">Player %s has won!</string>
