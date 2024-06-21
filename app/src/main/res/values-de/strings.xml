@@ -39,7 +39,7 @@
     <string name="are_you_sure_player">"Bist du sicher, dass Spieler "</string>
     <string name="is_a_cheater">" ein Schummler ist?"</string>
     <string name="this_player_was_a_cheater_you_collect_200">Dieser Spieler war ein Schummler, du erhältst 200€!</string>
-    <string name="this_player_was_not_a_cheater_you_loose_200">Dieser Spieler war kein Schummler, du verlierst 200€!</string>
+    <string name="this_player_was_not_a_cheater_you_lose_200">Dieser Spieler war kein Schummler, du verlierst 200€!</string>
     <string name="ok">Ok</string>
     <string name="you_are_not_allowed_to_select_yourself">Du kannst dich nicht selbst wählen.</string>
     <string name="congratulations">Gratulation!</string>

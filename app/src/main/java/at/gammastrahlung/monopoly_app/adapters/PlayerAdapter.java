@@ -71,7 +71,7 @@ public class PlayerAdapter extends RecyclerView.Adapter<PlayerAdapter.PlayerView
 
         if (emphasizeCurrentPlayer) {
             if (player.equals(currentPlayer)) {
-                holder.itemView.setBackgroundColor(Color.GRAY);
+                holder.itemView.setBackgroundColor(Color.LTGRAY);
             } else {
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT);
             }

@@ -80,7 +80,7 @@ public class UncoverPlayerListFragment extends DialogFragment {
                     } else {
                         MonopolyClient.getMonopolyClient().reportPenalty();
                         new AlertDialog.Builder(getActivity())
-                                .setMessage(R.string.this_player_was_not_a_cheater_you_loose_200)
+                                .setMessage(R.string.this_player_was_not_a_cheater_you_lose_200)
                                 .setPositiveButton(R.string.ok, (dialog3, which3) -> dialog3.dismiss())
                                 .create()
                                 .show();
