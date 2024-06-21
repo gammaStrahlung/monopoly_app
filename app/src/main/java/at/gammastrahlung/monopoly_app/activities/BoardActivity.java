@@ -215,8 +215,10 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void updateLogMessages() {
         List<String> logMessages = GameData.getGameData().getLogMessages();
         StringBuilder logText = new StringBuilder();
-        for (String logMessage : logMessages) {
-            logText.append(logMessage).append("\n");
+        synchronized (logMessages) {
+            for (String logMessage : logMessages) {
+                logText.append(logMessage).append("\n");
+            }
         }
         logTextView.setText(logText.toString());
         // Scroll ScrollView to the bottom
