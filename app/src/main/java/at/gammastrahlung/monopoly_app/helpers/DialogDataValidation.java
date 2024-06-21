@@ -4,6 +4,8 @@ public class DialogDataValidation {
     private static final int MIN_GAME_ID = 100000;
     private static final int MAX_GAME_ID = 999999;
 
+    private static final int MIN_ROUND_AMOUNT = 2;
+
     private DialogDataValidation() {}
 
     public static boolean validateGameId(String gameId) {
@@ -21,5 +23,14 @@ public class DialogDataValidation {
     public static boolean validatePlayerName(String playerName) {
         // Player name is not empty
         return !playerName.isEmpty();
+    }
+
+    public static boolean validateRoundAmount(String roundAmount) {
+        try {
+            int roundAmountInt = Integer.parseInt(roundAmount);
+            return roundAmountInt > MIN_ROUND_AMOUNT;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -55,4 +55,5 @@
     <string name="buyField">Do you want to buy the field %1$s for %2$s $ ?</string>
     <string name="buy_successful">Successfully bought the field.</string>
     <string name="buy_fail">Failed to buy the field.</string>
+    <string name="roundAmount">Rounds</string>
 </resources>

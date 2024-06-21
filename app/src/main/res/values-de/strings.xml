@@ -55,4 +55,5 @@
     <string name="buyField">Möchtest du das Spieldeld %1$s für %2$s € kaufen?</string>
     <string name="buy_successful">Das Spielfeld wurde erfolgreich gekauft.</string>
     <string name="buy_fail">Das Spielfeld konnte nicht gekauft werden.</string>
+    <string name="roundAmount">Runden</string>
 </resources>
