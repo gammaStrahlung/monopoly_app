@@ -20,7 +20,7 @@
     <string name="playerList_IsYou">(Du)</string>
     <string name="field_title">Feld Titel</string>
     <string name="money">Aktueller Kontostand: %1$d €</string>
-    <string name="otherPlayers">Mitspieler</string>
+    <string name="otherPlayers">Spielerliste</string>
     <string name="currencyDisplay">%1$d €</string>
     <string name="close">Schließen</string>
     <string name="owned_fields">Besitzte Felder:</string>

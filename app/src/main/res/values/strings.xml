@@ -19,7 +19,7 @@
     <string name="playerList_IsYou">(You)</string>
     <string name="field_title">Field Title</string>
     <string name="money">Current Balance: %1$d $</string>
-    <string name="otherPlayers">Other Players</string>
+    <string name="otherPlayers">Player list</string>
     <string name="currencyDisplay">%1$d $</string>
     <string name="close">Close</string>
     <string name="owned_fields">Owned Fields:</string>
