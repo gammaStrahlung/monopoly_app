@@ -27,14 +27,16 @@ public class MonopolyClient {
      * Sends a new game message to the server.
      *
      * @param playerName Name of the player that will be shown to other players.
+     * @param roundAmount The amount of rounds until the game ends.
      */
-    public void newGame(String playerName) {
+    public void newGame(String playerName, int roundAmount) {
         GameData gameData = GameData.getGameData();
         gameData.getPlayer().setName(playerName);
 
         webSocketClient.sendMessage(ClientMessage.builder()
                 .messagePath("create")
                 .player(gameData.getPlayer())
+                .message(String.valueOf(roundAmount))
                 .build());
     }
 
