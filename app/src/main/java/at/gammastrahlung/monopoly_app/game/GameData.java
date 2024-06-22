@@ -98,7 +98,9 @@ public class GameData extends BaseObservable {
      * @param logMessage The log message to add
      */
     public void addLogMessage(String logMessage) {
-        logMessages.add(logMessage);
+        synchronized (logMessages) {
+            logMessages.add(logMessage);
+        }
         // Notify observers that log messages have changed
         notifyPropertyChanged(BR.logMessages);
     }

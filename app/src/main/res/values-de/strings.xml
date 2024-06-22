@@ -20,7 +20,7 @@
     <string name="playerList_IsYou">(Du)</string>
     <string name="field_title">Feld Titel</string>
     <string name="money">Aktueller Kontostand: %1$d €</string>
-    <string name="otherPlayers">Mitspieler</string>
+    <string name="otherPlayers">Spielerliste</string>
     <string name="currencyDisplay">%1$d €</string>
     <string name="close">Schließen</string>
     <string name="owned_fields">Besitzte Felder:</string>
@@ -40,7 +40,7 @@
     <string name="is_a_cheater">" ein Schummler ist?"</string>
     <string name="this_player_was_a_cheater_you_collect_200">Dieser Spieler war ein Schummler, du erhältst 200€!</string>
     <string name="this_player_was_not_a_cheater_you_lose_200">Dieser Spieler war kein Schummler, du verlierst 200€!</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="you_are_not_allowed_to_select_yourself">Du kannst dich nicht selbst wählen.</string>
     <string name="congratulations">Gratulation!</string>
     <string name="winningPlayer">%s hat gewonnen!</string>
