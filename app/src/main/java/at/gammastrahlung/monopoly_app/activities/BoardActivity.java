@@ -74,6 +74,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
 
+    Observable.OnPropertyChangedCallback propertyChangedCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,11 +110,17 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         playersRecyclerView.setAdapter(playerAdapter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
 
-        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+        GameData.getGameData().addOnPropertyChangedCallback(propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 // Update when game data changes
@@ -137,8 +144,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
                     runOnUiThread(() -> updatePlayerList());
-                }
-                else if (propertyId == BR.logMessages){
+                } else if (propertyId == BR.logMessages) {
                     runOnUiThread(() -> updateLogMessages());
                 }
                 // Update when dice value is changed
@@ -161,6 +167,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GameData.getGameData().removeOnPropertyChangedCallback(propertyChangedCallback);
     }
 
     private void gameEnd() {
