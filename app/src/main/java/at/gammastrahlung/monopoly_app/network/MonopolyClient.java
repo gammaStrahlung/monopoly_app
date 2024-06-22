@@ -212,4 +212,16 @@ public class MonopolyClient {
                 .player(GameData.getGameData().getPlayer())
                 .build());
     }
+
+    /**
+     * Sends a buy_field message to the server
+     * @param fieldId the id of the field
+     */
+    public void buyField(int fieldId) {
+        webSocketClient.sendMessage(ClientMessage.builder()
+                .messagePath("buy_field")
+                .player(GameData.getGameData().getPlayer())
+                .message(String.valueOf(fieldId))
+                .build());
+    }
 }

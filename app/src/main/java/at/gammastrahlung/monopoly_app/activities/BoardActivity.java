@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.BuyFieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.UncoverPlayerListFragment;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -42,6 +43,8 @@ import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.game.gameboard.Railroad;
+import at.gammastrahlung.monopoly_app.game.gameboard.Utility;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
@@ -125,6 +128,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                             updateGameBoard();
                         }
                         updatePlayerInfo();
+                        promptPlayerWhenOnBuyableField();
                     });
                 } else if (propertyId == BR.player) {
                     runOnUiThread(() -> updatePlayerInfo());
@@ -217,6 +221,27 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         logTextView.setText(logText.toString());
         // Scroll ScrollView to the bottom
         logScrollView.post(() -> logScrollView.fullScroll(View.FOCUS_DOWN));
+    }
+
+    int lastPromptIndex = -1;
+    private void promptPlayerWhenOnBuyableField() {
+        Player thisPlayer = GameData.getGameData().getPlayer();
+        Player bank = GameData.getGameData().getGame().getGameBoard().getBank();
+        Field field = GameData.getGameData().getGame().getGameBoard().getFields()[thisPlayer.getCurrentFieldIndex()];
+
+        if (lastPromptIndex == field.getFieldId())
+            return; // Only prompt once
+        lastPromptIndex = field.getFieldId();
+
+        if (thisPlayer.isInJail())
+            return; // Player in Jail can't buy field
+
+        if (field instanceof Property && ((Property) field).getOwner().equals(bank) ||
+                field instanceof Utility && ((Utility) field).getOwner().equals(bank) ||
+                field instanceof Railroad && ((Railroad) field).getOwner().equals(bank)) {
+
+            new BuyFieldFragment(field).show(getSupportFragmentManager(), "BUY_FIELD");
+        }
     }
 
     private void updatePlayerOnTurn() {
