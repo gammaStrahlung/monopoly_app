@@ -57,6 +57,9 @@ public class ReJoinGameFragment extends DialogFragment {
                                             new Intent(activity, BoardActivity.class) : // Playing -> game board
                                             new Intent(activity, LobbyActivity.class); // Not already playing -> game lobby
 
+                                    // Clear previous activities
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
                                     // Update GameData.currentPlayer
                                     MonopolyClient.getMonopolyClient().initiateRound();
 
