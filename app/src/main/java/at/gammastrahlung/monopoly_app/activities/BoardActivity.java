@@ -1,5 +1,6 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -568,5 +569,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public void onSelectedValue(int value){
         moveAvatarAfterCheating();
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
