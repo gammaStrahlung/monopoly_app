@@ -31,6 +31,8 @@ public class Player {
 
     private int balance;
 
+    private boolean isInJail;
+
     @Expose
     private boolean isCheating;
 

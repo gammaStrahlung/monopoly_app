@@ -29,6 +29,7 @@ import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 public class NewGameFragment extends DialogFragment {
 
     private EditText playerNameEditText;
+    private EditText roundAmountEditText;
 
     @NonNull
     @Override
@@ -39,6 +40,7 @@ public class NewGameFragment extends DialogFragment {
         View inflated = inflater.inflate(R.layout.dialog_newgame, null);
 
         playerNameEditText = inflated.findViewById(R.id.playerName);
+        roundAmountEditText = inflated.findViewById(R.id.roundAmount);
 
         // Set player name to the one that has been saved
         playerNameEditText.setText(GameData.getGameData().getPlayer().getName());
@@ -47,7 +49,9 @@ public class NewGameFragment extends DialogFragment {
                 // Add action buttons
                 .setPositiveButton(R.string.main_startGame, (dialog, id) -> {
                     String playerName = playerNameEditText.getText().toString();
-                    MonopolyClient.getMonopolyClient().newGame(playerName);
+                    String rounds = roundAmountEditText.getText().toString();
+
+                    MonopolyClient.getMonopolyClient().newGame(playerName, Integer.parseInt(rounds));
 
                     Activity activity = getActivity();
 
@@ -96,7 +100,8 @@ public class NewGameFragment extends DialogFragment {
         Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
 
         // Disable positive button until input is valid
-        positiveButton.setEnabled(DialogDataValidation.validatePlayerName(playerNameEditText.getText().toString()));
+        positiveButton.setEnabled(DialogDataValidation.validatePlayerName(playerNameEditText.getText().toString()) &&
+                DialogDataValidation.validateRoundAmount(roundAmountEditText.getText().toString()));
 
         // Add TextChangeListener to EditTexts
         TextWatcher textWatcher = new TextWatcher() {
@@ -105,7 +110,8 @@ public class NewGameFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                positiveButton.setEnabled(DialogDataValidation.validatePlayerName(playerNameEditText.getText().toString()));
+                positiveButton.setEnabled(DialogDataValidation.validatePlayerName(playerNameEditText.getText().toString()) &&
+                        DialogDataValidation.validateRoundAmount(roundAmountEditText.getText().toString()));
             }
 
             @Override
@@ -113,5 +119,6 @@ public class NewGameFragment extends DialogFragment {
         };
 
         playerNameEditText.addTextChangedListener(textWatcher);
+        roundAmountEditText.addTextChangedListener(textWatcher);
     }
 }

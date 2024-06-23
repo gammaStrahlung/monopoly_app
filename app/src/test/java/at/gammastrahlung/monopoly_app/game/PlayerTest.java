@@ -17,7 +17,7 @@ class PlayerTest {
 
         UUID uuid = UUID.randomUUID();
 
-        Player p2 = new Player(uuid, "NAME", 0,0, false);
+        Player p2 = new Player(uuid, "NAME", 0,0, false, false);
         assertEquals(uuid, p2.getId());
         assertEquals("NAME", p2.getName());
         assertFalse(p2.isCheating());
@@ -85,5 +85,14 @@ class PlayerTest {
         assertFalse(p1.isCheating());
         p1.setCheating(true);
         assertTrue(p1.isCheating());
+    }
+
+    @Test
+    void isInJail() {
+        Player p = new Player();
+
+        assertFalse(p.isInJail());
+        p.setInJail(true);
+        assertTrue(p.isInJail());
     }
 }

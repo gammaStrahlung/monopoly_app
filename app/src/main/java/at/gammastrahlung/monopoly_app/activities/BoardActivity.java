@@ -1,5 +1,6 @@
 package at.gammastrahlung.monopoly_app.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.gammastrahlung.monopoly_app.R;
+import at.gammastrahlung.monopoly_app.fragments.BuyFieldFragment;
 import at.gammastrahlung.monopoly_app.fragments.UncoverPlayerListFragment;
 import at.gammastrahlung.monopoly_app.adapters.PlayerAdapter;
 import at.gammastrahlung.monopoly_app.fragments.FieldFragment;
@@ -42,6 +44,8 @@ import at.gammastrahlung.monopoly_app.game.Player;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
 import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.game.gameboard.Railroad;
+import at.gammastrahlung.monopoly_app.game.gameboard.Utility;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 
 public class BoardActivity extends AppCompatActivity implements SensorEventListener, SelectValueFragment.OnValueSelectedListener {
@@ -71,6 +75,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
 
+    Observable.OnPropertyChangedCallback propertyChangedCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +111,17 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         playersRecyclerView.setAdapter(playerAdapter);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         buildGameBoard();
         updatePlayerInfo();
         updatePlayerOnTurn();
 
-        GameData.getGameData().addOnPropertyChangedCallback(new Observable.OnPropertyChangedCallback() {
+        GameData.getGameData().addOnPropertyChangedCallback(propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 // Update when game data changes
@@ -125,6 +136,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                             updateGameBoard();
                         }
                         updatePlayerInfo();
+                        promptPlayerWhenOnBuyableField();
                     });
                 } else if (propertyId == BR.player) {
                     runOnUiThread(() -> updatePlayerInfo());
@@ -133,8 +145,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 else if (propertyId == BR.currentPlayer) {
                     runOnUiThread(() -> updatePlayerOnTurn());
                     runOnUiThread(() -> updatePlayerList());
-                }
-                else if (propertyId == BR.logMessages){
+                } else if (propertyId == BR.logMessages) {
                     runOnUiThread(() -> updateLogMessages());
                 }
                 // Update when dice value is changed
@@ -157,6 +168,12 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        GameData.getGameData().removeOnPropertyChangedCallback(propertyChangedCallback);
     }
 
     private void gameEnd() {
@@ -211,12 +228,35 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     private void updateLogMessages() {
         List<String> logMessages = GameData.getGameData().getLogMessages();
         StringBuilder logText = new StringBuilder();
-        for (String logMessage : logMessages) {
-            logText.append(logMessage).append("\n");
+        synchronized (logMessages) {
+            for (String logMessage : logMessages) {
+                logText.append(logMessage).append("\n");
+            }
         }
         logTextView.setText(logText.toString());
         // Scroll ScrollView to the bottom
         logScrollView.post(() -> logScrollView.fullScroll(View.FOCUS_DOWN));
+    }
+
+    int lastPromptIndex = -1;
+    private void promptPlayerWhenOnBuyableField() {
+        Player thisPlayer = GameData.getGameData().getPlayer();
+        Player bank = GameData.getGameData().getGame().getGameBoard().getBank();
+        Field field = GameData.getGameData().getGame().getGameBoard().getFields()[thisPlayer.getCurrentFieldIndex()];
+
+        if (lastPromptIndex == field.getFieldId())
+            return; // Only prompt once
+        lastPromptIndex = field.getFieldId();
+
+        if (thisPlayer.isInJail())
+            return; // Player in Jail can't buy field
+
+        if (field instanceof Property && ((Property) field).getOwner().equals(bank) ||
+                field instanceof Utility && ((Utility) field).getOwner().equals(bank) ||
+                field instanceof Railroad && ((Railroad) field).getOwner().equals(bank)) {
+
+            new BuyFieldFragment(field).show(getSupportFragmentManager(), "BUY_FIELD");
+        }
     }
 
     private void updatePlayerOnTurn() {
@@ -227,11 +267,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         playerOnTurn.setText(getString(R.string.player_on_turn, player.getName()));
 
         // if current player is our player then enable roll dice button
-        if (isMyTurn()) {
-            rollDiceButton.setEnabled(true);
-        } else {
-            rollDiceButton.setEnabled(false);
-        }
+        rollDiceButton.setEnabled(isMyTurn());
 
         // Update current round
         Game game = GameData.getGameData().getGame();
@@ -450,8 +486,6 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
         dice1.setImageResource(value1);
         dice2.setImageResource(value2);
-
-        int dicedValue = GameData.getGameData().getDice().getValue1() + GameData.getGameData().getDice().getValue2();
     }
 
     public void enableUserActions() {
@@ -535,5 +569,11 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
     @Override
     public void onSelectedValue(int value){
         moveAvatarAfterCheating();
+    }
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
