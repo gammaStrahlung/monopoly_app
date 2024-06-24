@@ -16,19 +16,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.library.baseAdapters.BR;
-import androidx.databinding.Observable.OnPropertyChangedCallback;
+import androidx.databinding.Observable;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Map;
-import java.util.Observable;
 
 import javax.security.auth.callback.Callback;
 
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
+import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
@@ -36,7 +36,7 @@ import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
 public class FieldInfoFragment extends DialogFragment {
     private Field field;
-    //private Observable.OnPropertyChangedCallback callback;
+    private Observable.OnPropertyChangedCallback callback;
 
     public FieldInfoFragment(Field field) {
         this.field = field;
@@ -180,12 +180,12 @@ public class FieldInfoFragment extends DialogFragment {
             }
         });
 
-        //registerPropertyChangedCallback();
+        registerPropertyChangedCallback();
 
         return view;
     }
 
-    /*private void registerPropertyChangedCallback() {
+    private void registerPropertyChangedCallback() {
         callback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {

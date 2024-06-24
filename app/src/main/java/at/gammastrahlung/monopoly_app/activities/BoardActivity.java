@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
 
-    OnPropertyChangedCallback propertyChangedCallback;
+    Observable.OnPropertyChangedCallback propertyChangedCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +122,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         updatePlayerInfo();
         updatePlayerOnTurn();
 
-        GameData.getGameData().addOnPropertyChangedCallback(propertyChangedCallback = new OnPropertyChangedCallback() {
+        GameData.getGameData().addOnPropertyChangedCallback(propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 // Update when game data changes
