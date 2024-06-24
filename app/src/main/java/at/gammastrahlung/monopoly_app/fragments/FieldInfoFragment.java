@@ -23,13 +23,12 @@ import com.google.android.material.textview.MaterialTextView;
 
 import java.util.Map;
 
-import javax.security.auth.callback.Callback;
-
 import at.gammastrahlung.monopoly_app.R;
 import at.gammastrahlung.monopoly_app.game.GameData;
 import at.gammastrahlung.monopoly_app.game.gameboard.Field;
-import at.gammastrahlung.monopoly_app.game.gameboard.GameBoard;
 import at.gammastrahlung.monopoly_app.game.gameboard.Property;
+import at.gammastrahlung.monopoly_app.game.gameboard.Railroad;
+import at.gammastrahlung.monopoly_app.game.gameboard.Utility;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
@@ -54,8 +53,15 @@ public class FieldInfoFragment extends DialogFragment {
             inflatedView = inflater.inflate(R.layout.fragment_propertyinfo, null);
             View view = setUpPropertyInfo(inflater, container, savedInstanceState);
             builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
-
-        }else{
+        }else if(field instanceof Utility){
+            inflatedView = inflater.inflate(R.layout.fragment_utility_info, null);
+            View view = setUpUtilityInfo(inflater, container, savedInstanceState);
+            builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
+        }else if(field instanceof Railroad){
+            inflatedView = inflater.inflate(R.layout.fragment_railroad_info, null);
+            View view = setUpRailroadInfo(inflater, container, savedInstanceState);
+            builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
+        }else {
             inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, null);
             MaterialTextView title = inflatedView.findViewById(R.id.fieldName);
             title.setText(field.getName());
@@ -81,7 +87,11 @@ public class FieldInfoFragment extends DialogFragment {
 
         if(field instanceof Property){
             view = setUpPropertyInfo(inflater, container, savedInstanceState);
-        }else {
+        }else if(field instanceof Utility){
+            view = setUpUtilityInfo(inflater, container, savedInstanceState);
+        }else if(field instanceof Railroad){
+            view = setUpRailroadInfo(inflater, container, savedInstanceState);
+    }else {
             view = inflater.inflate(R.layout.fragment_fieldinfo, container, false);
             TextView fieldName = view.findViewById(R.id.fieldName);
             fieldName.setText(field.getName());
@@ -181,6 +191,72 @@ public class FieldInfoFragment extends DialogFragment {
         });
 
         registerPropertyChangedCallback();
+
+        return view;
+    }
+
+    @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
+    private View setUpUtilityInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+
+        Utility utility;
+        utility = (Utility) field;
+        View view = inflater.inflate(R.layout.fragment_utility_info, container, false);
+
+        TextView name = view.findViewById(R.id.utility_name);
+        TextView rent = view.findViewById(R.id.utility_rent);
+        TextView owner = view.findViewById(R.id.utility_owner);
+        TextView price = view.findViewById(R.id.utility_price);
+
+        ImageView utilityPicture = view.findViewById(R.id.picture);
+        int utilityPictureValue = getResources().getIdentifier("property_" + field.getFieldId(), "drawable", "at.gammastrahlung.monopoly_app");
+        utilityPicture.setImageResource(utilityPictureValue);
+
+        name.setText(getString(R.string.utility_name, utility.getName()));
+        if(utility.getOwner().getName()==null){
+            owner.setText(getString(R.string.utility_owner, "Bank"));
+        }else{
+            owner.setText(getString(R.string.utility_owner, utility.getOwner().getName()));
+        }
+        rent.setText(getString(R.string.utility_rent, utility.getToPay()));
+        price.setText(getString(R.string.utility_price, utility.getPrice()));
+
+
+
+
+        return view;
+    }
+
+    @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
+    private View setUpRailroadInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+
+        Railroad railroad;
+        railroad = (Railroad) field;
+        View view = inflater.inflate(R.layout.fragment_railroad_info, container, false);
+
+        TextView name = view.findViewById(R.id.railroad_name);
+        TextView rent_1 = view.findViewById(R.id.railroad_rent_1);
+        TextView rent_2 = view.findViewById(R.id.railroad_rent_2);
+        TextView rent_3 = view.findViewById(R.id.railroad_rent_3);
+        TextView rent_4 = view.findViewById(R.id.railroad_rent_4);
+        TextView owner = view.findViewById(R.id.railroad_owner);
+        TextView price = view.findViewById(R.id.railroad_price);
+
+        ImageView railroadPicture = view.findViewById(R.id.railroad_image);
+        int railroadPictureValue = getResources().getIdentifier("property_" + field.getFieldId(), "drawable", "at.gammastrahlung.monopoly_app");
+        railroadPicture.setImageResource(railroadPictureValue);
+
+        name.setText(getString(R.string.utility_name, railroad.getName()));
+        if(railroad.getOwner().getName()==null){
+            owner.setText(getString(R.string.utility_owner, "Bank"));
+        }else{
+            owner.setText(getString(R.string.utility_owner, railroad.getOwner().getName()));
+        }
+
+        rent_1.setText(getString(R.string.railroad_rent_1, 25));
+        rent_2.setText(getString(R.string.railroad_rent_2, 50));
+        rent_3.setText(getString(R.string.railroad_rent_2, 100));
+        rent_4.setText(getString(R.string.railroad_rent_2, 200));
+        price.setText(getString(R.string.utility_price, railroad.getPrice()));
 
         return view;
     }
