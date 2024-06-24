@@ -72,4 +72,12 @@
     <string name="buy_fail">Das Spielfeld konnte nicht gekauft werden.</string>
     <string name="roundAmount">Runden</string>
     <string name="property_name">%s</string>
+    <string name="utility_rent">Miete: %d$</string>
+    <string name="utility_price">Kaufpreis: %$d €</string>
+    <string name="utility_name">%s</string>
+    <string name="utility_owner">Besitzer: %s</string>
+    <string name="railroad_rent_1">"Rent with 1 Railroad: %$d"</string>
+    <string name="railroad_rent_2">Rent with 2 Railroads: %$d</string>
+    <string name="railroad_rent_3">Rent with 3 Railroads: %$d</string>
+    <string name="railroad_rent_4">Rent with 4 Railroads: %$d</string>
 </resources>
