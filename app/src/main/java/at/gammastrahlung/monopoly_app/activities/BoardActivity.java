@@ -75,7 +75,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
 
     ArrayList<FieldFragment> fieldFragments = new ArrayList<>();
 
-    Observable.OnPropertyChangedCallback propertyChangedCallback;
+    OnPropertyChangedCallback propertyChangedCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class BoardActivity extends AppCompatActivity implements SensorEventListe
         updatePlayerInfo();
         updatePlayerOnTurn();
 
-        GameData.getGameData().addOnPropertyChangedCallback(propertyChangedCallback = new Observable.OnPropertyChangedCallback() {
+        GameData.getGameData().addOnPropertyChangedCallback(propertyChangedCallback = new OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
                 // Update when game data changes

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.library.baseAdapters.BR;
+import androidx.databinding.Observable.OnPropertyChangedCallback;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.textview.MaterialTextView;
@@ -32,8 +33,10 @@ import at.gammastrahlung.monopoly_app.game.gameboard.Property;
 import at.gammastrahlung.monopoly_app.network.MonopolyClient;
 import at.gammastrahlung.monopoly_app.network.dtos.ServerMessage;
 
+
 public class FieldInfoFragment extends DialogFragment {
     private Field field;
+    //private Observable.OnPropertyChangedCallback callback;
 
     public FieldInfoFragment(Field field) {
         this.field = field;
@@ -41,23 +44,27 @@ public class FieldInfoFragment extends DialogFragment {
 
 
     @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    @Nullable
+    public <container> Dialog onCreateDialog(@Nullable Bundle savedInstanceOf, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
 
         View inflatedView;
         if(field instanceof Property){
             inflatedView = inflater.inflate(R.layout.fragment_propertyinfo, null);
+            View view = setUpPropertyInfo(inflater, container, savedInstanceState);
+            builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
+
         }else{
             inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, null);
             MaterialTextView title = inflatedView.findViewById(R.id.fieldName);
             title.setText(field.getName());
         }
 
+
+
         // Add close button
         builder.setView(inflatedView).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
-
         return builder.create();
 
 
@@ -73,8 +80,8 @@ public class FieldInfoFragment extends DialogFragment {
         View view;
 
         if(field instanceof Property){
-           view = setUpPropertyInfo(inflater, container, savedInstanceState);
-        }else{
+            view = setUpPropertyInfo(inflater, container, savedInstanceState);
+        }else {
             view = inflater.inflate(R.layout.fragment_fieldinfo, container, false);
             TextView fieldName = view.findViewById(R.id.fieldName);
             fieldName.setText(field.getName());
@@ -119,23 +126,28 @@ public class FieldInfoFragment extends DialogFragment {
         if (property.getHouseCount() < 4) {
             currentRentString = rentPrices.get(String.valueOf(property.getHouseCount()));
             houseCount.setText(getString(R.string.house_count, property.getHouseCount()));
+            hotelCount.setText(getString(R.string.hotel_count, 0));
         }else {
             currentRentString = rentPrices.get("hotel");
             houseCount.setText(getString(R.string.house_count, 0));
             hotelCount.setText(getString(R.string.hotel_count, 1));
         }
 
-        propertyName.setText(property.getName());
+        propertyName.setText(getString(R.string.property_name, property.getName()));
+        if(property.getOwner().getName()==null){
+            owner.setText(getString(R.string.owner, "Bank"));
+        }else{
         owner.setText(getString(R.string.owner, property.getOwner().getName()));
+        }
         currentRent.setText(getString(R.string.current_rent,currentRentString));
         fullSetRent.setText(getString(R.string.rent_full_set, rentPrices.get("full_set")));
-        hotelRent.setText(getString(R.string.hotel_rent, rentPrices.get("HOTEL")));
-        baseRent.setText(getString(R.id.base_rent, rentPrices.get(0)));
-        oneHouseRent.setText(getString(R.id.one_house_rent, rentPrices.get(1)));
-        twoHouseRent.setText(getString(R.id.two_house_rent, rentPrices.get(2)));
-        threeHouseRent.setText(getString(R.id.three_house_rent, rentPrices.get(3)));
-        fourHouseRent.setText(getString(R.id.four_house_rent, rentPrices.get(4)));
-        price.setText(getString(R.id.price, property.getPrice()));
+        hotelRent.setText(getString(R.string.hotel_rent, rentPrices.get("hotel")));
+        baseRent.setText(getString(R.string.base_rent, rentPrices.get("0")));
+        oneHouseRent.setText(getString(R.string.one_house_rent, rentPrices.get("1")));
+        twoHouseRent.setText(getString(R.string.two_houses_rent, rentPrices.get("2")));
+        threeHouseRent.setText(getString(R.string.three_house_rent, rentPrices.get("3")));
+        fourHouseRent.setText(getString(R.string.four_houses_rent, rentPrices.get("4")));
+        price.setText(getString(R.string.price, property.getPrice()));
 
         if(property.getHouseCount()>0){
             buildingSlotOne.setImageResource(R.drawable.house);
@@ -162,18 +174,46 @@ public class FieldInfoFragment extends DialogFragment {
             TextView buildMessage = view.findViewById(R.id.build_message);
             if(GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.SUCCESS){
                 buildMessage.setText(R.string.successful_build);
-            }else{
+                setUpPropertyInfo(inflater, container, savedInstanceState);  // Update UI after building
+            } else {
                 buildMessage.setText(R.string.failed_build);
             }
-            //GameData.getGameData().addOnPropertyChangedCallback(callback);
         });
 
+        //registerPropertyChangedCallback();
 
         return view;
-
     }
 
-   /* @Override
+    /*private void registerPropertyChangedCallback() {
+        callback = new Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(Observable sender, int propertyId) {
+                if (propertyId == BR.game) {
+                    Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
+
+                    if (field instanceof Property && newField instanceof Property) {
+                        Property property = (Property) newField;
+                        getActivity().runOnUiThread(() -> {
+                            TextView buildMessage = getView().findViewById(R.id.build_message);
+                            buildMessage.setText(R.string.successful_build);
+                            setUpPropertyInfo(getLayoutInflater(), null, null);
+                        });
+                    }
+                }
+            }
+        };
+        GameData.getGameData().addOnPropertyChangedCallback(callback);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (callback != null) {
+            GameData.getGameData().removeOnPropertyChangedCallback(callback);
+        }
+    }
+   /*@Override
     public void onDestroyView(){
         GameData.getGameData().removeOnPropertyChangedCallback(callback);
         super.onDestroyView();
@@ -183,8 +223,7 @@ public class FieldInfoFragment extends DialogFragment {
         @Override
         public void onPropertyChanged(androidx.databinding.Observable sender, int propertyId) {
 
-            @Override
-            public void onPropertyChanged(Observable sender, int propertyId){
+            public void onPropertyChanged;(Observable sender, int propertyId){
                 if (propertyId == BR.game) {
                     Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
 
@@ -203,6 +242,31 @@ public class FieldInfoFragment extends DialogFragment {
 
             }
         }
-    }*/
+    }
+
+            Observable.OnPropertyChangedCallback callback = new androidx.databinding.Observable.OnPropertyChangedCallback() {
+            @Override
+            public void onPropertyChanged(androidx.databinding.Observable sender, int propertyId) {
+
+                public void onPropertyChanged;(Observable sender, int propertyId){
+                    if (propertyId == BR.game) {
+                        Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
+
+                        if(field instanceof Property){
+                            if (newField instanceof Property) {
+                                Property property = (Property) newField;
+                                Property oldProperty = (Property) field;
+
+                                getActivity().runOnUiThread(() -> {
+                                    MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
+                                    TextView buildMessage = view.findViewById(R.id.build_message);
+                                });
+                            }
+                        }
+                    }
+
+                }
+            }
+        };*/
 }
 

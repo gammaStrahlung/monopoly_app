@@ -71,4 +71,5 @@
     <string name="buy_successful">Das Spielfeld wurde erfolgreich gekauft.</string>
     <string name="buy_fail">Das Spielfeld konnte nicht gekauft werden.</string>
     <string name="roundAmount">Runden</string>
+    <string name="property_name">%s</string>
 </resources>
