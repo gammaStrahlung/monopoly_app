@@ -59,8 +59,8 @@ public class FieldInfoFragment extends DialogFragment {
             setUpRailroadInfo(view);
         } else {
             view = inflater.inflate(R.layout.fragment_fieldinfo, null);
-            MaterialTextView title = view.findViewById(R.id.fieldName);
-            title.setText(field.getName());
+            setUpFieldInfo(view);
+
         }
 
         builder.setView(view)
@@ -69,7 +69,14 @@ public class FieldInfoFragment extends DialogFragment {
         return builder.create();
     }
 
-
+    @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
+    private void setUpFieldInfo(View view) {
+        ImageView fieldPicture = view.findViewById(R.id.field_picture);
+        int fieldPictureValue = getResources().getIdentifier("field_" + field.getFieldId(), "drawable", "at.gammastrahlung.monopoly_app");
+        fieldPicture.setImageResource(fieldPictureValue);
+        MaterialTextView title = view.findViewById(R.id.fieldName);
+        title.setText(field.getName());
+    }
 
     @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
     private void setUpPropertyInfo(View view) {
