@@ -3,6 +3,7 @@ package at.gammastrahlung.monopoly_app.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -36,17 +37,17 @@ public class FieldInfoFragment extends DialogFragment {
     private Field field;
     private Observable.OnPropertyChangedCallback callback;
 
+    View view = null;
+
     public FieldInfoFragment(Field field) {
         this.field = field;
     }
-
 
     @NonNull
     @Nullable
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = null;
 
         if (field instanceof Property) {
             view = inflater.inflate(R.layout.fragment_propertyinfo, null);
@@ -226,16 +227,20 @@ public class FieldInfoFragment extends DialogFragment {
                     Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
 
                     if (field instanceof Property && newField instanceof Property) {
-                        Property property = (Property) newField;
-                        getActivity().runOnUiThread(() -> {
-                            TextView buildMessage = getView().findViewById(R.id.build_message);
-                            if(GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.SUCCESS){
-                                buildMessage.setText(R.string.successful_build);
-                            } else {
-                                buildMessage.setText(R.string.failed_build);
-                            }
-                            setUpPropertyInfo(getView());
-                        });
+                        field = newField;
+                        Activity activity = getActivity();
+
+                        if (activity != null) {
+                            activity.runOnUiThread(() -> {
+                                TextView buildMessage = view.findViewById(R.id.build_message);
+                                if (GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.SUCCESS) {
+                                    buildMessage.setText(R.string.successful_build);
+                                } else {
+                                    buildMessage.setText(R.string.failed_build);
+                                }
+                                setUpPropertyInfo(view);
+                            });
+                        }
                     }
                 }
             }
