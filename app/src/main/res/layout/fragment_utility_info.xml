@@ -21,6 +21,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="53dp"
         android:text="@string/utility_name"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/picture" />
 

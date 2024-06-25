@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,69 +43,38 @@ public class FieldInfoFragment extends DialogFragment {
 
     @NonNull
     @Nullable
-    public <container> Dialog onCreateDialog(@Nullable Bundle savedInstanceOf, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View view = null;
 
-        View inflatedView;
-        if(field instanceof Property){
-            inflatedView = inflater.inflate(R.layout.fragment_propertyinfo, null);
-            View view = setUpPropertyInfo(inflater, container, savedInstanceState);
-            builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
-        }else if(field instanceof Utility){
-            inflatedView = inflater.inflate(R.layout.fragment_utility_info, null);
-            View view = setUpUtilityInfo(inflater, container, savedInstanceState);
-            builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
-        }else if(field instanceof Railroad){
-            inflatedView = inflater.inflate(R.layout.fragment_railroad_info, null);
-            View view = setUpRailroadInfo(inflater, container, savedInstanceState);
-            builder.setView(view).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
-        }else {
-            inflatedView = inflater.inflate(R.layout.fragment_fieldinfo, null);
-            MaterialTextView title = inflatedView.findViewById(R.id.fieldName);
+        if (field instanceof Property) {
+            view = inflater.inflate(R.layout.fragment_propertyinfo, null);
+            setUpPropertyInfo(view);
+        } else if (field instanceof Utility) {
+            view = inflater.inflate(R.layout.fragment_utility_info, null);
+            setUpUtilityInfo(view);
+        } else if (field instanceof Railroad) {
+            view = inflater.inflate(R.layout.fragment_railroad_info, null);
+            setUpRailroadInfo(view);
+        } else {
+            view = inflater.inflate(R.layout.fragment_fieldinfo, null);
+            MaterialTextView title = view.findViewById(R.id.fieldName);
             title.setText(field.getName());
         }
 
+        builder.setView(view)
+                .setNegativeButton(R.string.close, (dialog, which) -> dialog.cancel());
 
-
-        // Add close button
-        builder.setView(inflatedView).setNegativeButton(R.string.close, ((dialog, which) -> dialog.cancel()));
         return builder.create();
-
-
-
     }
 
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        View view;
-
-        if(field instanceof Property){
-            view = setUpPropertyInfo(inflater, container, savedInstanceState);
-        }else if(field instanceof Utility){
-            view = setUpUtilityInfo(inflater, container, savedInstanceState);
-        }else if(field instanceof Railroad){
-            view = setUpRailroadInfo(inflater, container, savedInstanceState);
-    }else {
-            view = inflater.inflate(R.layout.fragment_fieldinfo, container, false);
-            TextView fieldName = view.findViewById(R.id.fieldName);
-            fieldName.setText(field.getName());
-        }
-
-        return view;
-    }
 
     @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
-    private View setUpPropertyInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    private void setUpPropertyInfo(View view) {
+        Property property = (Property) field;
 
-        Property property;
-        property = (Property) field;
-
-        View view = inflater.inflate(R.layout.fragment_propertyinfo, container, false);
 
         ImageView propertyPicture = view.findViewById(R.id.propertyPicture);
         int propertyPictureValue = getResources().getIdentifier("property_" + field.getFieldId(), "drawable", "at.gammastrahlung.monopoly_app");
@@ -179,28 +147,18 @@ public class FieldInfoFragment extends DialogFragment {
             }
 
         Button buildButton = view.findViewById(R.id.build_button);
+        buildButton.setEnabled(property.getOwner().equals(GameData.getGameData().getPlayer()));
         buildButton.setOnClickListener(v -> {
+            registerPropertyChangedCallback();
             MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
-            TextView buildMessage = view.findViewById(R.id.build_message);
-            if(GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.SUCCESS){
-                buildMessage.setText(R.string.successful_build);
-                setUpPropertyInfo(inflater, container, savedInstanceState);  // Update UI after building
-            } else {
-                buildMessage.setText(R.string.failed_build);
-            }
         });
 
-        registerPropertyChangedCallback();
-
-        return view;
     }
 
     @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
-    private View setUpUtilityInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
+    private void setUpUtilityInfo(View view) {
+        Utility utility = (Utility) field;
 
-        Utility utility;
-        utility = (Utility) field;
-        View view = inflater.inflate(R.layout.fragment_utility_info, container, false);
 
         TextView name = view.findViewById(R.id.utility_name);
         TextView rent = view.findViewById(R.id.utility_rent);
@@ -220,18 +178,11 @@ public class FieldInfoFragment extends DialogFragment {
         rent.setText(getString(R.string.utility_rent, utility.getToPay()));
         price.setText(getString(R.string.utility_price, utility.getPrice()));
 
-
-
-
-        return view;
     }
 
     @SuppressLint({"SetTextI18n", "StringFormatInvalid", "ResourceType"})
-    private View setUpRailroadInfo(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-
-        Railroad railroad;
-        railroad = (Railroad) field;
-        View view = inflater.inflate(R.layout.fragment_railroad_info, container, false);
+    private void setUpRailroadInfo(View view) {
+        Railroad railroad = (Railroad) field;
 
         TextView name = view.findViewById(R.id.railroad_name);
         TextView rent_1 = view.findViewById(R.id.railroad_rent_1);
@@ -258,7 +209,6 @@ public class FieldInfoFragment extends DialogFragment {
         rent_4.setText(getString(R.string.railroad_rent_2, 200));
         price.setText(getString(R.string.utility_price, railroad.getPrice()));
 
-        return view;
     }
 
     private void registerPropertyChangedCallback() {
@@ -272,8 +222,12 @@ public class FieldInfoFragment extends DialogFragment {
                         Property property = (Property) newField;
                         getActivity().runOnUiThread(() -> {
                             TextView buildMessage = getView().findViewById(R.id.build_message);
-                            buildMessage.setText(R.string.successful_build);
-                            setUpPropertyInfo(getLayoutInflater(), null, null);
+                            if(GameData.getGameData().getLastMessageType() == ServerMessage.MessageType.SUCCESS){
+                                buildMessage.setText(R.string.successful_build);
+                            } else {
+                                buildMessage.setText(R.string.failed_build);
+                            }
+                            setUpPropertyInfo(getView());
                         });
                     }
                 }
@@ -289,60 +243,6 @@ public class FieldInfoFragment extends DialogFragment {
             GameData.getGameData().removeOnPropertyChangedCallback(callback);
         }
     }
-   /*@Override
-    public void onDestroyView(){
-        GameData.getGameData().removeOnPropertyChangedCallback(callback);
-        super.onDestroyView();
-    }
 
-    Observable.OnPropertyChangedCallback callback = new androidx.databinding.Observable.OnPropertyChangedCallback() {
-        @Override
-        public void onPropertyChanged(androidx.databinding.Observable sender, int propertyId) {
-
-            public void onPropertyChanged;(Observable sender, int propertyId){
-                if (propertyId == BR.game) {
-                    Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
-
-                    if(field instanceof Property){
-                        if (newField instanceof Property) {
-                            Property property = (Property) newField;
-                            Property oldProperty = (Property) field;
-
-                            getActivity().runOnUiThread(() -> {
-                                MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
-                                TextView buildMessage = view.findViewById(R.id.build_message);
-                            });
-                        }
-                    }
-                }
-
-            }
-        }
-    }
-
-            Observable.OnPropertyChangedCallback callback = new androidx.databinding.Observable.OnPropertyChangedCallback() {
-            @Override
-            public void onPropertyChanged(androidx.databinding.Observable sender, int propertyId) {
-
-                public void onPropertyChanged;(Observable sender, int propertyId){
-                    if (propertyId == BR.game) {
-                        Field newField = GameData.getGameData().getGame().getGameBoard().getFields()[field.getFieldId()];
-
-                        if(field instanceof Property){
-                            if (newField instanceof Property) {
-                                Property property = (Property) newField;
-                                Property oldProperty = (Property) field;
-
-                                getActivity().runOnUiThread(() -> {
-                                    MonopolyClient.getMonopolyClient().buildHouse(property.getFieldId());
-                                    TextView buildMessage = view.findViewById(R.id.build_message);
-                                });
-                            }
-                        }
-                    }
-
-                }
-            }
-        };*/
 }
 
