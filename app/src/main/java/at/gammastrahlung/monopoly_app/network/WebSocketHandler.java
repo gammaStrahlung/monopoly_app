@@ -175,7 +175,7 @@ public class WebSocketHandler {
         game.setPlayers(players);
 
         // Update player with player from game
-        gameData.setPlayer(game.getPlayers().stream().filter( player -> player.equals(gameData.getPlayer())).findFirst().get());
+        game.getPlayers().stream().filter(player -> player.equals(gameData.getPlayer())).findFirst().ifPresent(gameData::setPlayer);
     }
 
     private void handleLogMessage(String jsonData){

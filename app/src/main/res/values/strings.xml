@@ -25,6 +25,21 @@
     <string name="owned_fields">Owned Fields:</string>
     <string name="player_on_turn">Player on Turn: %s</string>
     <string name="end_turn">End Turn</string>
+    <string name="owner">Owner: %s</string>
+    <string name="current_rent">Current rent: %1$d $</string>
+    <string name="rent_full_set">Rent Full-Set: %1$d €</string>
+    <string name="house_count">Houses: %1$d</string>
+    <string name="hotel_count">Hotels: %1$d</string>
+    <string name="hotel_rent">Rent with a hotel: %1$d €</string>
+    <string name="base_rent">Base rent: %1$d €</string>
+    <string name="one_house_rent">Rent with one house: %1$d €</string>
+    <string name="three_house_rent">Rent with three houses: %1$d €</string>
+    <string name="four_houses_rent">Rent with four houses: %1$d €</string>
+    <string name="price">Price: %1$d €</string>
+    <string name="build">Build on property</string>
+    <string name="successful_build">Building successfully built!</string>
+    <string name="failed_build">Building on this property is not possible!</string>
+    <string name="two_houses_rent">Rent with two houses: %1$d €</string>
     <string name="do_you_want_to_forward_the_diced_value_or_select_a_different_one">Do you want to forward the diced value or select a different one?</string>
     <string name="cheat">Cheat</string>
     <string name="forward">Forward</string>
@@ -56,4 +71,13 @@
     <string name="buy_successful">Successfully bought the field.</string>
     <string name="buy_fail">Failed to buy the field.</string>
     <string name="roundAmount">Rounds</string>
+    <string name="property_name"> %s </string>
+    <string name="utility_rent">Rent: %1$d €</string>
+    <string name="utility_price">Price: %1$d €</string>
+    <string name="utility_name">%s</string>
+    <string name="utility_owner">Owner: %s</string>
+    <string name="railroad_rent_1">"Rent with 1  Railroad: %1$d"</string>
+    <string name="railroad_rent_2">Rent with 2 Railroads: %1$d</string>
+    <string name="railroad_rent_3">Rent with 3 Railroads: %1$d</string>
+    <string name="railroad_rent_4">Rent with 4 Railroads: %1$d</string>
 </resources>
